@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id                   :integer          not null, primary key
+#  audio_url            :string
+#  image_url            :string
+#  label                :string
+#  send_request_on_save :boolean
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#
+
+one:
+  image_url: MyString
+  audio_url: MyString
+  label: MyString
+  send_request_on_save: false
+
+two:
+  image_url: MyString
+  audio_url: MyString
+  label: MyString
+  send_request_on_save: false

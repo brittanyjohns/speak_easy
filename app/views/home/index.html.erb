@@ -1,12 +1,34 @@
-<div>
-  <div id="draggable" draggable="true">Drag me!</div>
-<div id="dropzone">Drop here!</div>
 
-  <h1 class="font-bold text-4xl">Home#index</h1>
-  <p>Find me in app/views/home/index.html.erb</p>
+
+    
+<div class="flex flex-col justify-center">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-3xl font-semibold mb-6">Communicate Without Speaking!</h2>
+            <p class="text-lg text-blue-800 mb-8">Create custom boards with images and audio to convey your feelings, needs, and thoughts.</p>
+            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full">Get Started</a>
+        </section>
+
+        <!-- Features Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <%= image_tag("talking_table.jpg", size: "300x300", class: "mx-auto mb-4") %>
+                <h3 class="text-2xl font-bold mb-2">Custom Boards</h3>
+                <p>Design your own boards with your preferred images and audio clips.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <%= image_tag("upload_image.jpeg", size: "300x300", class: "mx-auto mb-4") %>
+                <h3 class="text-2xl font-bold mb-2">Upload Your Images</h3>
+                <p>Add a personal touch by uploading images that mean the most to you.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <%= image_tag("books.png", size: "300x300", class: "mx-auto mb-4") %>
+                <h3 class="text-2xl font-bold mb-2">Choose From Our Library</h3>
+                <p class="inline-block align-bottom">Explore our extensive library of images and sounds to build your board.</p>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <%= render "layouts/footer" %>
+
 </div>
-<ul id="sortable-list">
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-</ul>

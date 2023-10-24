@@ -59,6 +59,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "annotate"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -71,7 +72,24 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-
 end
 gem "devise"
-gem 'sortablejs-rails'
+gem "sortablejs-rails"
+gem "font-awesome-sass", "~> 6.4.0"
+
+# HTTP requests
+gem "faraday"
+
+gem "dry-initializer"
+
+# Config & ENV vars
+gem "figaro"
+
+# Open AI
+gem "ruby-openai", "~> 4.1"
+
+gem "espeak-ruby", require: "espeak"
+
+gem "view_component"
+
+gem "cssbundling-rails", "~> 1.3"

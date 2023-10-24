@@ -1,0 +1,6 @@
+
+  <% @images.each do |image| %>
+    <div class="field">
+      <%= select_image_button(@board, image, size: "200x200") %>
+    </div>
+    <% end %>

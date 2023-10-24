@@ -1,0 +1,11 @@
+<!-- app/views/boards/_add_image_form.html.erb -->
+
+<%= form_for @board, url: associate_image_board_path(@board), method: :post do |f| %>
+  <div class="field">
+    <%= label_tag :image_id, "Select Image" %>
+    <%= select_tag :image_id, options_from_collection_for_select(@images, :id, :name) %>
+    <!-- Again, adjust :name based on your Image model's attributes -->
+  </div>
+  
+  <%= f.submit "Add Image" %>
+<% end %>

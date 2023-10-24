@@ -1,0 +1,22 @@
+<div id="<%= dom_id board %>">
+
+  <p class="my-5">
+    <%= link_to board.name, board %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Theme color:</strong>
+    <%= board.theme_color %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Grid size:</strong>
+    <%= board.grid_size %>
+  </p>
+
+  <% if action_name == " " %>
+    <%= link_to "Show this board", board, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this board", edit_board_path(board), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>
