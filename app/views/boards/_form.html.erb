@@ -16,17 +16,24 @@
     <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :theme_color %>
-    <%= form.select :theme_color, Board.theme_color_options, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  <div class="mb-4">
+    <%= form.label :theme_color, "Theme Color", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :theme_color,
+                    options_for_select(Board.theme_color_options),
+                    {},
+                    class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :grid_size %>
-    <%= form.select :grid_size, Board.grid_size_options, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  <div class="mb-4">
+    <%= form.label :grid_size, "Grid Size", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :grid_size,
+                    options_for_select(["2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "8x8"]),
+                    {},
+                    class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
 
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-  </div>
+    <div class="inline">
+      <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    </div>
+
 <% end %>

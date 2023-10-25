@@ -1,10 +1,11 @@
 class ImagesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_image, only: %i[ show edit update destroy speak generate ]
 
   # GET /images or /images.json
   def index
     if params[:query].present?
-      @images = Image.where("label LIKE ?", "%#{params[:query]}%")
+      @images = Image.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
     else
       @images = Image.all.order(label: :asc)
     end

@@ -13,7 +13,6 @@ gem "sprockets-rails"
 # gem "sqlite3", "~> 1.4"
 gem "pg", "~> 1.1"
 
-
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
@@ -96,3 +95,5 @@ gem "view_component"
 
 gem "cssbundling-rails", "~> 1.3"
 gem "sidekiq", "~> 7.1"
+# AWS - ActiveStorage in production
+gem "aws-sdk-s3", require: false
