@@ -1,6 +1,7 @@
 
   <% @images.each do |image| %>
     <div class="field">
-      <%= select_image_button(@board, image, size: "200x200") %>
+      <%= image.label %>
+      <%= select_image_button(@board, image, size: "200") %>
     </div>
     <% end %>

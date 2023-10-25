@@ -16,6 +16,11 @@
   </div>
 
   <div class="my-5">
+    <%= form.label :image_prompt %>
+    <%= form.text_field :image_prompt, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
     <%= form.label :upload %>
     <%= form.file_field :saved_image %>
   </div>

@@ -4,9 +4,10 @@
   <% end %>
 
   <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Images</h1>
+    <h1 class="font-bold text-4xl">Image Library</h1>
     <%= link_to "New image", new_image_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
+<%= turbo_stream_from :image_list %>
 
   <div id="images" class="grid grid-col-4">
     <%= render @images %>

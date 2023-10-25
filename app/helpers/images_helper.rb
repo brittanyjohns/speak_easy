@@ -4,7 +4,7 @@ module ImagesHelper
   end
 
   def remove_image_button(board, image)
-    button_to "#{icon("fa-regular", "trash")}".html_safe, remove_image_board_path(board, image_id: image), class: "bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full absolute bottom-0 left-0", method: :post
+    button_to "#{icon("fa-solid", "trash")}".html_safe, remove_image_board_path(board, image_id: image), class: "text-red-600 hover:text-red-700 py-2 px-4 rounded-full absolute bottom-0 left-0", method: :post
   end
 
   def speech_button(image)

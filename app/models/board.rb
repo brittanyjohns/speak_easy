@@ -24,7 +24,7 @@ class Board < ApplicationRecord
   has_many :images, through: :board_images
 
   def remaining_images
-    Image.all - images
+    Image.all.excluding(images)
   end
 
   def self.grid_size_options

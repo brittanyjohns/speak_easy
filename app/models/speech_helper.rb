@@ -15,7 +15,7 @@ module SpeechHelper
     capital = default_options[:capital]
     amplitude = default_options[:amplitude]
     quiet = default_options[:quiet]
-    speech = ESpeak::Speech.new(name, voice: lang, pitch: pitch, speed: speed, capital: capital, amplitude: amplitude, quiet: quiet)
+    speech = ESpeak::Speech.new(speak_name, voice: lang, pitch: pitch, speed: speed, capital: capital, amplitude: amplitude, quiet: quiet)
     speech.speak # invokes espeak
   end
 end

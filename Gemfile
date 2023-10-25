@@ -93,3 +93,4 @@ gem "espeak-ruby", require: "espeak"
 gem "view_component"
 
 gem "cssbundling-rails", "~> 1.3"
+gem "sidekiq", "~> 7.1"

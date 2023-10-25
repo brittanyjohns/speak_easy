@@ -79,24 +79,20 @@ module BoardsHelper
     columns = board.column_count
     rows = board.row_count
     max_image_count = board.max_image_count
-    puts "images: #{images.length} columns: #{columns} max_image_count: #{max_image_count}"
     str = "<div class='p-8 #{theme_color_background(board)}'>"
     str += "<div class='grid #{grid_row_class(board)} #{grid_column_class(board)} gap-4 place-items-center flex space-x-4'>"
-    # remainder = images.length % columns
 
-    # placeholders = remainder == 0 ? 0 : columns - remainder
     placeholders = max_image_count - images.length
-    puts "images: #{images.length} columns: #{columns} placeholders: #{placeholders}"
     images.each do |image|
       str += "<div class='relative max-h-200 overflow-hidden'>"
       str += saved_image_link(image)
-      str += remove_image_button(board, image)
+      str += remove_image_button(board, image) unless action_name == "locked"
+
       str += "</div>"
     end
     placeholders.times do
       str += "<div class='relative max-h-200 overflow-hidden'>"
       str += "<div class='box-border flex bg-gray-100 border-2 border-gray-300 border-dashed rounded-md h-32 w-32'>"
-      # str += add_image_button(board)
       str += "</div>"
       str += "</div>"
     end

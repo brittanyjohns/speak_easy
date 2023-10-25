@@ -20,17 +20,14 @@ module ImageHelper
   end
 
   def create_image
-    success = false
     img_url = OpenAiClient.new(open_ai_opts).create_image
     if img_url
-      self.update(image_url: img_url)
+      # self.update(image_url: img_url)
       save_image(img_url)
-      success = true
     else
-      success = false
       puts "**** ERROR **** \nDid not receive valid response.\n"
+      return false
     end
-    success
   end
 
   def create_image_variation(img_url = nil, user = nil)

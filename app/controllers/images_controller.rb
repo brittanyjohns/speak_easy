@@ -3,7 +3,7 @@ class ImagesController < ApplicationController
 
   # GET /images or /images.json
   def index
-    @images = Image.all
+    @images = Image.all.order(label: :asc)
   end
 
   def speak
@@ -17,7 +17,9 @@ class ImagesController < ApplicationController
     #   @image.label = image_prompt
     #   puts "setting label: #{@image.label}"
     # end
-    resubmit(@image)
+    # resubmit(@image)
+    GenerateImageJob.perform_async(@image.id)
+    redirect_to images_url, notice: "Your image is generating."
   end
 
   # GET /images/1 or /images/1.json
@@ -81,6 +83,6 @@ class ImagesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def image_params
-    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image)
+    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image, :image_prompt)
   end
 end

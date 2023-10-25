@@ -27,7 +27,15 @@ class Image < ApplicationRecord
   end
 
   def name
+    image_prompt || label
+  end
+
+  def speak_name
     label
+  end
+
+  def broadcast_upload
+    broadcast_replace_to :image_list
   end
 
   def main_image_on_disk

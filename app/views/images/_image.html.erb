@@ -1,26 +1,8 @@
-<div id="<%= dom_id image %>">
+<div id="<%= dom_id image %>" class="w-96 p-5 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Label:</strong>
-    <%= image.label %>
+    <%= link_to image.label, image, class: "rounded-lg py-3 px-5 inline-block font-medium" %>
   </p>
-  <p class="my-5">
-       <%= saved_image_link(image) %>
-  </p>
+  <%= saved_image_link(image, size: "100") %>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Audio url:</strong>
-    <%= image.audio_url %>
-  </p>
-
-
-  <p class="my-5">
-       <%= generate_image_button(image) unless image.saved_image.attached? %>
-  </p>
-
-  <% if action_name != "show" %>
-    <%= link_to "Show this image", image, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to "Edit this image", edit_image_path(image), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
 </div>
