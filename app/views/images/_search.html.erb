@@ -1,0 +1,8 @@
+<%= form_with(url: images_path, method: :get, data: { controller: "search-form", turbo_frame: "images", turbo_action: "advance" }) do |form| %>
+  <%= form.label :query, "Search images:", class: "block mb-2" %>
+  <div class="flex space-x-3">
+    <%= form.text_field :query, class: "py-3 px-4 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { action: "input->search-form#search" } %>
+
+    <%= form.submit "Search", class: "px-4 py-3 font-medium bg-orange-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100" %>
+  </div>
+<% end %>

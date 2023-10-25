@@ -1,8 +1,8 @@
-<div id="<%= dom_id image %>" class="w-96 p-5 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
+<div id="<%= dom_id image %>" class="max-w-3xl p-5 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
 
   <p class="my-5">
     <%= link_to image.label, image, class: "rounded-lg py-3 px-5 inline-block font-medium" %>
   </p>
-  <%= saved_image_link(image, size: "100") %>
+  <%= saved_image_link(image, size: "200") %>
 
 </div>

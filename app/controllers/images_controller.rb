@@ -3,7 +3,16 @@ class ImagesController < ApplicationController
 
   # GET /images or /images.json
   def index
-    @images = Image.all.order(label: :asc)
+    if params[:query].present?
+      @images = Image.where("label LIKE ?", "%#{params[:query]}%")
+    else
+      @images = Image.all.order(label: :asc)
+    end
+    if turbo_frame_request?
+      render partial: "images", locals: { images: @images }
+    else
+      render :index
+    end
   end
 
   def speak

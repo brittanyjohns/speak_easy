@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Talk2Me</title>
+    <title>SpeakEasy</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -14,8 +14,8 @@
   <body class="bg-blue-50 h-screen">
     <%= render "layouts/navbar" %>
     <div class="relative min-h-screen overflow-hidden bg-gray-50 p-6 pt-8">
-       <p class="notice"><%= notice %></p>
-       <p class="alert"><%= alert %></p>
+       <%= render "layouts/notice" %>
+       <%= render "layouts/alert" %>
       <%= yield %>
     </div>
 
