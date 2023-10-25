@@ -3,9 +3,9 @@
 class ImageSelectorComponent < ViewComponent::Base
   include ImagesHelper
 
-  def initialize(board:)
+  def initialize(board:, images:)
     @board = board
-    @images = @board.remaining_images.order(label: :asc)
+    @images = images
   end
 
   def render?

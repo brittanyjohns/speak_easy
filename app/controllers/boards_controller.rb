@@ -9,7 +9,18 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
-    @images = @board.remaining_images
+    # @images = @board.remaining_images
+    if params[:query].present?
+      @images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+    else
+      @images = @board.remaining_images.order(label: :asc)
+    end
+
+    if turbo_frame_request?
+      render ImageSelectorComponent.new(board: @board, images: @images)
+    else
+      render :show
+    end
   end
 
   def locked
