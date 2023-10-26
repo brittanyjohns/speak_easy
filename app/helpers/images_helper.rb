@@ -16,9 +16,7 @@ module ImagesHelper
       puts "no saved image"
       return ""
     end
-    button_to(speak_image_path(image), data: { turbo_method: :post }) do
-      image_tag(image.saved_image, size: size, class: "")
-    end
+    image_tag(image.saved_image, size: size, class: "", data: { action: "click->speech#speak" })
   end
 
   def select_image_button(board, image, size: "500x500")

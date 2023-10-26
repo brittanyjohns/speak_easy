@@ -16,10 +16,6 @@ class ImagesController < ApplicationController
     end
   end
 
-  def speak
-    @image.speak
-  end
-
   def generate
     puts "generate_image: #{@image}"
     # if image_params["label"]

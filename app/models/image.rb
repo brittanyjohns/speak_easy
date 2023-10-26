@@ -16,6 +16,7 @@ class Image < ApplicationRecord
   include SpeechHelper
 
   has_one_attached :saved_image
+  has_one_attached :audio_clip
 
   after_create :generate_image, if: :send_request_on_save
 

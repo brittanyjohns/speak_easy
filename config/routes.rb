@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   get "home/index"
   devise_for :users
   resources :images do
-    post "speak", on: :member
     post "generate", on: :member
   end
   resources :boards do
