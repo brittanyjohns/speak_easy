@@ -1,6 +1,6 @@
 <div id="<%= dom_id board_image %>" class="max-w-3xl p-2 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
   <p class="m-5 items-center">
-    <%= link_to board_image.label, edit_image_path(board_image), class: "rounded-lg py-3 px-5 inline-block font-medium", data: { turbo: false } %>   <%= icon("fa-solid", "eye-slash") if board_image.private %>
+    <%= board_image.label class: "rounded-lg py-3 px-5 inline-block font-medium" %>   <%= icon("fa-solid", "eye-slash") if board_image.private %>
   </p>
   <%= select_image_button(@board, board_image, size: "200") %>
 </div>

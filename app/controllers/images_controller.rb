@@ -4,10 +4,19 @@ class ImagesController < ApplicationController
 
   # GET /images or /images.json
   def index
-    if params[:query].present?
-      @images = Image.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+    puts "\n\nPARAMS: #{params}\n\n"
+    if params[:user_images_only] == "1"
+      puts "user images only"
+      @images = current_user.images
     else
       @images = Image.searchable_images_for(current_user).order(label: :asc)
+    end
+    if params[:query].present?
+      puts "query present"
+      @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+    else
+      puts "no query"
+      @images = @images.searchable_images_for(current_user).order(label: :asc)
     end
     if turbo_frame_request?
       puts "Turbo frame request"
@@ -18,13 +27,6 @@ class ImagesController < ApplicationController
   end
 
   def generate
-    puts "generate_image: #{@image}"
-    # if image_params["label"]
-    #   image_prompt = @scrubbed + " #{@image_type_text.downcase}"
-    #   @image.label = image_prompt
-    #   puts "setting label: #{@image.label}"
-    # end
-    # resubmit(@image)
     GenerateImageJob.perform_async(@image.id)
     redirect_to images_url, notice: "Your image is generating."
   end
@@ -40,6 +42,9 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
+    unless @image.user == current_user
+      redirect_to images_url, notice: "You can only edit your own images."
+    end
   end
 
   # POST /images or /images.json

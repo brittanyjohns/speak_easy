@@ -4,10 +4,10 @@
     <%= link_to "New board", new_board_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
 
-  <div id="boards" class="min-w-full">
+  <div id="boards" class="w-1/2">
     <ul class="list-none rounded-lg py-3 px-5">
     <% @boards.each do |board| %>
-      <li class="p-8 font-medium flex justify-between"><%= link_to board.name, board %><span class="bg-blue-600 text-white"><%= board.grid_size %></span></li>
+      <li class="p-8 font-medium m-4 flex justify-between  border-2 border-gray-300"><%= link_to board.name, board %><span class="bg-blue-300 p-5 text-white"><%= board.grid_size %></span></li>
     <% end %>
     </ul>
   </div>
