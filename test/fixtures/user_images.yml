@@ -2,12 +2,12 @@
 #
 # Table name: user_images
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  favorite   :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  image_id   :integer          not null
-#  user_id    :integer          not null
+#  image_id   :bigint           not null
+#  user_id    :bigint           not null
 #
 # Indexes
 #
@@ -16,8 +16,8 @@
 #
 # Foreign Keys
 #
-#  image_id  (image_id => images.id)
-#  user_id   (user_id => users.id)
+#  fk_rails_...  (image_id => images.id)
+#  fk_rails_...  (user_id => users.id)
 #
 
 one:

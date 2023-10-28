@@ -21,6 +21,11 @@
   </div>
 
   <div class="my-5">
+    <%= form.label :private %>
+    <%= form.check_box :private, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-8" %>
+  </div>
+
+  <div class="my-5">
     <%= form.label :upload %>
     <%= form.file_field :saved_image %>
   </div>

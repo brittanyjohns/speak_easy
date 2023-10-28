@@ -4,12 +4,11 @@ class BoardsController < ApplicationController
 
   # GET /boards or /boards.json
   def index
-    @boards = Board.all
+    @boards = current_user.boards
   end
 
   # GET /boards/1 or /boards/1.json
   def show
-    # @images = @board.remaining_images
     if params[:query].present?
       @images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
     else
@@ -17,7 +16,7 @@ class BoardsController < ApplicationController
     end
 
     if turbo_frame_request?
-      render ImageSelectorComponent.new(board: @board, images: @images)
+      render partial: "board_images", locals: { images: @images }
     else
       render :show
     end
@@ -52,7 +51,7 @@ class BoardsController < ApplicationController
   end
 
   def associate_image
-    @board = Board.find(params[:id])
+    @board = current_user.boards.find(params[:id])
     image = Image.find(params[:image_id])
     @board.images << image unless @board.images.include?(image)
 
@@ -60,7 +59,7 @@ class BoardsController < ApplicationController
   end
 
   def remove_image
-    @board = Board.find(params[:id])
+    @board = current_user.boards.find(params[:id])
     image = Image.find(params[:image_id])
     @board.images.delete(image)
     redirect_to @board
@@ -93,7 +92,11 @@ class BoardsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_board
-    @board = Board.includes(:images).find(params[:id])
+    begin
+      @board = current_user.boards.includes(:images).find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to boards_url, notice: "Board not found"
+    end
   end
 
   # Only allow a list of trusted parameters through.

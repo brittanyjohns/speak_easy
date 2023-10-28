@@ -5,9 +5,9 @@
   </div>
 
   <div id="boards" class="min-w-full">
-    <ul class="list-none">
+    <ul class="list-none rounded-lg py-3 px-5">
     <% @boards.each do |board| %>
-      <li><%= link_to board.name, board %></li>
+      <li class="p-8 font-medium flex justify-between"><%= link_to board.name, board %><span class="bg-blue-600 text-white"><%= board.grid_size %></span></li>
     <% end %>
     </ul>
   </div>

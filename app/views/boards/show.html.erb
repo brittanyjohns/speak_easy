@@ -6,7 +6,9 @@
   <%= print_grid_with_blanks(@board) %>
   <div class="mx-auto max-h-screen overflow-scroll place-items-center">
      <%= render "boards/search" %>
-    <%= render(ImageSelectorComponent.new(board: @board, images: @images)) %>
+     <div class="my-6">
+      <%= render "board_images", images: @board_images %>
+    </div>
   </div>
   
 </div>
