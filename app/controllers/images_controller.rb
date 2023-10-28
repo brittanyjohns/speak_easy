@@ -5,11 +5,12 @@ class ImagesController < ApplicationController
   # GET /images or /images.json
   def index
     if params[:query].present?
-      @images = Image.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+      @images = Image.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
     else
-      @images = Image.all.order(label: :asc)
+      @images = Image.searchable_images_for(current_user).order(label: :asc)
     end
     if turbo_frame_request?
+      puts "Turbo frame request"
       render partial: "images", locals: { images: @images }
     else
       render :index
@@ -44,7 +45,7 @@ class ImagesController < ApplicationController
   # POST /images or /images.json
   def create
     @image = Image.new(image_params)
-
+    @image.user = current_user
     respond_to do |format|
       if @image.save
         format.html { redirect_to image_url(@image), notice: "Image was successfully created." }
@@ -89,6 +90,6 @@ class ImagesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def image_params
-    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image, :image_prompt)
+    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image, :image_prompt, :private)
   end
 end

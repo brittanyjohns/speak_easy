@@ -2,13 +2,16 @@
 #
 # Table name: images
 #
-#  id                   :integer          not null, primary key
+#  id                   :bigint           not null, primary key
 #  audio_url            :string
+#  image_prompt         :string
 #  image_url            :string
 #  label                :string
+#  private              :boolean          default(TRUE)
 #  send_request_on_save :boolean
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  user_id              :integer
 #
 
 one:

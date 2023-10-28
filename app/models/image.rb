@@ -2,29 +2,43 @@
 #
 # Table name: images
 #
-#  id                   :integer          not null, primary key
+#  id                   :bigint           not null, primary key
 #  audio_url            :string
+#  image_prompt         :string
 #  image_url            :string
 #  label                :string
+#  private              :boolean          default(TRUE)
 #  send_request_on_save :boolean
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  user_id              :integer
 #
 class Image < ApplicationRecord
+  belongs_to :user, optional: true
   attr_accessor :descriptive_prompt
   include ImageHelper
   include SpeechHelper
+
+  validates :label, presence: true
 
   has_one_attached :saved_image
   has_one_attached :audio_clip
 
   after_create :generate_image, if: :send_request_on_save
 
-  validates :label, presence: true
+  scope :public_images, -> { where(private: false) }
 
   def generate_image
     puts "Generating image for #{self.label}"
     self.create_image
+  end
+
+  def self.searchable_images_for(user = nil)
+    if user
+      Image.where(private: false).or(Image.where(user_id: user.id))
+    else
+      Image.where(private: false)
+    end
   end
 
   def name
@@ -41,10 +55,6 @@ class Image < ApplicationRecord
 
   def main_image_on_disk
     ActiveStorage::Blob.service.path_for(saved_image.key)
-  end
-
-  def label_prompt
-    "Generate an image that clearly represents the concept of '#{label}'. The image should be a photograph of a real object, not a drawing or painting. The image should be a photograph of a single object, not a group of objects."
   end
 
   def prompt_to_send

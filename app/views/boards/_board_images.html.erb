@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "board_images" do %>
+   <% @images.each do |image| %>
+      <%= render "board_image", board_image: image %>  
+    <% end %>
+<% end %>

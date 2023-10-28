@@ -2,13 +2,14 @@
 #
 # Table name: boards
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  grid_size   :string
 #  name        :string
+#  show_labels :boolean
 #  theme_color :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  user_id     :integer          not null
+#  user_id     :bigint           not null
 #
 # Indexes
 #
@@ -16,7 +17,7 @@
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id)
 #
 class Board < ApplicationRecord
   belongs_to :user
@@ -24,7 +25,7 @@ class Board < ApplicationRecord
   has_many :images, through: :board_images
 
   def remaining_images
-    Image.all.excluding(images)
+    Image.searchable_images_for(self.user).excluding(images)
   end
 
   def self.grid_size_options

@@ -2,12 +2,12 @@
 #
 # Table name: board_images
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  board_id   :integer          not null
-#  image_id   :integer          not null
+#  board_id   :bigint           not null
+#  image_id   :bigint           not null
 #
 # Indexes
 #
@@ -16,8 +16,8 @@
 #
 # Foreign Keys
 #
-#  board_id  (board_id => boards.id)
-#  image_id  (image_id => images.id)
+#  fk_rails_...  (board_id => boards.id)
+#  fk_rails_...  (image_id => images.id)
 #
 
 one:

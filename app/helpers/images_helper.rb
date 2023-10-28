@@ -24,7 +24,7 @@ module ImagesHelper
       puts "no saved image"
       return ""
     end
-    button_to(associate_image_board_path(board, image_id: image), data: { turbo_method: :post }) do
+    button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
       image_tag(image.saved_image, size: size, class: "")
     end
   end
