@@ -16,7 +16,7 @@ module ImagesHelper
       puts "no saved image"
       return ""
     end
-    image_tag(image.saved_image, size: size, class: "", data: { action: "click->speech#speak" })
+    image_tag(image.saved_image, size: size, class: "w-full h-auto object-cover", data: { action: "click->speech#speak" })
   end
 
   def select_image_button(board, image, size: "500x500")

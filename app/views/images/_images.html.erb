@@ -1,3 +1,5 @@
-<%= turbo_frame_tag "images" do %>
-  <%= render images %>
-<% end %>
+  <%= turbo_frame_tag "images" do %>
+  <div class="grid grid-cols-3 gap-4">
+    <%= render images %>
+    </div>
+  <% end %>

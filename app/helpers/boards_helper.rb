@@ -79,13 +79,13 @@ module BoardsHelper
     columns = board.column_count
     rows = board.row_count
     max_image_count = board.max_image_count
-    str = "<div class='p-8 #{theme_color_background(board)} mt-5'>"
+    str = "<div class='p-2 #{theme_color_background(board)}'>"
     str += "<div class='grid #{grid_row_class(board)} #{grid_column_class(board)} gap-4 place-items-center'>"
 
     placeholders = max_image_count - images.length
     images.each do |image|
       str += "<div class='relative max-h-200 overflow-hidden' data-controller='speech'>"
-      str += "<input data-speech-target='name' type='text' value='#{image.label}' class='invisible'>"
+      str += "<input data-speech-target='name' type='text' value='#{image.label}' class='invisible p-0 m-0 h-0 w-0'>"
       str += saved_image_link(image)
       str += remove_image_button(board, image) unless action_name == "locked"
 
