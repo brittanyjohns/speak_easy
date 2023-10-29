@@ -24,6 +24,7 @@ class BoardsController < ApplicationController
 
   def locked
     @images = @board.images
+    render layout: "play_mode"
   end
 
   # GET /boards/new

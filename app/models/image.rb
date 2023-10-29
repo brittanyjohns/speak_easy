@@ -21,7 +21,12 @@ class Image < ApplicationRecord
 
   validates :label, presence: true
 
-  has_one_attached :saved_image
+  has_one_attached :saved_image do |attachable|
+    attachable.variant :thumbnail, resize_to_limit: [100, 100]
+    attachable.variant :small, resize_to_limit: [200, 200]
+    attachable.variant :medium, resize_to_limit: [300, 300]
+    attachable.variant :large, resize_to_limit: [500, 500]
+  end
   has_one_attached :audio_clip
 
   after_create :generate_image, if: :send_request_on_save

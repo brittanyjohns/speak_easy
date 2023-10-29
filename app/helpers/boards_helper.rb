@@ -79,8 +79,8 @@ module BoardsHelper
     columns = board.column_count
     rows = board.row_count
     max_image_count = board.max_image_count
-    str = "<div class='p-2 #{theme_color_background(board)}'>"
-    str += "<div class='grid #{grid_row_class(board)} #{grid_column_class(board)} gap-4 place-items-center'>"
+    str = "<div class='p-2 #{theme_color_background(board)} rounded-md pb-8'>"
+    str += "<div class='grid grid-cols-1 sm:grid-cols-2 md:#{grid_column_class(board)} gap-4 place-items-center'>"
 
     placeholders = max_image_count - images.length
     images.each do |image|

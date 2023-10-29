@@ -1,5 +1,7 @@
 <%= turbo_frame_tag "board_images" do %>
-   <% @images.each do |image| %>
-      <%= render "board_image", board_image: image %>  
+  <div class="grid grid-cols-2">
+    <% @images.each do |board_image| %>
+      <%= render "board_image", board_image: board_image %>
     <% end %>
+  </div>
 <% end %>
