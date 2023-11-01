@@ -40,7 +40,7 @@ class ImagesController < ApplicationController
     if @image.user != current_user
       redirect_to images_url, notice: "You can only edit your own images."
     elsif @image.saved_image.attached? && !@image.cropped_image.attached?
-      redirect_to crop_image_url(@image), notice: "You must crop your image before editing."
+      redirect_to crop_image_url(@image), notice: "You must crop your image before continuing."
     end
   end
 
@@ -84,7 +84,7 @@ class ImagesController < ApplicationController
       filename: "cropped_image_#{@image.id}.jpg",
       content_type: "image/x-bmp",
     )
-    render json: { status: "success", redirect_url: image_url(@image) }
+    render json: { status: "success", redirect_url: image_url(@image), notice: "Image was successfully cropped." }
   end
 
   # DELETE /images/1 or /images/1.json

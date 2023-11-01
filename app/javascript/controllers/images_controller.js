@@ -1,39 +1,20 @@
 import { Controller } from "@hotwired/stimulus";
+
 import Cropper from "cropperjs";
 
 // Connects to data-controller="images"
 export default class extends Controller {
   static targets = ["source", "output", "cropButton"];
   connect() {
-    console.log("Connected");
-    console.log(this.sourceTarget);
+    console.log("Connected to images controller ***");
     this.createCropper();
-    this.sourceTarget.addEventListener("load", () => {
-      console.log("Image loaded");
-    });
   }
 
   createCropper() {
-    this.cropper = new Cropper(this.sourceTarget, {
-      background: true,
-      aspectRatio: 1,
-      viewMode: 1,
-      // dragMode: "move",
-      responsive: true,
-      checkCrossOrigin: false,
-    });
-    // this.cropper = new Cropper(this.sourceTarget, {
-    //   dragMode: "move",
-    //   aspectRatio: 16 / 9,
-    //   autoCropArea: 0.65,
-    //   restore: false,
-    //   guides: false,
-    //   center: false,
-    //   highlight: false,
-    //   cropBoxMovable: false,
-    //   cropBoxResizable: false,
-    //   toggleDragModeOnDblclick: false,
-    // });
+    this.cropper = new Cropper(this.sourceTarget);
+    const element = this.cropper.getCropperSelection();
+    element.aspectRatio = 1;
+    element.initialAspectRatio = 1;
   }
 
   click = (e) => {
@@ -54,9 +35,7 @@ export default class extends Controller {
 
   postToAPI(croppedData) {
     const image_id = this.data.get("id");
-    console.log(`image_id: ${image_id}`);
     const dataURL = croppedData;
-    console.log(`dataURL:  ${dataURL.length} - ${typeof dataURL}`);
     const strippedData = dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
     fetch(`/croppable/${image_id}`, {
       method: "PATCH",
