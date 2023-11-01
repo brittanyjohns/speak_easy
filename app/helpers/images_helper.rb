@@ -16,7 +16,7 @@ module ImagesHelper
       puts "no saved image"
       return ""
     end
-    image_tag(image.saved_image.variant(:medium).processed.url, data: { action: "click->speech#speak" })
+    image_tag(image.display_image.variant(:medium).processed.url, data: { action: "click->speech#speak" })
   end
 
   def select_image_button(board, image, size: "thumnail")
@@ -25,7 +25,7 @@ module ImagesHelper
       return ""
     end
     button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
-      image_tag(image.saved_image.representation(resize_to_limit: [100, 100]).processed.url)
+      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url)
     end
   end
 end

@@ -27,7 +27,12 @@ class Image < ApplicationRecord
     attachable.variant :medium, resize_to_limit: [300, 300]
     attachable.variant :large, resize_to_limit: [500, 500]
   end
-  has_one_attached :cropped_image
+  has_one_attached :cropped_image do |attachable|
+    attachable.variant :thumbnail, resize_to_limit: [100, 100]
+    attachable.variant :small, resize_to_limit: [200, 200]
+    attachable.variant :medium, resize_to_limit: [300, 300]
+    attachable.variant :large, resize_to_limit: [500, 500]
+  end
 
   after_create :generate_image, if: :send_request_on_save
 
