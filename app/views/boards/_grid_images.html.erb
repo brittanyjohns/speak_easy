@@ -1,7 +1,8 @@
 
 <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-0.5 p-1 w-full h-full">
   <% @images.each do |image| %>
-    <div class='grid-cell'>
+    <div class='grid-cell' data-controller='speech'>
+        <input data-speech-target='name' type='text' value='<%= image.label %>' class='invisible p-0 m-0 h-0 w-0'>
         <%= saved_image_link(image) %>
     </div>
     <% end %>

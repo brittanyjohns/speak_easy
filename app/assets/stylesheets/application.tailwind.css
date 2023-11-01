@@ -24,3 +24,37 @@
 body {
   @apply m-0;
 }
+
+img {
+  display: block;
+
+  /* This rule is very important, please don't ignore this */
+  max-width: 100% !important;
+}
+
+.image {
+  display: flex;
+  width: 500px;
+  height: 600px;
+  max-width: 100%;
+}
+
+.image-container > cropper-canvas {
+  width: 500px;
+  height: 600px;
+  max-width: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+#source {
+  margin: 0 5px;
+}
+
+#output {
+  margin: 0 5px;
+}

@@ -37,7 +37,7 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    if @image.user != current_user
+    if @image.user != current_user && !current_user.admin?
       redirect_to images_url, notice: "You can only edit your own images."
     elsif @image.saved_image.attached? && !@image.cropped_image.attached?
       redirect_to crop_image_url(@image), notice: "You must crop your image before continuing."
