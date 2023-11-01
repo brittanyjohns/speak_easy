@@ -1,0 +1,30 @@
+<% # NOT_IN_USE - See app/javascript/controllers/upload_controller.js %>
+<% image_url = image.saved_image.attached? ? rails_storage_proxy_path(image.saved_image) : "" %>
+
+<% cropped_image_url = image.cropped_image.attached? ? rails_storage_proxy_path(image.cropped_image) : "" %>
+
+<%= content_tag(:div, "", class: "container", data: {
+                            controller: "upload",
+                          }) do %>
+    <div class="my-5">
+        <%= form.label :upload %>
+        <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+
+    </div>
+    <div class="image-container">
+        <%= image_tag image_url, class: "image", id: "preview", data: {
+                                   upload_target: "preview",
+                                 } %>
+    </div>
+    <div class="my-5">
+    <%= link_to "Crop", "#", data: {
+                               action: "click->upload#click",
+                               upload_target: "cropButton",
+                             }, method: :get %>
+    </div>
+    <div class="image-container">
+      <%= image_tag(cropped_image_url, class: "image", id: "output", data: {
+                                         upload_target: "output",
+                                       }) %>
+    </div>
+  <% end %>

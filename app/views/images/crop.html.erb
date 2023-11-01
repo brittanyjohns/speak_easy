@@ -1,0 +1,21 @@
+
+  <%= content_tag(:div, "", data: {
+                              controller: "images",
+                              images_url: @image_url,
+                              images_id: @image.id,
+                            }, class: "container") do %>
+    <div class="image-container">
+      <%= image_tag(@image_url, class: "image", id: "source", data: {
+                                  images_target: "source",
+                                }) %>
+      <%= button_to "Crop", "#", data: {
+                                   action: "click->images#click",
+                                   images_target: "cropButton",
+                                 }, method: :get %>
+    </div>
+    <div class="image-container">
+      <%= image_tag(@cropped_image_url, class: "image", id: "output", data: {
+                                          images_target: "output",
+                                        }) %>
+    </div>
+  <% end %>

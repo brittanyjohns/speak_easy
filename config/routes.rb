@@ -2,8 +2,10 @@ Rails.application.routes.draw do
   root to: "home#index"
   get "home/index"
   devise_for :users
+  patch "croppable/:id", to: "images#croppable", as: "croppable"
   resources :images do
     post "generate", on: :member
+    get "crop", on: :member
   end
   resources :boards do
     member do

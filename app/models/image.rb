@@ -27,11 +27,19 @@ class Image < ApplicationRecord
     attachable.variant :medium, resize_to_limit: [300, 300]
     attachable.variant :large, resize_to_limit: [500, 500]
   end
-  has_one_attached :audio_clip
+  has_one_attached :cropped_image
 
   after_create :generate_image, if: :send_request_on_save
 
   scope :public_images, -> { where(private: false) }
+
+  def display_image
+    if cropped_image.attached?
+      cropped_image
+    else
+      saved_image
+    end
+  end
 
   def generate_image
     puts "Generating image for #{self.label}"

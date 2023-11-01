@@ -97,3 +97,6 @@ gem "cssbundling-rails", "~> 1.3"
 gem "sidekiq", "~> 7.1"
 # AWS - ActiveStorage in production
 gem "aws-sdk-s3", require: false
+
+# CORS
+gem "rack-cors"
