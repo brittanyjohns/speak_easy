@@ -84,7 +84,7 @@ class ImagesController < ApplicationController
       filename: "cropped_image_#{@image.id}.jpg",
       content_type: "image/x-bmp",
     )
-    render json: { status: "success", redirect_url: image_url(@image), notice: "Image was successfully cropped." }
+    render json: { status: "success", redirect_url: images_url, notice: "Image was successfully cropped & saved." }
   end
 
   # DELETE /images/1 or /images/1.json

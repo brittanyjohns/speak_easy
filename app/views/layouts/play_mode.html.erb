@@ -11,8 +11,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-blue-50 h-screen">
-    <div class="bg-blue-600 text-white p-4 shadow-md">
+  <body class="h-screen p-2">
+    <div class="bg-blue-600 text-white shadow-md">
       <div class="container mx-auto">
         <div class="justify-between items-center">
         <%= link_to @board do %>
@@ -21,7 +21,7 @@
           </div>
       </div>
     </div>
-    <div class="relative min-h-screen overflow-hidden bg-gray-50 pt-8">
+    <div class="bg-gray-100">
        <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
       <%= yield %>
