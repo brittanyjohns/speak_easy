@@ -4,14 +4,17 @@
 
 import { application } from "./application";
 
-import HelloController from "./hello_controller";
-application.register("hello", HelloController);
+// import HelloController from "./hello_controller";
+// application.register("hello", HelloController);
 
-import ImagesController from "./images_controller";
-application.register("images", ImagesController);
+// import ImagesController from "./images_controller";
+// application.register("images", ImagesController);
 
-import SearchFormController from "./search_form_controller";
-application.register("search-form", SearchFormController);
+// import SearchFormController from "./search_form_controller";
+// application.register("search-form", SearchFormController);
 
-import SpeechController from "./speech_controller";
-application.register("speech", SpeechController);
+// import SpeechController from "./speech_controller";
+// application.register("speech", SpeechController);
+
+import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
+eagerLoadControllersFrom("controllers", application);
