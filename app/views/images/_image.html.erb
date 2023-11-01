@@ -3,7 +3,7 @@
   <div class="relative">
     <%= image_tag image.display_image, class: "w-full" %>
 
-  <p class="absolute text-xl bg-black p-3 rounded-lg text-slate-200	 bottom-4 left-1/2 -translate-x-1/2">
+  <p class="absolute text-sm bg-slate-600/75 p-1 text-center rounded-lg text-slate-200	inset-x-0 bottom-0">
     <%= link_to image.label, edit_image_path(image), class: "rounded-lg inline-block font-medium", data: { turbo: false } %>   <%= icon("fa-solid", "lock") if image.private %>
   </p>
 
