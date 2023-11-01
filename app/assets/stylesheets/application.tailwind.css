@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.no_scroll {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+/* Ensure that the grid cells maintain a 1:1 aspect ratio and are centered */
+.grid-cell {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+/* Ensure the images themselves are not stretched but contained within the cells */
+.grid-cell img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* Ensure the body has no margin */
+@tailwind base;
+body {
+  @apply m-0;
+}
