@@ -4,7 +4,6 @@ pin "application", preload: true
 pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
-pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@fortawesome/fontawesome-free", to: "https://ga.jspm.io/npm:@fortawesome/fontawesome-free@6.4.2/js/all.js"
 pin "cropperjs", to: "https://ga.jspm.io/npm:cropperjs@2.0.0-beta.4/dist/cropper.esm.raw.js"
 pin "@cropper/element", to: "https://ga.jspm.io/npm:@cropper/element@2.0.0-beta.4/dist/element.esm.raw.js"
@@ -18,3 +17,4 @@ pin "@cropper/element-shade", to: "https://ga.jspm.io/npm:@cropper/element-shade
 pin "@cropper/element-viewer", to: "https://ga.jspm.io/npm:@cropper/element-viewer@2.0.0-beta.4/dist/element-viewer.esm.raw.js"
 pin "@cropper/elements", to: "https://ga.jspm.io/npm:@cropper/elements@2.0.0-beta.4/dist/elements.esm.raw.js"
 pin "@cropper/utils", to: "https://ga.jspm.io/npm:@cropper/utils@2.0.0-beta.4/dist/utils.esm.raw.js"
+pin_all_from "app/javascript/controllers", under: "controllers"
