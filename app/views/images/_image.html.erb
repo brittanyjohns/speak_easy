@@ -1,7 +1,7 @@
-<div id="<%= dom_id image %>" class="max-w-3xl p-2 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center" data-controller="images">
+<div id="<%= dom_id image %>" class="max-w-3xl p-2 m-3 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
 
   <p class="m-5 items-center">
     <%= link_to image.label, edit_image_path(image), class: "rounded-lg py-3 px-5 inline-block font-medium", data: { turbo: false } %>   <%= icon("fa-solid", "lock") if image.private %>
   </p>
-    <%= image_tag image.saved_image, class: "w-32 h-32" %>
+    <%= image_tag image.display_image, class: "w-32 h-32" %>
 </div>
