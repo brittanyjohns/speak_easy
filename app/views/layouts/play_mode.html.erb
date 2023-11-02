@@ -6,22 +6,21 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-
+       <%= javascript_include_tag "application", type: "module" %>
+       <script src="https://kit.fontawesome.com/7747fb4a3a.js" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
   </head>
 
   <body class="h-screen w-screen overflow-hidden">
-    <div class="outline shadow-md">
-      <div class="container mx-auto">
-        <div class="justify-between items-center">
+    <div class="bg-gray-800">
+      <div class="flex items-center justify-between px-4 py-3 md:py-4 md:px-6">
         <%= link_to @board do %>
-          <h1 class="text-xl font-bold text-white-700"><%= icon("fa-solid", "arrow-left") %></h1>
+          <h1 class="text-xl font-bold text-white p-2 outline rounded-lg">
+            <%= icon("fa-solid", "arrow-left") %> <%= @board.name %></h1>
         <% end %>
-          </div>
       </div>
     </div>
-    <div class="bg-gray-100">
+    <div class="bg-teal-100 h-full pt-3">
        <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
       <%= yield %>

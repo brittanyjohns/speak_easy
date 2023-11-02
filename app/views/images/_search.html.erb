@@ -1,9 +1,11 @@
 <%= form_with(url: images_path, method: :get, data: { controller: "search-form", turbo_frame: "images", turbo_action: "advance" }) do |form| %>
-  <div class="flex space-x-4 items-center">
-    <%= form.text_field :query, class: "py-3 px-4 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { action: "input->search-form#search" } %>
-    <%= form.submit "Search", class: "px-4 py-3 font-medium bg-orange-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100" %>
-
-    <%= form.label :user_images_only, "Only my images", class: "block" %>
-    <%= form.check_box :user_images_only, class: "py-3 px-4 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { action: "input->search-form#search" } %>  
-</div>
+  <div class="flex flex-wrap items-center justify-between gap-4 w-full lg:w-1/2">
+    <%= form.text_field :query, class: "flex-grow py-3 px-4 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { action: "input->search-form#search" } %>
+    <%= form.submit "Search", class: "shrink-0 px-4 py-3 font-medium bg-orange-300 text-neutral-900 rounded cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100" %>
+    
+    <div class="flex items-center space-x-2 justify-end">
+      <%= form.check_box :user_images_only, class: "form-checkbox h-5 w-5 text-orange-600", data: { action: "input->search-form#search" } %>
+      <%= form.label :user_images_only, "Only my images", class: "text-sm font-medium text-gray-700" %>
+    </div>
+  </div>
 <% end %>

@@ -1,11 +1,8 @@
-<div id="<%= dom_id image %>" class="max-w-xl p-1 m-1 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
 
-  <div class="relative">
-    <%= image_tag image.display_image, class: "w-full" %>
 
-  <p class="absolute text-sm bg-slate-600/75 p-1 text-center rounded-lg text-slate-200	inset-x-0 bottom-0">
+<div id="<%= dom_id image %>" class="inline-block mr-4 w-16 md:w-32 lg:w-48">
+    <p class="m-2 truncate">
     <%= link_to image.label, edit_image_path(image), class: "rounded-lg inline-block font-medium", data: { turbo: false } %>   <%= icon("fa-solid", "lock") if image.private %>
-  </p>
-
-    </div>
+    </p>
+    <%= image_tag image.display_image, class: "w-full" %>
 </div>

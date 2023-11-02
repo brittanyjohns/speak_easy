@@ -14,7 +14,9 @@
 #  user_id              :integer
 #
 class Image < ApplicationRecord
+  default_scope { with_attached_cropped_image }
   belongs_to :user, optional: true
+  has_many :board_images, dependent: :destroy
   attr_accessor :descriptive_prompt
   include ImageHelper
   include SpeechHelper

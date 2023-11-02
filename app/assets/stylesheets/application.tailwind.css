@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.no_scroll {
+/* .no_scroll {
   height: 100%;
   overflow-y: hidden;
 }
@@ -20,14 +20,14 @@
   object-fit: contain;
 }
 /* Ensure the body has no margin */
-@tailwind base;
+/* @tailwind base;
 body {
   @apply m-0;
-}
+} */
 
+/* IMPORTANT FOR CROPPERJS */
 img {
   display: block;
-
   /* This rule is very important, please don't ignore this */
   max-width: 100% !important;
 }

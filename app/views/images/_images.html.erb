@@ -1,5 +1,7 @@
 <%= turbo_frame_tag "images" do %>
-  <div class="grid grid-cols-3 gap-4">
-    <%= render images %>
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 gap-2">
+    <% @images.each do |image| %>
+      <%= render "image", image: image %>
+    <% end %>
   </div>
 <% end %>

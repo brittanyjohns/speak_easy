@@ -1,9 +1,17 @@
-import { Application } from "@hotwired/stimulus"
+// console.log("Stimulus loading...");
 
-const application = Application.start()
+// import { Application } from "@hotwired/stimulus";
 
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus   = application
+// // const application = Application.start()
 
-export { application }
+// // // Configure Stimulus development experience
+// // application.debug = false
+// // window.Stimulus   = application
+
+// import { definitionsFromContext } from "@hotwired/stimulus-webpack-helpers";
+
+// window.Stimulus = Application.start();
+// const context = require.context("./controllers", true, /\.js$/);
+// Stimulus.load(definitionsFromContext(context));
+// console.log("Stimulus loaded");
+// export { application };

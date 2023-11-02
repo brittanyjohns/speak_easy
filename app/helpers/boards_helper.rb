@@ -86,9 +86,8 @@ module BoardsHelper
     images.each do |image|
       str += "<div class='relative max-h-200 overflow-hidden' data-controller='speech'>"
       str += "<input data-speech-target='name' type='text' value='#{image.label}' class='invisible p-0 m-0 h-0 w-0'>"
-      str += saved_image_link(image)
+      str += saved_image_link(image, 'small')
       str += remove_image_button(board, image) unless action_name == "locked"
-
       str += "</div>"
     end
     placeholders.times do
