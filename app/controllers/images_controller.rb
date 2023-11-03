@@ -4,6 +4,7 @@ class ImagesController < ApplicationController
 
   # GET /images or /images.json
   def index
+    puts "\n\n\n\n*****\n\n\nparams: #{params}\n\n\n*****\n\n\n"
     if params[:user_images_only] == "1"
       @images = current_user.images
     else
@@ -84,6 +85,9 @@ class ImagesController < ApplicationController
       filename: "cropped_image_#{@image.id}.jpg",
       content_type: "image/x-bmp",
     )
+    if @image.cropped_image.attached?
+      @image.saved_image.purge
+    end
     render json: { status: "success", redirect_url: images_url, notice: "Image was successfully cropped & saved." }
   end
 
@@ -107,6 +111,6 @@ class ImagesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def image_params
-    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image, :image_prompt, :private, :cropped_image)
+    params.require(:image).permit(:image_url, :audio_url, :label, :send_request_on_save, :saved_image, :image_prompt, :private, :cropped_image, :category)
   end
 end

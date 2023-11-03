@@ -6,43 +6,23 @@ function removeParamFromURL(url, param) {
 }
 // Connects to data-controller="search-form"
 export default class extends Controller {
-  static targets = ["query", "user_images_only"];
-  connect() {}
-
-  search() {
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      console.log(this.element);
-      this.element.requestSubmit();
-    }, 200);
+  static targets = ["query", "userImagesOnly"];
+  static values = { useronly: String, query: String };
+  connect() {
+    this.queryTarget.value = this.queryValue;
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const params = new URLSearchParams(url.search);
+    this.userImagesOnlyTarget.checked = params.has("user_images_only", "1");
+    this.queryTarget.focus();
   }
 
-  user_images_only() {
+  search = (e) => {
+    this.queryTarget.focus();
+
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      console.log(this.element);
       this.element.requestSubmit();
-      console.log("submitted: ", this.element);
-      const currentUrl = window.location.href;
-      console.log("currentUrl: ", currentUrl);
-      // window.location.replace(newUrl);
-      const url = new URL(currentUrl);
-      const baseUrl = url.origin + url.pathname;
-      const params = new URLSearchParams(url.search);
-      console.log(`Query string (before):\t ${params}`);
-      if (params.has("user_images_only", "0")) {
-        console.log("user_images_only exists");
-        params.delete("user_images_only", "0");
-        const newUrl = baseUrl + "?" + params.toString();
-        // window.location.replace(newUrl);
-        console.log(`Query string (after):\t ${params}`);
-      } else {
-        console.log("user_images_only does not exist");
-        params.append("user_images_only", "0");
-        const newUrl = baseUrl + "?" + params.toString();
-        // window.location.replace(newUrl);
-        console.log(`Query string (after):\t ${params}`);
-      }
     }, 200);
-  }
+  };
 }

@@ -1,5 +1,3 @@
-
-
 <div id="<%= dom_id image %>" class="inline-block mr-4 w-16 md:w-32 lg:w-48">
     <p class="m-2 truncate">
     <%= link_to image.label, edit_image_path(image), class: "rounded-lg inline-block font-medium", data: { turbo: false } %>   <%= icon("fa-solid", "lock") if image.private %>

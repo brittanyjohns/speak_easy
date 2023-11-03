@@ -1,4 +1,4 @@
-<%= form_with(model: image, class: "contents", id: "new_image_form") do |form| %>
+<%= form_with(model: image, class: "contents mb-8", id: "new_image_form", data: { controller: "disable" }) do |form| %>
   <% if image.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
       <h2><%= pluralize(image.errors.count, "error") %> prohibited this image from being saved:</h2>
@@ -11,28 +11,34 @@
     </div>
   <% end %>
   <div class="my-5">
+    <%= form.label :category %>
+    <%= form.select :category,
+                    options_for_select(Image.category_options.sort, selected: form.object.category),
+                    {}, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+  <div class="my-5">
     <%= form.label :label %>
-    <%= form.text_field :label, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_field :label, placeholder: "What should I say?", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
   <div class="my-5">
     <%= form.label :image_prompt %>
-    <%= form.text_field :image_prompt, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_field :image_prompt, placeholder: "No image? Use ChatGPT to generate one. Enter your prompt here.", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
   <div class="my-5">
     <%= form.label :private %>
-    <%= form.check_box :private, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-8" %>
+    <%= form.check_box :private, class: "shadow rounded-md border border-gray-200 outline-none px-4 py-2 mt-2 ml-3 inline" %>
   </div>
 
   <div class="my-5">
       <%= form.label :upload %>
-      <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+      <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "block rounded-md outline-none px-3 py-2 mt-2 w-1/2" %>
   </div>
 
   <div class="inline">
-    <%= form.submit class: "rounded-lg py-2 px-2 outline inline-block font-medium cursor-pointer" %>
-    <%= link_to "Cancel", boards_path, class: "ml-2 rounded-lg py-3 px-5 bg-red-400 inline-block font-medium" %>
+    <%= form.submit class: "text-white shadow mt-2 rounded-lg py-3 px-5 bg-cyan-700 inline-block font-medium", data: { disable_target: "button", action: "click->disable#disableForm" } %>
+    <%= link_to "Cancel", images_path, class: "text-white shadow mt-2 rounded-lg py-3 px-5 bg-red-300 inline-block font-medium" %>
 
   </div>
 <% end %>
