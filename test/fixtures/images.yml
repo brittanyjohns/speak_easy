@@ -4,6 +4,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  audio_url            :string
+#  category             :string
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string

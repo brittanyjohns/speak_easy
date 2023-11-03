@@ -4,6 +4,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  audio_url            :string
+#  category             :string
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string
@@ -23,18 +24,8 @@ class Image < ApplicationRecord
 
   validates :label, presence: true
 
-  has_one_attached :saved_image do |attachable|
-    attachable.variant :thumbnail, resize_to_limit: [100, 100]
-    attachable.variant :small, resize_to_limit: [200, 200]
-    attachable.variant :medium, resize_to_limit: [300, 300]
-    attachable.variant :large, resize_to_limit: [500, 500]
-  end
-  has_one_attached :cropped_image do |attachable|
-    attachable.variant :thumbnail, resize_to_limit: [100, 100]
-    attachable.variant :small, resize_to_limit: [200, 200]
-    attachable.variant :medium, resize_to_limit: [300, 300]
-    attachable.variant :large, resize_to_limit: [500, 500]
-  end
+  has_one_attached :saved_image
+  has_one_attached :cropped_image
 
   after_create :generate_image, if: :send_request_on_save
 
@@ -83,5 +74,12 @@ class Image < ApplicationRecord
 
   def open_ai_opts
     { prompt: prompt_to_send }
+  end
+
+  def self.category_options
+    ["TV Shows", "Food", "Animals", "People", "Places", "Things", "Actions", "Emotions",
+     "Colors", "Numbers", "Letters", "Shapes", "Weather", "Time", "Sports", "Music",
+     "Clothing", "Body Parts", "Vehicles", "Technology", "School", "Nature", "Holidays",
+     "Family", "Household", "Jobs", "Other"]
   end
 end

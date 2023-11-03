@@ -1,9 +1,6 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing image</h1>
-
-  <%= render "form", image: @image %>
-  <%= render "images/cropped_image", image: @image %>
-
-    <%= button_to "Destroy this image", image_path(@image), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-red-100 font-medium", form_class: "inline-block" %>
-  <%= link_to "Back to images", images_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<div class="shadow mt-8 p-2 border w-1/2">
+  <div class="m-5">
+    <h1 class="font-bold text-4xl">Editing image</h1>
+    <%= render "form", image: @image %>
+  </div>
 </div>

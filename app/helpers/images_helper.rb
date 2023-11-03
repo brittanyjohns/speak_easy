@@ -14,16 +14,16 @@ module ImagesHelper
   def saved_image_link(image, *options)
     size = options[0] || "small"
     puts "size: #{size}"
-    unless image.saved_image.attached?
-      puts "no saved image"
+    unless image.cropped_image.attached?
+      puts "no image"
       return ""
     end
-    image_tag(image.display_image.variant(size.to_sym).processed.url, data: { action: "click->speech#speak" })
+    image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url, data: { action: "click->speech#speak" })
   end
 
   def select_image_button(board, image, size: "thumnail")
-    unless image.saved_image.attached?
-      puts "no saved image"
+    unless image.cropped_image.attached?
+      puts "no image"
       return ""
     end
     button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
