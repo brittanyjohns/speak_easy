@@ -21,13 +21,14 @@ module ImagesHelper
     image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url, data: { action: "click->speech#speak" })
   end
 
-  def select_image_button(board, image, size: "thumnail")
+  def select_image_button(board, image, size: "thumnail", img_class: "rounded-full")
+    puts "img_class: #{img_class}"
     unless image.cropped_image.attached?
       puts "no image"
       return ""
     end
     button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
-      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url)
+      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url, class: img_class)
     end
   end
 end

@@ -1,7 +1,21 @@
 <%= turbo_frame_tag "board_images" do %>
-  <div class="grid grid-cols-2">
-    <% @images.each do |board_image| %>
-      <%= render "board_image", board_image: board_image %>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+    <% @images.each do |image| %>
+      <div id="<%= dom_id image %>" class="w-full">
+        <div class="bg-white rounded-lg shadow overflow-hidden group">
+          <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
+           <%= select_image_button(@board, image, img_class: "absolute top-0 left-0 w-full h-full object-contain") %>
+            <% if image.private %>
+              <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
+            <% end %>
+          </div>
+          <div class="p-4">
+            <p class="truncate text-gray-800 font-medium hover:text-blue-600">
+              <%= link_to image.label, edit_image_path(image), class: "rounded-lg", data: { turbo: false } %>
+            </p>
+          </div>
+        </div>
+      </div>
     <% end %>
   </div>
 <% end %>
