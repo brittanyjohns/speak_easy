@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_03_152853) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_04_163955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_152853) do
     t.integer "user_id"
     t.boolean "private", default: true
     t.string "category"
+    t.boolean "ai_generated", default: false
+  end
+
+  create_table "response_boards", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "response_images", force: :cascade do |t|
+    t.bigint "response_board_id", null: false
+    t.bigint "image_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "index_response_images_on_image_id"
+    t.index ["response_board_id"], name: "index_response_images_on_response_board_id"
   end
 
   create_table "user_images", force: :cascade do |t|
@@ -104,6 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_152853) do
   add_foreign_key "board_images", "boards"
   add_foreign_key "board_images", "images"
   add_foreign_key "boards", "users"
+  add_foreign_key "response_images", "images"
+  add_foreign_key "response_images", "response_boards"
   add_foreign_key "user_images", "images"
   add_foreign_key "user_images", "users"
 end

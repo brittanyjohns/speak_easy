@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
+  get 'response_boards/index'
+  get 'response_boards/show'
   root to: "home#index"
   get "home/index"
   devise_for :users
   patch "croppable/:id", to: "images#croppable", as: "croppable"
   resources :images do
     post "generate", on: :member
+    get "create_response_board", on: :member
     get "crop", on: :member
   end
   resources :boards do
@@ -14,6 +17,8 @@ Rails.application.routes.draw do
       get "locked"
     end
   end
+
+  resources :response_boards, only: [:index, :show]
   # post "boards/:board_id/add_image/:image_id", to: "boards#add_image", as: "add_image_to_board"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

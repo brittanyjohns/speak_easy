@@ -102,3 +102,4 @@ gem "aws-sdk-s3", require: false
 gem "rack-cors"
 
 gem "jsbundling-rails", "~> 1.2"
+gem "kaminari"

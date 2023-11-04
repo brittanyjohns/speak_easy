@@ -3,6 +3,7 @@
 # Table name: images
 #
 #  id                   :bigint           not null, primary key
+#  ai_generated         :boolean          default(FALSE)
 #  audio_url            :string
 #  category             :string
 #  image_prompt         :string
