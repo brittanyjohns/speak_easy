@@ -13,11 +13,13 @@ export default class extends Controller {
   createCropper() {
     this.cropper = new Cropper(this.sourceTarget);
     const element = this.cropper.getCropperSelection();
+    console.log(element);
     element.aspectRatio = 1;
     element.initialAspectRatio = 1;
   }
 
   click = (e) => {
+    console.log("click");
     e.preventDefault();
 
     this.cropper

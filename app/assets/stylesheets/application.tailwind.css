@@ -34,14 +34,14 @@ img {
 
 .image {
   display: flex;
-  width: 500px;
-  height: 600px;
+  /* width: 500px;
+  height: 600px; */
   max-width: 100%;
 }
 
 .image-container > cropper-canvas {
-  width: 500px;
-  height: 600px;
+  /* width: 500px;
+  height: 600px; */
   max-width: 100%;
 }
 

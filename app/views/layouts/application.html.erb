@@ -14,9 +14,10 @@
 
   <body class="bg-stone-50">
     <%= render "layouts/navbar" %>
-    <div class="h-full flex justify-center p-4 md:p-8">
-       <%= render "layouts/notice" %>
+    <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
+    <div class="h-full flex justify-center p-2 md:p-4">
+       
       <%= yield %>
     </div>
     <script>

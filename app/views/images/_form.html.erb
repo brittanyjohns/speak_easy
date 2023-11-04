@@ -37,8 +37,10 @@
   </div>
 
   <div class="inline">
-    <%= form.submit class: "text-white shadow mt-2 rounded-lg py-3 px-5 bg-cyan-700 inline-block font-medium", data: { disable_target: "button", action: "click->disable#disableForm" } %>
-    <%= link_to "Cancel", images_path, class: "text-white shadow mt-2 rounded-lg py-3 px-5 bg-red-300 inline-block font-medium" %>
-
+    <%= form.submit "Save", class: "text-white shadow rounded-lg py-2 px-4 bg-green-700 font-medium text-center", data: { disable_target: "button", action: "click->disable#disableForm" } %>
+    <% if image.persisted? %>
+    <%= link_to "Crop", crop_image_path(@image), class: "text-white shadow rounded-lg py-2 px-4 bg-cyan-700 font-medium text-center" %>
+    <%= button_to "Destroy", image_path(@image), method: :delete, class: "text-white  mt-2 shadow rounded-lg py-2 px-4 bg-red-700 font-medium text-center", form_class: "" %>
+    <% end %>
   </div>
 <% end %>
