@@ -51,6 +51,12 @@ class BoardsController < ApplicationController
     end
   end
 
+  def find_or_create_image
+    @board = current_user.boards.find(params[:id])
+    @image = Image.find_or_create_by(label: params[:label])
+    @board.images << @image unless @board.images.include?(@image)
+  end
+
   def associate_image
     @board = current_user.boards.find(params[:id])
     image = Image.find(params[:image_id])

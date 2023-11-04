@@ -1,0 +1,2 @@
+module ResponseBoardsHelper
+end

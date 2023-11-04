@@ -4,11 +4,10 @@ class ImagesController < ApplicationController
 
   # GET /images or /images.json
   def index
-    puts "\n\n\n\n*****\n\n\nparams: #{params}\n\n\n*****\n\n\n"
     if params[:user_images_only] == "1"
-      @images = current_user.images
+      @images = current_user.images.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).page params[:page]
     else
-      @images = Image.searchable_images_for(current_user).order(label: :asc)
+      @images = Image.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).searchable_images_for(current_user).order(label: :asc).page params[:page]
     end
     if params[:query].present?
       @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
@@ -89,6 +88,14 @@ class ImagesController < ApplicationController
       @image.saved_image.purge
     end
     render json: { status: "success", redirect_url: images_url, notice: "Image was successfully cropped & saved." }
+  end
+
+  def create_response_board
+    @image = Image.find(params[:id])
+    response_board = ResponseBoard.find_or_create_by(name: @image.label)
+    AskAiJob.perform_async(@image.id)
+    puts "Response Board: #{response_board}"
+    redirect_to response_board_url(response_board)
   end
 
   # DELETE /images/1 or /images/1.json

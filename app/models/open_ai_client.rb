@@ -35,26 +35,21 @@ class OpenAiClient
     img_variation_url
   end
 
-  def create_completion
-    response = openai_client.completions(parameters: { model: DEFAULT_MODEL, prompt: @prompt })
-    if response
-      choices = response["choices"].map { |c| "<p class='ai-response'>#{c["text"]}</p>" }.join("\n")
-      response_body = choices[0]
-    else
-      puts "**** ERROR **** \nDid not receive valid response.\n"
-    end
-    response_body
-  end
-
   def create_chat
+    puts "**** ERROR **** \nNo messages provided.\n" unless @messages
+    puts "Messages: #{@messages}\n"
     opts = {
       model: TURBO_MODEL, # Required.
       messages: @messages, # Required.
       temperature: 0.7,
     }
-    response = openai_client.chat(
-      parameters: opts,
-    )
+    begin
+      response = openai_client.chat(
+        parameters: opts,
+      )
+    rescue => e
+      puts "**** ERROR **** \n#{e.message}\n"
+    end
     puts response.dig("choices", 0, "message", "content")
     if response
       @role = response.dig("choices", 0, "message", "role")

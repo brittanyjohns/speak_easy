@@ -1,0 +1,5 @@
+<div>
+  <% @response_boards.each do |response_board| %>
+    <p class="flex justify-between"><%= link_to response_board.name, response_board %> <span><%= response_board.images.count %></span></p>
+  <% end %>
+</div>
