@@ -27,7 +27,7 @@ module ImagesHelper
       return ""
     end
     button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
-      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url, class: img_class)
+      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url)
     end
   end
 end
