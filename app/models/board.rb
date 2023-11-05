@@ -25,7 +25,7 @@ class Board < ApplicationRecord
   has_many :images, through: :board_images
 
   def remaining_images
-    Image.searchable_images_for(self.user).excluding(images)
+    Image.with_attached_cropped_image.includes(cropped_image_attachment: :blob).searchable_images_for(self.user).excluding(images)
   end
 
   def self.grid_size_options

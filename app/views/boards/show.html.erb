@@ -1,12 +1,15 @@
 <div class="mx-auto md:w-2/3 w-full p-4">
+                  <%= paginate @images %>
+
   <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
   <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white inline-block font-medium align-middle" %>
 
   <div class="mt-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+
     <div class="search_box_with_results flex-1">
       <%= render "boards/search" %>
       <div class="mt-4 overflow-x-scroll whitespace-nowrap">
-        <%= render "board_images", images: @board_images %>
+        <%= render "board_images", images: @images %>
       </div>
     </div>
     <div class="print_grid_with_blanks flex-1">

@@ -10,9 +10,9 @@ class BoardsController < ApplicationController
   # GET /boards/1 or /boards/1.json
   def show
     if params[:query].present?
-      @images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+      @images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
     else
-      @images = @board.remaining_images.order(label: :asc)
+      @images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
     end
 
     if turbo_frame_request?
