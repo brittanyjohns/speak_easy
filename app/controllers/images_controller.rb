@@ -41,6 +41,9 @@ class ImagesController < ApplicationController
       redirect_to images_url, notice: "You can only edit your own images."
     elsif @image.saved_image.attached? && !@image.cropped_image.attached?
       redirect_to crop_image_url(@image), notice: "You must crop your image before continuing."
+    else
+      @image.create_image
+      redirect_to image_url(@image)
     end
   end
 
