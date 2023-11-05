@@ -3,6 +3,7 @@
 # Table name: response_images
 #
 #  id                :bigint           not null, primary key
+#  click_count       :integer          default(0)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  image_id          :bigint           not null

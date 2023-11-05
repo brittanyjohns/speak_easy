@@ -3,6 +3,7 @@
 # Table name: response_images
 #
 #  id                :bigint           not null, primary key
+#  click_count       :integer          default(0)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  image_id          :bigint           not null
@@ -22,4 +23,8 @@ class ResponseImage < ApplicationRecord
   belongs_to :response_board
   belongs_to :image
   broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
+
+  def label
+    image.label
+  end
 end

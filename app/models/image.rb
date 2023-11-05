@@ -71,7 +71,7 @@ class Image < ApplicationRecord
   end
 
   def prompt_to_send
-    descriptive_prompt || label
+    descriptive_prompt || "A simple clip art image of: #{label}"
   end
 
   def open_ai_opts
@@ -98,7 +98,7 @@ class Image < ApplicationRecord
   end
 
   def prompt_for_child_conversation
-    prompt = "Given the word '#{label}', what are the most likely words to come next in a conversation for a child using AAC? Return an array of 4-6 strings only. Keep them to as few words as possible. 3 words max. A single word is highly preferred. Do not repeat words and avoid common single words like 'a', 'of', 'the', etc. Expected example response: \n['a list of',  'words', 'formatted', 'like this']\n"
+    prompt = "Given the word '#{label}', what are the words most likely to come next in a conversation for a child using AAC? Return an array of 5-10 strings only. Keep them to as few words as possible. 3 words max. A single word is highly preferred. Do not repeat words and avoid common single words like 'a', 'of', 'the', etc. Expected example response: \n['a list of',  'words', 'formatted', 'like this']\n"
     prompt += "Exclude and DO NOT USE the following words in your response: \n #{existing_responses.join(", ")} \n" if existing_responses.any?
     prompt
   end

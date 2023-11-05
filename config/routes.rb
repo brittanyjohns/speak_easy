@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
-  get 'response_boards/index'
-  get 'response_boards/show'
+  get "response_boards/index"
+  get "response_boards/show"
   root to: "home#index"
   get "home/index"
   devise_for :users
   patch "croppable/:id", to: "images#croppable", as: "croppable"
+  patch "response_images/:id/click", to: "response_images#click", as: "click_response_image"
   resources :images do
     post "generate", on: :member
     get "create_response_board", on: :member
