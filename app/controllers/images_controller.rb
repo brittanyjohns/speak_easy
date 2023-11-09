@@ -95,9 +95,9 @@ class ImagesController < ApplicationController
 
   def create_response_board
     @image = Image.find(params[:id])
+    puts "Parmas: #{params}"
     response_board = ResponseBoard.find_or_create_by(name: @image.label)
     AskAiJob.perform_async(@image.id)
-    puts "Response Board: #{response_board}"
     redirect_to response_board_url(response_board)
   end
 

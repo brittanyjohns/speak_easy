@@ -1,5 +1,5 @@
 <div id="<%= dom_id response_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= response_image.id %>" data-speech-label="<%= response_image.label %>">
-    <div class="bg-white rounded-lg shadow overflow-hidden group" data-action="click->speech#speak">
+    <div class="bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
         <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
             <%= image_tag response_image.image.display_image.representation(resize_to_limit: [100, 100]).processed.url, class: "absolute top-0 left-0 w-full h-full object-contain" if response_image.image.display_image.attached? %>
         <% if response_image.image.private %>
@@ -7,8 +7,14 @@
         <% end %>
         </div>
         <div class="p-4">
+            <p class=""><%= response_image.click_count %></p>
         <p class="truncate text-gray-800 font-medium hover:text-blue-600">
-            <%= link_to response_image.image.label, create_response_board_image_path(response_image.image), class: "rounded-lg", data: { turbo: false } %>
+            <% if response_image.image.continue_conversation? %>
+            <p>cont</p>
+                <%= link_to response_image.image.label, create_response_board_image_path(response_image.image), class: "rounded-lg", data: { turbo: false } %>
+            <% else %>
+                <%= link_to response_image.image.label, response_image.response_board, class: "rounded-lg", data: { turbo: false } %>
+            <% end %>
         </p>
         </div>
     </div>

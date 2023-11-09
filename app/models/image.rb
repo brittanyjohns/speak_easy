@@ -43,7 +43,12 @@ class Image < ApplicationRecord
 
   def generate_image
     self.send_request_on_save = false
-    self.create_image
+    if self.saved_image.attached? || self.cropped_image.attached?
+      puts "Image already has an image attached. Skipping..."
+      self.save
+    else
+      self.create_image
+    end
   end
 
   def self.searchable_images_for(user = nil)
@@ -79,33 +84,70 @@ class Image < ApplicationRecord
   end
 
   def self.category_options
-    ["TV Shows", "Food", "Animals", "People", "Places", "Things", "Actions", "Emotions",
-     "Colors", "Numbers", "Letters", "Shapes", "Weather", "Time", "Sports", "Music",
-     "Clothing", "Body Parts", "Vehicles", "Technology", "School", "Nature", "Holidays",
-     "Family", "Household", "Jobs", "Other"]
+    [
+      "Animals & Pets",
+      "Family & People",
+      "Play & Entertainment",
+      "Food & Drink",
+      "Places & Nature",
+      "Colors & Shapes",
+      "Feelings & Actions",
+      "Things & Stuff",
+    ]
   end
 
-  def source_response_board
-    ResponseBoard.where(name: label).first
+  def response_board
+    ResponseBoard.find_by(name: label)
   end
 
   def existing_responses
-    if source_response_board
-      source_response_board.images.map(&:label)
+    if response_board
+      response_board.images.map(&:label)
     else
       []
     end
   end
 
+  def continue_conversation?
+    self.category == "Feelings & Actions"
+  end
+
   def prompt_for_child_conversation
-    prompt = "Given the word '#{label}', what are the words most likely to come next in a conversation for a child using AAC? Return an array of 5-10 strings only. Keep them to as few words as possible. 3 words max. A single word is highly preferred. Do not repeat words and avoid common single words like 'a', 'of', 'the', etc. Expected example response: \n['a list of',  'words', 'formatted', 'like this']\n"
-    prompt += "Exclude and DO NOT USE the following words in your response: \n #{existing_responses.join(", ")} \n" if existing_responses.any?
+    # Begin the prompt with a clear and concise introduction
+    prompt = "Imagine a person with special needs is using an AAC device to communicate. "
+    prompt += "They are using a board of images to communicate and have chosen the image '#{label}'. "
+    prompt += "They are now looking for the next word or phrase to communicate. "
+    # prompt = "For the word '#{label}', suggest 2-3 words or short phrases most likely to be spoken next in a conversation. "
+    # prompt += "If the word '#{label}' would most commonly be used to start a sentence, please suggest 2-3 words or short phrases most likely to be spoken next in a conversation. "
+    prompt += "If the word '#{label}' would most commonly be used to end a sentence, please respond with the string 'end' only. Otherwise, "
+    prompt += "please suggest 3-5 words or short phrases most likely to be spoken next in a conversation. With the last word being spoken was '#{label}'. "
+
+    # Instruction for the desired format and constraints
+    prompt += "Categorize each suggestion choosing from the following: #{Image.category_options.join(", ")}. "
+
+    # prompt += "Each entry should be as concise as possible, favoring single words. "
+    # prompt += "Keep in mind these words/phrases to populate an AAC board for a child with special needs to use to communicate so the responses are what is presented when they choose "
+
+    # Guidance to avoid repetition and overly common words
+    # prompt += "Avoid repetitions, and do not use generic words such as 'a', 'of', 'the', etc. "
+
+    # Example of what the response should look like
+    prompt += "Expected response format is an array of hashes ONLY. Example: \n"
+    prompt += "[{ category: 'Family & People', label: 'mom' }, { category: 'Food & Drink', label: 'milk' }]"
+
+    # Exclude previously used words, if any, with a clear instruction
+    # if existing_responses.any?
+    #   excluded = existing_responses.join(", ")
+    #   prompt += "Do NOT include these words/phrases: #{excluded}.\n"
+    # end
+
+    # Return the constructed prompt
     prompt
   end
 
   def chat_with_ai(prompt = nil)
     response_board = ResponseBoard.find_by(name: self.label)
-    if response_board && response_board.images.count > 10
+    if response_board && response_board.images.count > 25
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
       return response_board
     end

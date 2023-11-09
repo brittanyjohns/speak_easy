@@ -11,6 +11,6 @@ class ResponseBoardsController < ApplicationController
   private
 
   def set_response_board
-    @response_board = ResponseBoard.find(params[:id])
+    @response_board = ResponseBoard.includes(images: [cropped_image_attachment: :blob, saved_image_attachment: :blob]).find(params[:id])
   end
 end

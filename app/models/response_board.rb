@@ -16,25 +16,39 @@ class ResponseBoard < ApplicationRecord
   end
 
   def create_images(response_content)
-    if response_content.is_a?(Array)
-      response_content.each do |content|
-        img = Image.find(label: content)
-        unless img
-          img = Image.create(label: content, send_request_on_save: true, private: false)
-          puts "Created image: #{img.label}"
+    puts "Response content is not an array - #{response_content.class}"
+    pp response_content
+    if response_content.include?("end")
+      puts "Response content includes end"
+      return self
+    end
+
+    # response_content.gsub("[", "").gsub("]", "").gsub("'", "").split(", ").each do |content|
+    array_of_hashes = eval(response_content)
+    array_of_hashes.each do |content|
+      label = content["label"] || content[:label]
+      category = content["category"] || content[:category]
+      next unless label && category
+      puts "Label: #{label} - Category: #{category}"
+      img = Image.find_by(label: label)
+      unless img
+        create_ai_image = false
+        img = Image.create(label: label, send_request_on_save: create_ai_image, private: false, category: category, ai_generated: create_ai_image)
+        puts "Created image: #{img.label}"
+      else
+        if category && img.category != category
+          img.category = category
+          if img.save
+            puts "Updated image category: #{img.label}"
+          else
+            puts "Error updating image category: #{img.label}"
+          end
         end
         self.images << img unless self.images.include?(img)
+        response_image = self.response_images.find_by(image_id: img.id)
+        response_image.click_count += 1
+        response_image.save
       end
-    else
-      response_content.gsub("[", "").gsub("]", "").gsub("'", "").split(",").each do |content|
-        img = Image.find_by(label: content.strip)
-        unless img
-          img = Image.create(label: content.strip, send_request_on_save: true, private: false)
-          puts "Created image: #{img.label}"
-        end
-        self.images << img unless self.images.include?(img)
-      end
-      pp response_content
     end
     self
   end
