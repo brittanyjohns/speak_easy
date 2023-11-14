@@ -1,6 +1,11 @@
 require "active_support/core_ext/integer/time"
+require "logger"
 
 Rails.application.configure do
+  logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+  config.log_level = :debug
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time

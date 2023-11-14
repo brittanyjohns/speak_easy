@@ -7,6 +7,8 @@ export default class extends Controller {
   speak() {
     this.image_id = this.data.get("id");
     this.name = this.data.get("label");
+    this.send_to_ai = this.data.get("send-to-ai");
+    console.log(` ${this.image_id} ${this.name} ${this.send_to_ai}`);
     // const element = this.nameTarget;
     // const name = element.value;
     const utterance = new SpeechSynthesisUtterance(this.name);
@@ -15,10 +17,12 @@ export default class extends Controller {
     utterance.rate = 1;
 
     speechSynthesis.speak(utterance);
-    this.postToAPI();
+    if (this.send_to_ai === "true") {
+      this.sendToAI();
+    }
   }
 
-  postToAPI() {
+  sendToAI() {
     fetch(`/response_images/${this.image_id}/click`, {
       method: "PATCH",
       headers: {
@@ -28,11 +32,14 @@ export default class extends Controller {
       },
       body: JSON.stringify({
         label: this.name,
+        send_to_ai: this.send_to_ai,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(`data:${data}`); // Look at local_names.default
         if (data.status === "success") {
+          console.log("Success:", data);
           window.location.href = data.redirect_url;
         }
       })

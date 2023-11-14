@@ -1,13 +1,13 @@
 
-<div class="mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex flex-col items-center">
-  <%= content_tag(:div, "", data: {
-                              controller: "images",
-                              images_url: @image_url,
-                              images_id: @image.id,
-                            }, class: "container") do %>
-    <div class="image-container">
-      <%= image_tag(@image_url, class: "image", id: "source", data: {
+<div class="bg-red-50 h-2/3">
+  <div class="bg-gray items-center">
+  <%= content_tag(:div, "container", data: {
+                                       controller: "images",
+                                       images_url: @image_url,
+                                       images_id: @image.id,
+                                     }, class: "flex justify-between") do %>
+    <div class="w-full">
+      <%= image_tag(@image_url, class: "", id: "source", data: {
                                   images_target: "source",
                                 }) %>
       <%= button_to "Crop", "#", class: "text-white shadow mt-2 rounded-lg py-3 px-5 bg-cyan-700 inline-block font-medium", data: {
@@ -15,8 +15,8 @@
                                    images_target: "cropButton",
                                  }, method: :get %>
     </div>
-    <div class="image-container">
-      <%= image_tag(@cropped_image_url, class: "image", id: "output", data: {
+    <div class="w-full">
+      <%= image_tag(@cropped_image_url, class: "", id: "output", data: {
                                           images_target: "output",
                                         }) %>
     </div>

@@ -6,6 +6,22 @@ class ResponseBoardsController < ApplicationController
   end
 
   def show
+    @send_to_ai = "true"
+  end
+
+  def associate_response_image
+    @response_board = ResponseBoard.find(params[:id])
+    response_image = ResponseImage.find(params[:image_id])
+    @response_board.response_images << response_image unless @response_board.response_images.include?(response_image)
+
+    redirect_to @response_board
+  end
+
+  def remove_response_image
+    @response_board = ResponseBoard.find(params[:id])
+    response_image = ResponseImage.find(params[:image_id])
+    @response_board.response_images.delete(response_image)
+    redirect_to @response_board
   end
 
   private

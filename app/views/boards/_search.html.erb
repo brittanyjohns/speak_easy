@@ -1,8 +1,11 @@
-<%= form_with(url: board_path(@board), method: :get, class: "mr-5", data: { controller: "search-form", turbo_frame: "board_images", turbo_action: "advance" }) do |form| %>
+<%= form_with(url: board_path(@board), method: :get, class: "mr-5", data: { controller: "search-form", turbo_frame: "board_images", turbo_action: "advance", search_form_query_value: params["query"] }) do |form| %>
   <%= form.label :query, "Search images:", class: "block mb-2" %>
   <div class="flex space-x-3">
     <%= form.text_field :query, class: "py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { search_form_target: "query", action: "input->search-form#search" } %>
-
+    <div class="flex items-center space-x-2 justify-end">
+      <%= form.check_box :user_images_only, class: "form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500", data: { search_form_target: "userImagesOnly", action: "input->search-form#search" } %>
+      <%= form.label :user_images_only, "Only my images", class: "text-sm font-medium text-gray-700" %>
+    </div>
     <%= form.submit "Search", class: "px-3 py-2 font-medium bg-orange-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100 mr-3" %>
   </div>
 <% end %>

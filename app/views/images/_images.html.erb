@@ -13,6 +13,7 @@
             <p class="truncate text-gray-800 font-medium hover:text-blue-600">
               <%= link_to image.label, edit_image_path(image), class: "rounded-lg", data: { turbo: false } %>
             </p>
+            <p class="text-gray-600 text-xs"><%= time_ago_in_words(image.created_at) %> ago</p>
           </div>
         </div>
       </div>

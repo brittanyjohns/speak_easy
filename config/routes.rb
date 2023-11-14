@@ -19,7 +19,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :response_boards, only: [:index, :show]
+  resources :response_boards, only: [:index, :show] do
+    member do
+      post "associate_response_image"
+      post "remove_response_image"
+    end
+  end
   # post "boards/:board_id/add_image/:image_id", to: "boards#add_image", as: "add_image_to_board"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

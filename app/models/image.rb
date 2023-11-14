@@ -28,7 +28,7 @@ class Image < ApplicationRecord
   has_one_attached :saved_image
   has_one_attached :cropped_image
 
-  after_create :generate_image, if: :send_request_on_save
+  after_save :generate_image, if: :send_request_on_save
 
   scope :public_images, -> { where(private: false) }
   # scope :with_attached_cropped_image, -> { with_attached_cropped_image }
@@ -114,16 +114,16 @@ class Image < ApplicationRecord
 
   def prompt_for_child_conversation
     # Begin the prompt with a clear and concise introduction
-    prompt = "Imagine a person with special needs is using an AAC device to communicate. "
-    prompt += "They are using a board of images to communicate and have chosen the image '#{label}'. "
-    prompt += "They are now looking for the next word or phrase to communicate. "
-    # prompt = "For the word '#{label}', suggest 2-3 words or short phrases most likely to be spoken next in a conversation. "
-    # prompt += "If the word '#{label}' would most commonly be used to start a sentence, please suggest 2-3 words or short phrases most likely to be spoken next in a conversation. "
+    # prompt = "Imagine a person with special needs is using an AAC device to communicate. "
+    # prompt += "They are using a board of images to communicate and have chosen the image '#{label}'. "
+    # prompt += "They are now looking for the next word or phrase to communicate. "
     prompt += "If the word '#{label}' would most commonly be used to end a sentence, please respond with the string 'end' only. Otherwise, "
     prompt += "please suggest 3-5 words or short phrases most likely to be spoken next in a conversation. With the last word being spoken was '#{label}'. "
 
     # Instruction for the desired format and constraints
     prompt += "Categorize each suggestion choosing from the following: #{Image.category_options.join(", ")}. "
+    prompt += "Expected response format is an array of hashes ONLY. Example: \n"
+    prompt += "[{ category: 'Family & People', label: 'mom' }, { category: 'Food & Drink', label: 'milk' }]"
 
     # prompt += "Each entry should be as concise as possible, favoring single words. "
     # prompt += "Keep in mind these words/phrases to populate an AAC board for a child with special needs to use to communicate so the responses are what is presented when they choose "
@@ -132,8 +132,6 @@ class Image < ApplicationRecord
     # prompt += "Avoid repetitions, and do not use generic words such as 'a', 'of', 'the', etc. "
 
     # Example of what the response should look like
-    prompt += "Expected response format is an array of hashes ONLY. Example: \n"
-    prompt += "[{ category: 'Family & People', label: 'mom' }, { category: 'Food & Drink', label: 'milk' }]"
 
     # Exclude previously used words, if any, with a clear instruction
     # if existing_responses.any?
@@ -145,6 +143,13 @@ class Image < ApplicationRecord
     prompt
   end
 
+  def setup_prompt
+    {
+      "role": "user",
+      "content": "I'm going to give you a word or short phrase and I want you to return an array of 3-5 options for the next word or phase(limit to 3 words max). For example - Given the word 'I', you return ['want', 'need', 'am', 'see', 'hear', 'know'] If the word I give you is most likely the last word in a sentence, please return the string 'end' only. For example - Given the word 'pizza', you return 'end'.",
+    }
+  end
+
   def chat_with_ai(prompt = nil)
     response_board = ResponseBoard.find_by(name: self.label)
     if response_board && response_board.images.count > 25
@@ -153,12 +158,13 @@ class Image < ApplicationRecord
     end
 
     prompt ||= prompt_for_child_conversation
+
     message = {
       "role": "user",
       "content": prompt,
     }
     begin
-      ai_client = OpenAiClient.new({ messages: [message] })
+      ai_client = OpenAiClient.new({ messages: [setup_prompt, message] })
       response = ai_client.create_chat
     rescue => e
       puts "**** ERROR **** \n#{e.message}\n"

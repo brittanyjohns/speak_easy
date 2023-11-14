@@ -16,18 +16,23 @@ module ImagesHelper
     puts "size: #{size}"
     unless image.cropped_image.attached? || image.saved_image.attached?
       puts "no image"
-      return ""
+      return "<p class='text-red-600'>#{image.label}</p>".html_safe
+      # <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold" data-action="click->speech#speak"><%= image.label.upcase %></div>
+      str = "<div class='absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold' data-action='click->speech#speak'>#{image.label.upcase}</div>"
+      return str.html_safe
     end
     image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url, data: { action: "click->speech#speak" })
   end
 
   def select_image_button(board, image, size: "thumnail")
-    unless image.cropped_image.attached? || image.saved_image.attached?
+    unless image.display_image.attached?
       puts "no image"
-      return ""
+      str = "<div class='absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold'>#{image.label.upcase}</div>"
+      return str.html_safe
+      # return button_to(image.label, associate_image_board_path(board, image_id: image), data: { turbo: false })
     end
-    button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }) do
-      image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url)
+    button_to(associate_image_board_path(board, image_id: image), data: { turbo: false }, class: "relative w-full h-0 pb-[100%]") do
+      image_tag(image.display_image.representation(resize_to_limit: [200, 200]).processed.url)
     end
   end
 end

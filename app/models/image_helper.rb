@@ -11,10 +11,9 @@ module ImageHelper
                                   "User-Agent" => "Ruby/#{RUBY_VERSION}",
                                   "From" => "foo@bar.invalid",
                                   "Referer" => "http://www.ruby-lang.org/")
-      puts "downloaded image: #{downloaded_image.inspect}"
       self.saved_image.attach(io: downloaded_image, filename: "img_#{id}.png")
     rescue => e
-      puts "ERROR: #{e.inspect}"
+      puts "ImageHelper ERROR: #{e.inspect}"
       raise e
     end
   end

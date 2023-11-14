@@ -89,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_222157) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "click_count", default: 0
+    t.boolean "final_response", default: false
     t.index ["image_id"], name: "index_response_images_on_image_id"
     t.index ["response_board_id"], name: "index_response_images_on_response_board_id"
   end

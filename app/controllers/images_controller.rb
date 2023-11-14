@@ -98,7 +98,13 @@ class ImagesController < ApplicationController
     puts "Parmas: #{params}"
     response_board = ResponseBoard.find_or_create_by(name: @image.label)
     AskAiJob.perform_async(@image.id)
-    redirect_to response_board_url(response_board)
+    # redirect_to response_boards_url(response_board)
+    puts "Label: #{@image.label} Response board: #{response_board.inspect}\n path: #{response_boards_path(response_board)}"
+    redirect_to response_boards_path(response_board), notice: "Your image is generating."
+    # respond_to do |format|
+    #   format.html { redirect_to response_boards_url(response_board), notice: "Image was successfully destroyed." }
+    #   format.json { head :no_content }
+    # end
   end
 
   # DELETE /images/1 or /images/1.json

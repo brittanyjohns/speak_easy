@@ -4,6 +4,7 @@
 #
 #  id                :bigint           not null, primary key
 #  click_count       :integer          default(0)
+#  final_response    :boolean          default(FALSE)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  image_id          :bigint           not null

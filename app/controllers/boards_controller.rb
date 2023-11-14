@@ -9,17 +9,24 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
+    @board_images = @board.images.order(label: :asc)
     if params[:query].present?
-      @images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
+      @query = params[:query]
+      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
     else
-      @images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+      @remaining_images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
     end
 
-    if turbo_frame_request?
-      render partial: "board_images", locals: { images: @images }
-    else
-      render :show
+    respond_to do |format|
+      format.html
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("select_images", partial: "select_images", locals: { images: @remaining_images }) }
     end
+
+    # if turbo_frame_request?
+    #   render partial: "select_images", locals: { images: @remaining_images }
+    # else
+    #   render :show
+    # end
   end
 
   def locked
@@ -68,8 +75,14 @@ class BoardsController < ApplicationController
   def remove_image
     @board = current_user.boards.find(params[:id])
     image = Image.find(params[:image_id])
-    @board.images.delete(image)
-    redirect_to @board
+    board_image = @board.board_images.find_by(image_id: image.id)
+    puts "Board image: #{board_image.inspect}"
+    board_image.destroy
+    # @board.board_images.destroy(board_image)
+    # @images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("board_images", partial: "board_images", locals: { images: @board.images }) }
+    end
   end
 
   # PATCH/PUT /boards/1 or /boards/1.json

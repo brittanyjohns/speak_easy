@@ -1,6 +1,7 @@
-  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<%= turbo_frame_tag "select_images" do %>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
     <% images.each do |image| %>
-      <div id="<%= dom_id image %>" class="relative w-full">
+      <div id="<%= dom_id image %>" class="w-full">
         <div class="bg-white rounded-lg shadow overflow-hidden group">
           <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
            <%= select_image_button(@board, image) %>
@@ -14,7 +15,7 @@
             </p>
           </div>
         </div>
-        <%= remove_image_button(@board, image) %>
       </div>
     <% end %>
   </div>
+<% end %>
