@@ -17,16 +17,16 @@ class BoardsController < ApplicationController
       @remaining_images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
     end
 
-    respond_to do |format|
-      format.html
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("select_images", partial: "select_images", locals: { images: @remaining_images }) }
-    end
-
-    # if turbo_frame_request?
-    #   render partial: "select_images", locals: { images: @remaining_images }
-    # else
-    #   render :show
+    # respond_to do |format|
+    #   format.html
+    #   format.turbo_stream { render turbo_stream: turbo_stream.replace("select_images", partial: "select_images", locals: { images: @remaining_images }) }
     # end
+
+    if turbo_frame_request?
+      render partial: "select_images", locals: { images: @remaining_images }
+    else
+      render :show
+    end
   end
 
   def locked
@@ -80,9 +80,10 @@ class BoardsController < ApplicationController
     board_image.destroy
     # @board.board_images.destroy(board_image)
     # @images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("board_images", partial: "board_images", locals: { images: @board.images }) }
-    end
+    render partial: "board_images", locals: { images: @board.images }
+    # respond_to do |format|
+    #   format.turbo_stream { render turbo_stream: turbo_stream.replace("board_images", partial: "board_images", locals: { images: @board.images }) }
+    # end
   end
 
   # PATCH/PUT /boards/1 or /boards/1.json

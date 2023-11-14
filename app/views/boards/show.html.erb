@@ -2,18 +2,17 @@
   <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
   <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white inline-block font-medium align-middle" %>
 
-  <div class="mt-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+  <div class="mt-6 flex justify-around">
 
-    <div class="search_box_with_results flex-1">
+    <div class="border">
       <%= render "boards/search" %>
-      <div class="mt-4 overflow-x-scroll whitespace-nowrap">
+      <div class="mt-4 overflow-x-scroll whitespace-nowrap" id="search_images">
           <%= paginate @remaining_images %>
-
-        <%= render "select_images", images: @remaining_images %>
+          <%= render "select_images", images: @remaining_images %>
       </div>
     </div>
-    <div class="mt-4 overflow-x-scroll whitespace-nowrap border" id="board_images">
-      <%= render "board_images", images: @board_images %>
+    <div class="mt-4 overflow-x-scroll whitespace-nowrap border">
+          <%= render "board_images", images: @board_images %>
     </div>
     
   </div>

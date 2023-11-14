@@ -1,4 +1,5 @@
 class ResponseBoardsController < ApplicationController
+  before_action :authenticate_user!, :set_current_user
   before_action :set_response_board, only: %i[ show ]
 
   def index

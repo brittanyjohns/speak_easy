@@ -1,4 +1,6 @@
 class ResponseImagesController < ApplicationController
+  before_action :authenticate_user!, :set_current_user
+
   def click
     Rails.logger.debug "ResponseImagesController#click\n#{params.inspect}\n"
     @response_image = ResponseImage.find(params[:id])
@@ -11,6 +13,7 @@ class ResponseImagesController < ApplicationController
     @source_board = @response_image.source_board
     Rails.logger.debug "response_board: #{@response_board.id} Source board: #{@source_board.id} - response_image.response_board_id: #{@response_image.response_board_id}"
     AskAiJob.perform_async(@image.id)
+    @current_user.make_selection(@image.label)
     # redirect_to @source_board
     render json: { status: "success", redirect_url: response_board_path(@response_board), notice: "Image was successfully cropped & saved." }
   end

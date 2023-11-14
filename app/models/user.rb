@@ -20,6 +20,7 @@
 class User < ApplicationRecord
   has_many :boards, dependent: :destroy
   has_many :images
+  has_many :user_selections, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -27,5 +28,15 @@ class User < ApplicationRecord
 
   def admin?
     id == 1
+  end
+
+  def make_selection(word)
+    selection = self.user_selections.current.first_or_create
+    selection.words << word
+    selection.save
+  end
+
+  def current_word_list
+    self.user_selections.current.first_or_create.words
   end
 end

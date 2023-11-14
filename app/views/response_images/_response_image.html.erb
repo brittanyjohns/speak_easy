@@ -1,4 +1,4 @@
-<div id="<%= dom_id response_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= response_image.id %>" data-speech-label="<%= response_image.label %>" data-speech-send-to-ai="<%= @send_to_ai ? "true" : "false" %>">
+<div id="<%= dom_id response_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= response_image.id %>" data-speech-label="<%= response_image.label %>" data-speech-send-to-ai="<%= @send_to_ai == "true" ? "true" : "false" %>">
     <div class="relative bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
         <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
             <%= image_tag response_image.image.display_image.representation(resize_to_limit: [100, 100]).processed.url, class: "absolute top-0 left-0 w-full h-full object-contain" if response_image.image.display_image.attached? %>

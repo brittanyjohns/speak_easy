@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_05_222157) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_14_180333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -104,6 +104,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_222157) do
     t.index ["user_id"], name: "index_user_images_on_user_id"
   end
 
+  create_table "user_selections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "words", default: [], array: true
+    t.boolean "current", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_selections_on_user_id"
+    t.index ["words"], name: "index_user_selections_on_words", using: :gin
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -126,4 +136,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_222157) do
   add_foreign_key "response_images", "response_boards"
   add_foreign_key "user_images", "images"
   add_foreign_key "user_images", "users"
+  add_foreign_key "user_selections", "users"
 end

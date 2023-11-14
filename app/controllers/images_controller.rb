@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :set_current_user
   before_action :set_image, only: %i[ show edit update destroy speak generate crop croppable ]
 
   # GET /images or /images.json
