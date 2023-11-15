@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: "home#index"
   get "home/index"
   devise_for :users
+  patch "clear_selection", to: "application#clear_selection", as: "clear_selection"
   patch "croppable/:id", to: "images#croppable", as: "croppable"
   patch "response_images/:id/click", to: "response_images#click", as: "click_response_image"
   resources :images do

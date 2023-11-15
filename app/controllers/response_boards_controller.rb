@@ -3,7 +3,7 @@ class ResponseBoardsController < ApplicationController
   before_action :set_response_board, only: %i[ show ]
 
   def index
-    @response_boards = ResponseBoard.all
+    @response_boards = ResponseBoard.includes(response_images: [image: [cropped_image_attachment: :blob, saved_image_attachment: :blob]]).order(name: :asc).page params[:page]
   end
 
   def show

@@ -25,11 +25,15 @@ class ResponseImage < ApplicationRecord
   belongs_to :image
   broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
 
-  def label
-    image.label
+  def display_image
+    image.display_image
   end
 
-  def source_board
-    ResponseBoard.find_or_create_by(name: label)
+  def private
+    image.private
+  end
+
+  def label
+    image.label
   end
 end

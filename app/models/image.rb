@@ -6,6 +6,7 @@
 #  ai_generated         :boolean          default(FALSE)
 #  audio_url            :string
 #  category             :string
+#  final_response_count :integer          default(0)
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string
@@ -32,7 +33,6 @@ class Image < ApplicationRecord
 
   scope :public_images, -> { where(private: false) }
   # scope :with_attached_cropped_image, -> { with_attached_cropped_image }
-
   def display_image
     if cropped_image.attached?
       cropped_image
@@ -45,10 +45,10 @@ class Image < ApplicationRecord
     self.send_request_on_save = false
     if self.saved_image.attached? || self.cropped_image.attached?
       puts "Image already has an image attached. Skipping..."
-      self.save
     else
       self.create_image
     end
+    self.save
   end
 
   def self.searchable_images_for(user = nil)
@@ -143,29 +143,47 @@ class Image < ApplicationRecord
     prompt
   end
 
-  def setup_prompt
+  def assistant_prompt
     {
-      "role": "user",
-      "content": "I'm going to give you a word or short phrase and I want you to return an array of 3-5 options for the next word or phase(limit to 3 words max). For example - Given the word 'I', you return ['want', 'need', 'am', 'see', 'hear', 'know'] If the word I give you is most likely the last word in a sentence, please return the string 'end' only. For example - Given the word 'pizza', you return 'end'.",
+      "role": "assistant",
+      "content": "A person with special needs is using an AAC device to communicate. You will predict the next word or phrase to communicate."
     }
   end
 
-  def chat_with_ai(prompt = nil)
+  def setup_prompt
+    {
+      "role": "user",
+      "content": "I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 3-5 options for the next word or phase (limit to 3 words max). 
+      Return ONLY an array of strings. 
+      Example 1 - Given the word list ['I'], you return ['want', 'need', 'am', 'see', 'hear', 'know']. 
+      Example 2 - Given the word list ['I', 'want'], you return ['pizza', 'water', 'milk', 'juice', 'food'].
+      If the word(s) I give you is most likely make a complete sentence, please return the string 'end' only.
+      Example 1 - Given the word list ['I', 'want', 'pizza', 'please'] you return ['end'].
+      If the word(s) I give you is most likely make a question or request, please return the string 'question' only.
+      Example 2 - Given the word list ['Can', 'I', 'have', 'some', 'water'] you return ['please'].",
+
+    }
+  end
+
+  def chat_with_ai(prompt = nil, response_image_id = nil)
     response_board = ResponseBoard.find_by(name: self.label)
-    if response_board && response_board.images.count > 25
+    if response_board && response_board.images.count > 30
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
       return response_board
     end
 
     prompt ||= prompt_for_child_conversation
 
+    puts "Prompt: #{prompt}"
+
     message = {
       "role": "user",
       "content": prompt,
     }
     begin
-      ai_client = OpenAiClient.new({ messages: [setup_prompt, message] })
+      ai_client = OpenAiClient.new({ messages: [assistant_prompt, setup_prompt, message] })
       response = ai_client.create_chat
+      Rails.logger.debug "\n\nResponse: #{response}\n\n"
     rescue => e
       puts "**** ERROR **** \n#{e.message}\n"
     end
@@ -174,6 +192,20 @@ class Image < ApplicationRecord
       response_content = response[:content]
 
       puts "Role: #{role} \nContent: #{response_content}"
+      if response_content.include?("end")
+        puts "Response content includes end"
+        self.final_response_count += 1
+        self.save
+        response_image = ResponseImage.find(response_image_id)
+        test_response_image = self.response_images.find_by(response_board_id: response_board.id)
+        if test_response_image
+          puts "Found response image: #{test_response_image.id}"
+          puts "Response board: #{response_board.id}"
+        end
+        response_image.final_response = true
+        response_image.save
+      end
+
       if response_board
         response_board.create_images(response_content)
       else

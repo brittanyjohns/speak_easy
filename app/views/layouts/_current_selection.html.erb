@@ -1,5 +1,7 @@
-<%= turbo_frame_tag :user_selection_list do %>
-    <div id='user_selection_list'>
-        <%= @current_user.current_word_list %>
-    </div>
+<%= render "user_selections/user_selection" %>
+<%= form_with(url: clear_selection_path, method: :patch, class: "mr-5 ml-5") do |form| %>
+  <div class="flex space-x-3">
+    <%= form.text_field :current_word_list, value: current_user.current_word_list, class: "w-2/3 sm:w-1/2 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none" %>
+    <%= form.submit "Clear", class: "px-3 py-2 font-medium bg-orange-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100 mr-3" %>
+  </div>
 <% end %>

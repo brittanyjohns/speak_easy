@@ -75,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_180333) do
     t.boolean "private", default: true
     t.string "category"
     t.boolean "ai_generated", default: false
+    t.integer "final_response_count", default: 0
   end
 
   create_table "response_boards", force: :cascade do |t|

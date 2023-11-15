@@ -9,4 +9,11 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     boards_path
   end
+
+  def clear_selection
+    puts "PARAMS: #{params.inspect}"
+    current_user.reset_user_selections if current_user
+    redirect_to boards_path
+    # render partial: "layouts/current_selection"
+  end
 end

@@ -11,6 +11,8 @@ class ResponseBoard < ApplicationRecord
   has_many :response_images, dependent: :destroy
   has_many :images, through: :response_images
 
+  CREATE_AI_IMAGES = false
+
   def source_image
     # Image.where(label: name).first
     Image.find_or_create_by(label: name, private: false)
@@ -39,8 +41,7 @@ class ResponseBoard < ApplicationRecord
       puts "Found image: #{img.label}" if img
 
       unless img
-        create_ai_image = true
-        img = Image.create(label: label, send_request_on_save: create_ai_image, private: false, category: category, ai_generated: create_ai_image)
+        img = Image.create(label: label, send_request_on_save: CREATE_AI_IMAGES, private: false, category: category, ai_generated: CREATE_AI_IMAGES)
         puts "Created image: #{img.label}"
       else
         if category && img.category != category
@@ -55,14 +56,14 @@ class ResponseBoard < ApplicationRecord
 
       if img
         self.images << img unless self.images.include?(img)
-        if content.include?("end")
-          puts "Response content includes end"
-          source_image.final_response_count += 1
-          source_image.save
-          response_image = self.response_images.find_by(image_id: img.id)
-          response_image.final_response = true
-          response_image.save
-        end
+        # if content.include?("end")
+        #   puts "Response content includes end"
+        #   source_image.final_response_count += 1
+        #   source_image.save
+        #   response_image = self.response_images.find_by(image_id: img.id)
+        #   response_image.final_response = true
+        #   response_image.save
+        # end
       end
     end
     self

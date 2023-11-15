@@ -9,7 +9,7 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
-    @board_images = @board.images.order(label: :asc)
+    @board_images = @board.board_images.includes(:image).order(label: :asc).references(:images)
     if params[:query].present?
       @query = params[:query]
       @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
@@ -30,7 +30,11 @@ class BoardsController < ApplicationController
   end
 
   def locked
-    @images = @board.images
+    @response_board = @board.response_board
+    @response_images = @response_board.response_images.includes(:image).order(label: :asc).references(:images)
+    @board_images = @board.board_images.includes(:image)
+    # @images = @board.response_board.response_images.includes(:image).order(label: :asc).references(:images)
+    @send_to_ai = true
     render layout: "play_mode"
   end
 
@@ -67,23 +71,23 @@ class BoardsController < ApplicationController
   def associate_image
     @board = current_user.boards.find(params[:id])
     image = Image.find(params[:image_id])
-    @board.images << image unless @board.images.include?(image)
 
-    redirect_to @board
+    before = @board.images.include?(image)
+    @board.board_images.create(image: image) unless @board.images.include?(image)
+    @response_board = @board.response_board
+    @response_board.response_images.create(image: image) unless @response_board.images.include?(image)
+    # @board.images << image unless @board.images.include?(image)
+
+    redirect_to @board, notice: "#{before} -@board.images.include?(image): #{@board.images.include?(image)}"
   end
 
   def remove_image
     @board = current_user.boards.find(params[:id])
-    image = Image.find(params[:image_id])
-    board_image = @board.board_images.find_by(image_id: image.id)
-    puts "Board image: #{board_image.inspect}"
+    board_image = @board.board_images.find(params[:image_id])
     board_image.destroy
-    # @board.board_images.destroy(board_image)
-    # @images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+    @response_board = @board.response_board
+    response_image = @response_board.response_images.find_by(image_id: params[:image_id])
     render partial: "board_images", locals: { images: @board.images }
-    # respond_to do |format|
-    #   format.turbo_stream { render turbo_stream: turbo_stream.replace("board_images", partial: "board_images", locals: { images: @board.images }) }
-    # end
   end
 
   # PATCH/PUT /boards/1 or /boards/1.json
@@ -114,7 +118,7 @@ class BoardsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_board
     begin
-      @board = current_user.boards.includes(:images).find(params[:id])
+      @board = current_user.boards.includes(board_images: [:image]).find(params[:id])
     rescue ActiveRecord::RecordNotFound
       redirect_to boards_url, notice: "Board not found"
     end

@@ -17,27 +17,33 @@
         <%= link_to @board do %>
           <h1 class="text-xl font-bold text-white p-2 outline rounded-lg">
             <%= icon("fa-solid", "arrow-left") %> <%= @board.name %></h1>
+            <p>Res. Board: <%= @response_board.inspect %></p>
+            <hr>
+            <p>Res. Board resp images: <%= @response_images.count %></p>
         <% end %>
       </div>
     </div>
     <div class="pt-3">
+            <%= render "layouts/current_selection" %>
        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-    <% @images.each do |image| %>
-      <div id="<%= dom_id image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= image.id %>" data-speech-label="<%= image.label %>" data-speech-send-to-ai="<%= @send_to_ai ? "true" : "false" %>">
+    <% @board_images.each do |board_image| %>
+      <div id="<%= dom_id board_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= board_image.response_image.id %>" data-speech-label="<%= board_image.label %>" data-speech-send-to-ai="<%= !board_image.response_image.final_response %>">
         <div class="bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
           <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
-           <% if image.display_image.attached? %>
-            <%= image_tag image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain" %>
+           <% if board_image.display_image.attached? %>
+            <%= image_tag board_image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain" %>
             <% else %>
-              <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold"><%= image.label.upcase %></div>
+              <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold"><%= board_image.label.upcase %></div>
             <% end %>
-            <% if image.private %>
+            <% if board_image.private %>
               <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
             <% end %>
           </div>
           <div class="p-1">
+            play mode image 
             <p class="truncate text-gray-800 font-small hover:text-blue-600 text-center">
-              <%= image.label %>
+              <%= board_image.class %>
+              <%= board_image.label %>
             </p>
           </div>
         </div>

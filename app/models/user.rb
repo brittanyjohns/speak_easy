@@ -39,4 +39,12 @@ class User < ApplicationRecord
   def current_word_list
     self.user_selections.current.first_or_create.words
   end
+
+  def reset_user_selections(words = [])
+    old_selection = self.user_selections.current.first
+    old_selection.update(current: false) if old_selection
+    new_selection = self.user_selections.create(current: true)
+    new_selection.words = words
+    new_selection.save
+  end
 end

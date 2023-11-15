@@ -3,6 +3,10 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="speech"
 export default class extends Controller {
   // static targets = ["name"];
+  connect() {
+    this.send_to_ai = this.data.get("send-to-ai");
+    console.log(`send_to_ai: ${this.send_to_ai}`);
+  }
 
   speak() {
     this.image_id = this.data.get("id");

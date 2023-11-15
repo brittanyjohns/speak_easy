@@ -22,4 +22,24 @@
 class BoardImage < ApplicationRecord
   belongs_to :board
   belongs_to :image
+
+  # def response_image
+  #   board.response_board.response_images.find_by(image_id: image.id)
+  # end
+
+  def response_image
+    board.response_board.response_images.includes(:image).where(image: { label: image.label }).find_or_create_by(image: image)
+  end
+
+  def display_image
+    image.display_image
+  end
+
+  def private
+    image.private
+  end
+
+  def label
+    image.label
+  end
 end
