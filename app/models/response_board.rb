@@ -10,15 +10,34 @@
 class ResponseBoard < ApplicationRecord
   has_many :response_images, dependent: :destroy
   has_many :images, through: :response_images
+  # has_many :response_options, -> { where.not(label: name) }, class_name: "ResponseImage", dependent: :destroy
+
+  after_create :ensure_self_image
 
   CREATE_AI_IMAGES = false
+
+  def response_options
+    response_images.where.not(label: name)
+  end
+
+  def ensure_self_image
+    self.images << source_image unless self.images.include?(source_image)
+  end
+
+  def self.general_board
+    Board.find_or_create_by(name: "General")
+  end
 
   def source_image
     # Image.where(label: name).first
     Image.find_or_create_by(label: name, private: false)
   end
 
-  def create_images(response_content)
+  def response_image
+    ResponseImage.find_by(label: name)
+  end
+
+  def create_images(response_content, word_list = nil)
     puts "Response content is not an array - #{response_content.class}"
     pp response_content
 
@@ -56,6 +75,16 @@ class ResponseBoard < ApplicationRecord
 
       if img
         self.images << img unless self.images.include?(img)
+        response_image_ids
+
+        if word_list
+          word_list.is_a?(Array) ? word_string = word_list.join(" ") : word_string = word_list
+          response_record = ResponseRecord.find_or_create_by(word_list: word_string)
+          response_record.response_image_ids.concat(self.response_image_ids).uniq!
+          puts "self.response_image_ids: #{self.response_image_ids}"
+          puts "Response record: #{response_record.name} - #{response_record.word_list} - #{response_record.response_image_ids}"
+          response_record.save
+        end
         # if content.include?("end")
         #   puts "Response content includes end"
         #   source_image.final_response_count += 1

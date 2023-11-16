@@ -1,4 +1,8 @@
-<%= render "user_selections/user_selection" %>
+<div id="user_selection_list" class="bg-blue-50 p-2 border">
+    <div class="flex flex-col space-y-2">
+        <%= render partial: "user_selections/user_selection", locals: { user_selection: current_user.current_user_selection } %>
+    </div>
+</div>
 <%= form_with(url: clear_selection_path, method: :patch, class: "mr-5 ml-5") do |form| %>
   <div class="flex space-x-3">
     <%= form.text_field :current_word_list, value: current_user.current_word_list, class: "w-2/3 sm:w-1/2 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none" %>

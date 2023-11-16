@@ -23,7 +23,13 @@
 class ResponseImage < ApplicationRecord
   belongs_to :response_board
   belongs_to :image
-  broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
+
+  before_save :set_label
+  # broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
+
+  def set_label
+    self.label = image.label
+  end
 
   def display_image
     image.display_image

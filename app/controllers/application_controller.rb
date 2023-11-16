@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   def clear_selection
     puts "PARAMS: #{params.inspect}"
     current_user.reset_user_selections if current_user
-    redirect_to boards_path
+    redirect_to locked_board_path(ResponseBoard.general_board)
     # render partial: "layouts/current_selection"
   end
 end

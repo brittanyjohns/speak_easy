@@ -5,13 +5,15 @@ export default class extends Controller {
   // static targets = ["name"];
   connect() {
     this.send_to_ai = this.data.get("send-to-ai");
+    this.word_list = this.data.get("word-list");
     console.log(`send_to_ai: ${this.send_to_ai}`);
+    console.log(`word_list: ${this.word_list}`);
   }
 
   speak() {
     this.image_id = this.data.get("id");
     this.name = this.data.get("label");
-    this.send_to_ai = this.data.get("send-to-ai");
+    // this.send_to_ai = this.data.get("send-to-ai");
     console.log(` ${this.image_id} ${this.name} ${this.send_to_ai}`);
     // const element = this.nameTarget;
     // const name = element.value;
@@ -36,7 +38,7 @@ export default class extends Controller {
       },
       body: JSON.stringify({
         label: this.name,
-        send_to_ai: this.send_to_ai,
+        word_list: this.word_list,
       }),
     })
       .then((response) => response.json())

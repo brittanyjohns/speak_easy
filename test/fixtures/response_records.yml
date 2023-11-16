@@ -1,0 +1,18 @@
+# == Schema Information
+#
+# Table name: response_records
+#
+#  id         :bigint           not null, primary key
+#  name       :string
+#  word_list  :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  name: MyString
+  word_list: MyString
+
+two:
+  name: MyString
+  word_list: MyString

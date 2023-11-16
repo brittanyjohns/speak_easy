@@ -1,0 +1,12 @@
+<div>
+  <h1 class="font-bold text-4xl"><%= @response_record.word_list %></h1>
+  <p>Find me in app/views/response_records/show.html.erb</p>
+  <%= turbo_stream_from :response_record_image_list %>
+  <div id='response_record_image_list' class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+     <% @response_record.response_images.each do |response_image| %>
+      <%= render partial: "response_records/response_record_image", locals: { response_image: response_image } %>
+    <% end %>
+
+  </div>
+</div>
+<%= render "select_response_record_images", response_record_images: @remaining_images %>

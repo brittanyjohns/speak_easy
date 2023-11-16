@@ -6,7 +6,6 @@
 #  ai_generated         :boolean          default(FALSE)
 #  audio_url            :string
 #  category             :string
-#  final_response_count :integer          default(0)
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string
@@ -30,6 +29,12 @@ class Image < ApplicationRecord
   has_one_attached :cropped_image
 
   after_save :generate_image, if: :send_request_on_save
+  after_save :ensure_response_board
+
+  def ensure_response_board
+    response_board = ResponseBoard.find_or_create_by(name: self.label)
+    response_board.response_images.find_or_create_by(image_id: self.id, label: self.label)
+  end
 
   scope :public_images, -> { where(private: false) }
   # scope :with_attached_cropped_image, -> { with_attached_cropped_image }
@@ -146,7 +151,7 @@ class Image < ApplicationRecord
   def assistant_prompt
     {
       "role": "assistant",
-      "content": "A person with special needs is using an AAC device to communicate. You will predict the next word or phrase to communicate."
+      "content": "A person with special needs is using an AAC device to communicate. You will predict the next word or phrase to communicate.",
     }
   end
 
@@ -165,7 +170,7 @@ class Image < ApplicationRecord
     }
   end
 
-  def chat_with_ai(prompt = nil, response_image_id = nil)
+  def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil)
     response_board = ResponseBoard.find_by(name: self.label)
     if response_board && response_board.images.count > 30
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
@@ -191,25 +196,20 @@ class Image < ApplicationRecord
       role = response[:role] || "assistant"
       response_content = response[:content]
 
-      puts "Role: #{role} \nContent: #{response_content}"
       if response_content.include?("end")
         puts "Response content includes end"
         self.final_response_count += 1
         self.save
         response_image = ResponseImage.find(response_image_id)
-        test_response_image = self.response_images.find_by(response_board_id: response_board.id)
-        if test_response_image
-          puts "Found response image: #{test_response_image.id}"
-          puts "Response board: #{response_board.id}"
-        end
+
         response_image.final_response = true
         response_image.save
       end
 
       if response_board
-        response_board.create_images(response_content)
+        response_board.create_images(response_content, word_list)
       else
-        response_board = ResponseBoard.create(name: self.label).create_images(response_content)
+        response_board = ResponseBoard.create(name: self.label).create_images(response_content, word_list)
       end
       response_board
     else

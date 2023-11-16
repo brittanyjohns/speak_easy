@@ -74,29 +74,29 @@ module BoardsHelper
     # "grid-rows-#{board.row_count}"
   end
 
-  def print_grid_with_blanks(board)
-    images = board.images
-    columns = board.column_count
-    rows = board.row_count
-    max_image_count = board.max_image_count
-    str = "<div class='p-2 #{theme_color_background(board)} rounded-md pb-8'>"
-    str += "<div class='grid grid-cols-1 sm:grid-cols-2 md:#{grid_column_class(board)} gap-4 place-items-center'>"
+  # def print_grid_with_blanks(board)
+  #   images = board.images
+  #   columns = board.column_count
+  #   rows = board.row_count
+  #   max_image_count = board.max_image_count
+  #   str = "<div class='p-2 #{theme_color_background(board)} rounded-md pb-8'>"
+  #   str += "<div class='grid grid-cols-1 sm:grid-cols-2 md:#{grid_column_class(board)} gap-4 place-items-center'>"
 
-    placeholders = max_image_count - images.length
-    images.each do |image|
-      str += "<div class='relative max-h-200 overflow-hidden' data-controller='speech'   data-speech-id='#{image.id}' data-speech-label='#{image.label}' data-speech-send-to-ai='#{@send_to_ai === "true" ? "true" : "false"}'>"
-      str += saved_image_link(image, "small")
-      str += remove_image_button(board, image) unless action_name == "locked"
-      str += "</div>"
-    end
-    placeholders.times do
-      str += "<div class='relative max-h-200 overflow-hidden'>"
-      str += "<div class='box-border flex bg-gray-100 border-2 border-gray-300 border-dashed rounded-md h-32 w-32'>"
-      str += "</div>"
-      str += "</div>"
-    end
-    str += "</div>"
-    str += "</div>"
-    str.html_safe
-  end
+  #   placeholders = max_image_count - images.length
+  #   images.each do |image|
+  #     str += "<div class='relative max-h-200 overflow-hidden' data-controller='speech'   data-speech-id='#{image.id}' data-speech-label='#{image.label}' data-speech-send-to-ai='#{@send_to_ai === "true" ? "true" : "false"}'>"
+  #     str += saved_image_link(image, "small")
+  #     str += remove_image_button(board, image) unless action_name == "locked"
+  #     str += "</div>"
+  #   end
+  #   placeholders.times do
+  #     str += "<div class='relative max-h-200 overflow-hidden'>"
+  #     str += "<div class='box-border flex bg-gray-100 border-2 border-gray-300 border-dashed rounded-md h-32 w-32'>"
+  #     str += "</div>"
+  #     str += "</div>"
+  #   end
+  #   str += "</div>"
+  #   str += "</div>"
+  #   str.html_safe
+  # end
 end

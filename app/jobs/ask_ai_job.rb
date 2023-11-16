@@ -6,11 +6,11 @@ class AskAiJob
     Rails.logger.debug "\n*** Running the Ask AI job!! IMAGE ID: #{image_id}\n WORD LIST: #{word_list}\n"
     begin
       image = Image.find(image_id)
-      if word_list
-        image.chat_with_ai("The word/phrase list is #{word_list}", response_image_id) if response_image_id
+      if !word_list.blank?
+        image.chat_with_ai("The word/phrase list is #{word_list}", response_image_id, word_list) if response_image_id
         image.chat_with_ai("The word/phrase list is #{word_list}") unless response_image_id
       else
-        image.chat_with_ai("The word/phrase is '#{image.label}'", response_image_id) if response_image_id
+        image.chat_with_ai("The word/phrase is '#{image.label}'", response_image_id, word_list) if response_image_id
         image.chat_with_ai("The word/phrase is '#{image.label}'") unless response_image_id
       end
     rescue => e

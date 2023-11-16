@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  get "response_boards/index"
-  get "response_boards/show"
+  resources :response_records do
+    member do
+      post "associate_response_image"
+      post "remove_response_image"
+    end
+  end
   root to: "home#index"
   get "home/index"
   devise_for :users

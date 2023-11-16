@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_14_180333) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_15_200947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -87,12 +87,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_180333) do
   create_table "response_images", force: :cascade do |t|
     t.bigint "response_board_id", null: false
     t.bigint "image_id", null: false
+    t.string "label", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "click_count", default: 0
     t.boolean "final_response", default: false
     t.index ["image_id"], name: "index_response_images_on_image_id"
     t.index ["response_board_id"], name: "index_response_images_on_response_board_id"
+  end
+
+  create_table "response_records", force: :cascade do |t|
+    t.string "name"
+    t.string "word_list"
+    t.integer "response_image_ids", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_images", force: :cascade do |t|
