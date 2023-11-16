@@ -78,7 +78,7 @@ class BoardsController < ApplicationController
     @response_board.response_images.create(image: image) unless @response_board.images.include?(image)
     # @board.images << image unless @board.images.include?(image)
 
-    redirect_to @board, notice: "#{before} -@board.images.include?(image): #{@board.images.include?(image)}"
+    redirect_to @board
   end
 
   def remove_image

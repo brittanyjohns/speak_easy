@@ -94,13 +94,13 @@ class ImagesController < ApplicationController
   end
 
   def create_response_board
-    @image = Image.find(params[:id])
-    puts "Parmas: #{params}"
-    response_board = ResponseBoard.find_or_create_by(name: @image.label)
-    AskAiJob.perform_async(@image.id)
+    # @image = Image.find(params[:id])
+    puts "create_response_board Parmas: #{params}"
+    # response_board = ResponseBoard.find_or_create_by(name: @image.label)
+    # AskAiJob.perform_async(@image.id)
     # redirect_to response_boards_url(response_board)
-    puts "Label: #{@image.label} Response board: #{response_board.inspect}\n path: #{response_boards_path(response_board)}"
-    redirect_to response_boards_path(response_board), notice: "Your image is generating."
+    # puts "Label: #{@image.label} Response board: #{response_board.inspect}\n path: #{response_boards_path(response_board)}"
+    redirect_to response_boards_path, notice: "Your image is generating."
     # respond_to do |format|
     #   format.html { redirect_to response_boards_url(response_board), notice: "Image was successfully destroyed." }
     #   format.json { head :no_content }

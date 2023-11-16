@@ -6,6 +6,7 @@
 #  ai_generated         :boolean          default(FALSE)
 #  audio_url            :string
 #  category             :string
+#  final_response_count :integer          default(0)
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string
@@ -33,7 +34,7 @@ class Image < ApplicationRecord
 
   def ensure_response_board
     response_board = ResponseBoard.find_or_create_by(name: self.label)
-    response_board.response_images.find_or_create_by(image_id: self.id, label: self.label)
+    self.response_images.find_or_create_by(response_board_id: response_board.id, label: self.label)
   end
 
   scope :public_images, -> { where(private: false) }
@@ -170,7 +171,7 @@ class Image < ApplicationRecord
     }
   end
 
-  def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil)
+  def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil, user_id = nil)
     response_board = ResponseBoard.find_by(name: self.label)
     if response_board && response_board.images.count > 30
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
@@ -207,7 +208,7 @@ class Image < ApplicationRecord
       end
 
       if response_board
-        response_board.create_images(response_content, word_list)
+        response_board.create_images(response_content, word_list, user_id)
       else
         response_board = ResponseBoard.create(name: self.label).create_images(response_content, word_list)
       end

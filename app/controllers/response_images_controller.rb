@@ -24,7 +24,7 @@ class ResponseImagesController < ApplicationController
     # @response_image.save
     @response_board = ResponseBoard.find_or_create_by(name: @image.label)
     Rails.logger.debug "*****response_board: #{@response_board.id} - response_image.response_board_id: #{@response_image.response_board_id}"
-    AskAiJob.perform_async(@image.id, @response_image.id, word_list)
+    AskAiJob.perform_async(@image.id, @response_image.id, word_list, @current_user.id)
     render json: { status: "success", redirect_url: response_board_path(@response_board), notice: "Image was successfully cropped & saved." }
   end
 end

@@ -39,12 +39,15 @@ class User < ApplicationRecord
 
   def make_selection(word)
     selection = self.user_selections.current.first_or_create
-    selection.words << word
+    stipped_word = word.strip
+    unless stipped_word.blank? || stipped_word == selection.words.last
+      selection.words << stipped_word
+    end
     selection.save
   end
 
   def current_word_list
-    self.user_selections.current.first_or_create.words
+    self.user_selections.current.first&.words || []
   end
 
   def reset_user_selections(words = [])

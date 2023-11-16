@@ -6,6 +6,7 @@
 #  ai_generated         :boolean          default(FALSE)
 #  audio_url            :string
 #  category             :string
+#  final_response_count :integer          default(0)
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string

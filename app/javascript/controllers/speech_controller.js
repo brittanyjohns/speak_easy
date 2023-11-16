@@ -6,8 +6,6 @@ export default class extends Controller {
   connect() {
     this.send_to_ai = this.data.get("send-to-ai");
     this.word_list = this.data.get("word-list");
-    console.log(`send_to_ai: ${this.send_to_ai}`);
-    console.log(`word_list: ${this.word_list}`);
   }
 
   speak() {
