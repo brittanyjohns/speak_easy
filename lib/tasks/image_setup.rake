@@ -1,8 +1,10 @@
 namespace :images do
   desc "Categorizes images"
+  # CREATE_AI_IMAGES=false rails images:categorize
   task categorize: [:environment] do
     CREATE_AI_IMAGES = ENV["CREATE_AI_IMAGES"] || true
     puts "Categorizing images..."
+    puts "CREATE_AI_IMAGES: #{CREATE_AI_IMAGES}"
     categorized_word_list = [
       { "category": "Food & Drink", "label": "hamburger" },
       { "category": "Feelings & Actions", "label": "to sleep" },
@@ -106,6 +108,7 @@ namespace :images do
       { "category": "Feelings & Actions", "label": "I share it" },
       { "category": "Things & Stuff", "label": "its broken" },
     ]
+
     categorized_word_list.each do |content|
       label = content[:label] || content["label"]
       category = content[:category] || content["category"]

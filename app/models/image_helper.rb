@@ -144,7 +144,11 @@ module ImageHelper
   end
 
   def create_image_prompt_text
-    "Can you create a text prompt for me that I can use with DALL-E to generate an image of a cartoon character expressing a certain emotion or doing a specific action. Or if the word is an object, write a prompt to generate an image of that object in a clear and simple way. Use as much detail as possible in order to generate an image that a child could easily recognize as the word given. Respond with the prompt only, not the image or any other text.  The word is '#{self.label}'."
+    "Can you create a text prompt for me that I can use with DALL-E to generate an image of 
+    a cartoon character expressing a certain emotion or doing a specific action. 
+    Or if the word is an object, write a prompt to generate an image of that object in a clear and simple way. 
+    Use as much detail as possible in order to generate an image that a child could easily recognize that the image represents this word/phrase: '#{self.label}'.
+     Respond with the prompt only, not the image or any other text.  It should be very clear that the word/phrase is '#{self.label}'."
   end
 
   def gpt_prompt
