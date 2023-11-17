@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     @current_user = current_user
-    @current_word_list = current_user.current_word_list if current_user
+    @current_user.ensure_current_user_selection if @current_user
+    @current_word_list = @current_user.current_word_list if @current_user
   end
 
   def after_sign_in_path_for(resource)
