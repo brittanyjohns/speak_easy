@@ -26,7 +26,12 @@ class ResponseImage < ApplicationRecord
   belongs_to :image
 
   before_save :set_label
-  # broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
+  broadcasts_to ->(response_image) { :response_image_list }, inserts_by: :prepend, target: "response_image_list"
+
+  validates :label, presence: true
+  validates :image_id, presence: true
+  validates :response_board_id, presence: true
+  validates_uniqueness_of :image_id, scope: :response_board_id
 
   def set_label
     self.label = image.label

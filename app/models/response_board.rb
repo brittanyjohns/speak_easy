@@ -10,16 +10,13 @@
 class ResponseBoard < ApplicationRecord
   has_many :response_images, dependent: :destroy
   has_many :images, through: :response_images
-  # has_many :response_options, -> { where.not(label: name) }, class_name: "ResponseImage", dependent: :destroy
+  validates :name, presence: true
+  normalizes :name, with: ->name { name.downcase }
 
-  CREATE_AI_IMAGES = false
+  CREATE_AI_IMAGES = ENV["CREATE_AI_IMAGES"] || true
 
   def response_options
     response_images.where.not(label: name)
-  end
-
-  def self.general_board
-    self.find_or_create_by(name: "General")
   end
 
   def source_response_image
@@ -67,14 +64,12 @@ class ResponseBoard < ApplicationRecord
       end
 
       if img
-        self.images << img unless self.images.include?(img)
+        # self.images << img unless self.images.include?(img)
+        self.response_images << ResponseImage.find_or_create_by(response_board_id: self.id, image_id: img.id, label: img.label)
+        puts "Added image to response board: #{img.label}"
+
         if word_list
-          word_list.is_a?(Array) ? word_string = word_list.join(" ") : word_string = word_list
-          response_record = ResponseRecord.find_or_create_by(word_list: word_string, user_id: user_id)
-          response_record.response_image_ids.concat(self.response_image_ids).uniq!
-          puts "self.response_image_ids: #{self.response_image_ids}"
-          puts "Response record: #{response_record.name} - #{response_record.word_list} - #{response_record.response_image_ids}"
-          response_record.save
+          create_response_record(word_list, user_id)
         end
         # if content.include?("end")
         #   puts "Response content includes end"
@@ -87,5 +82,15 @@ class ResponseBoard < ApplicationRecord
       end
     end
     self
+  end
+
+  def create_response_record(word_list, user_id = nil)
+    word_string = word_list.is_a?(Array) ? word_list.join(" ") : word_list
+    throw "Word list is not a string" unless word_string.is_a?(String)
+    response_record = ResponseRecord.find_or_create_by(word_list: word_string, user_id: user_id, name: self.name)
+    response_record.response_image_ids.concat(self.response_image_ids).uniq!
+    Rails.logger.debug "  self.response_image_ids: #{self.response_image_ids}"
+    Rails.logger.debug "create_response_record Response record: #{response_record.name} - #{response_record.word_list} - #{response_record.response_image_ids}"
+    response_record.save
   end
 end

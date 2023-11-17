@@ -5,6 +5,7 @@
     <%= render "form", image: @image %>
   </div>
   <div class="">
-    <%= link_to "ASK AI", create_response_board_image_path(@image), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        <%= link_to "Show", image_path(@image), class: "text-white  mt-2 shadow rounded-lg py-2 px-4 bg-blue-700 font-medium text-center" %>
+
     <%= button_to "Destroy", image_path(@image), method: :delete, class: "text-white  mt-2 shadow rounded-lg py-2 px-4 bg-red-700 font-medium text-center", form_class: "" %>
 </div>

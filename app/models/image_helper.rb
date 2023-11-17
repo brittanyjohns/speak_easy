@@ -19,13 +19,12 @@ module ImageHelper
   end
 
   def create_image
+    Rails.logger.debug "**** create_image **** label: #{label}\n"
     img_url = OpenAiClient.new(open_ai_opts).create_image
     if img_url
-      # self.update(image_url: img_url)
       save_image(img_url)
     else
-      puts "**** ERROR **** \nDid not receive valid response.\n"
-      return false
+      Rails.logger.debug "**** ERROR **** \nDid not receive valid response.\n"
     end
   end
 
@@ -37,7 +36,7 @@ module ImageHelper
       save_image(img_variation_url)
       success = true
     else
-      puts "**** ERROR **** \nDid not receive valid response.\n"
+      Rails.logger.debug "**** ERROR **** \nDid not receive valid response.\n"
     end
     success
   end
@@ -121,5 +120,34 @@ module ImageHelper
       prompt_text = normalized_prompt_text&.gsub(art_type, "")&.strip
     end
     prompt_text
+  end
+
+  def ask_ai_for_image_prompt
+    message = {
+      "role": "user",
+      "content": create_image_prompt_text,
+    }
+    begin
+      ai_client = OpenAiClient.new({ messages: [message] })
+      response = ai_client.create_chat
+    rescue => e
+      puts "**** ERROR - ask_ai_for_image_prompt **** \n#{e.message}\n"
+    end
+    if response && response[:role]
+      role = response[:role] || "assistant"
+      response_content = response[:content]
+      self.ai_prompt = response_content
+    else
+      Rails.logger.debug "*** ERROR - ask_ai_for_image_prompt *** \nDid not receive valid response. Response: #{response}\n"
+    end
+    response_content
+  end
+
+  def create_image_prompt_text
+    "Can you create a text prompt for me that I can use with DALL-E to generate an image of a cartoon character expressing a certain emotion or doing a specific action. Or if the word is an object, write a prompt to generate an image of that object in a clear and simple way. Use as much detail as possible in order to generate an image that a child could easily recognize as the word given. Respond with the prompt only, not the image or any other text.  The word is '#{self.label}'."
+  end
+
+  def gpt_prompt
+    ask_ai_for_image_prompt || "Create an image of a cartoon-style individual with medium-length hair, wearing a comfortable shirt. This person should have a facial expression and body language that adapt to the concept of '#{self.label}'. If the word is an object like 'pizza', they could be holding or interacting with it. If it's a place like 'outside', they could be standing with a backdrop that suggests the setting, and if it's an action or emotion, they should be performing a gesture that conveys that action or feeling. The background should be minimalist, using a soft, solid color to keep the main focus on the individual and the concept they are depicting."
   end
 end

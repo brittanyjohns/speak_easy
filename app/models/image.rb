@@ -4,6 +4,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  ai_generated         :boolean          default(FALSE)
+#  ai_prompt            :text
 #  audio_url            :string
 #  category             :string
 #  final_response_count :integer          default(0)
@@ -22,15 +23,15 @@ class Image < ApplicationRecord
   has_many :response_images, dependent: :destroy
   attr_accessor :descriptive_prompt
   include ImageHelper
-  include SpeechHelper
 
   validates :label, presence: true
+  normalizes :label, with: ->label { label.downcase }
 
   has_one_attached :saved_image
   has_one_attached :cropped_image
 
   after_save :generate_image, if: :send_request_on_save
-  after_save :ensure_response_board
+  after_create_commit :broadcast_upload
 
   def ensure_response_board
     response_board = ResponseBoard.find_or_create_by(name: self.label)
@@ -38,7 +39,7 @@ class Image < ApplicationRecord
   end
 
   scope :public_images, -> { where(private: false) }
-  # scope :with_attached_cropped_image, -> { with_attached_cropped_image }
+
   def display_image
     if cropped_image.attached?
       cropped_image
@@ -48,12 +49,15 @@ class Image < ApplicationRecord
   end
 
   def generate_image
+    puts "Generate Image: #{label}"
     self.send_request_on_save = false
-    if self.saved_image.attached? || self.cropped_image.attached?
-      puts "Image already has an image attached. Skipping..."
-    else
-      self.create_image
-    end
+    self.create_image
+    puts "Image creating: #{label}"
+    # if self.saved_image.attached? || self.cropped_image.attached?
+    #   puts "Image already has an image attached. Skipping..."
+    # else
+    #   self.create_image
+    # end
     self.save
   end
 
@@ -75,6 +79,7 @@ class Image < ApplicationRecord
 
   def broadcast_upload
     broadcast_replace_to :image_list
+    Rails.logger.info "Image: #{id}  #{label} broadcasted"
   end
 
   def main_image_on_disk
@@ -82,7 +87,7 @@ class Image < ApplicationRecord
   end
 
   def prompt_to_send
-    descriptive_prompt || "A simple clip art image of: #{label}"
+    descriptive_prompt || gpt_prompt
   end
 
   def open_ai_opts
@@ -114,40 +119,26 @@ class Image < ApplicationRecord
     end
   end
 
-  def continue_conversation?
-    self.category == "Feelings & Actions"
-  end
+  # >>> For Future Use
 
-  def prompt_for_child_conversation
-    # Begin the prompt with a clear and concise introduction
-    # prompt = "Imagine a person with special needs is using an AAC device to communicate. "
-    # prompt += "They are using a board of images to communicate and have chosen the image '#{label}'. "
-    # prompt += "They are now looking for the next word or phrase to communicate. "
-    prompt += "If the word '#{label}' would most commonly be used to end a sentence, please respond with the string 'end' only. Otherwise, "
-    prompt += "please suggest 3-5 words or short phrases most likely to be spoken next in a conversation. With the last word being spoken was '#{label}'. "
+  # def prompt_for_child_conversation
+  #   prompt += "If the word '#{label}' would most commonly be used to end a sentence, please respond with the string 'end' only. Otherwise, "
+  #   prompt += "please suggest 3-5 words or short phrases most likely to be spoken next in a conversation. With the last word being spoken was '#{label}'. "
 
-    # Instruction for the desired format and constraints
-    prompt += "Categorize each suggestion choosing from the following: #{Image.category_options.join(", ")}. "
-    prompt += "Expected response format is an array of hashes ONLY. Example: \n"
-    prompt += "[{ category: 'Family & People', label: 'mom' }, { category: 'Food & Drink', label: 'milk' }]"
+  #   # Instruction for the desired format and constraints
+  #   prompt += "Categorize each suggestion choosing from the following: #{Image.category_options.join(", ")}. "
+  #   prompt += "Expected response format is an array of hashes ONLY. Example: \n"
+  #   prompt += "[{ category: 'Family & People', label: 'mom' }, { category: 'Food & Drink', label: 'milk' }]"
 
-    # prompt += "Each entry should be as concise as possible, favoring single words. "
-    # prompt += "Keep in mind these words/phrases to populate an AAC board for a child with special needs to use to communicate so the responses are what is presented when they choose "
+  #   # Exclude previously used words, if any, with a clear instruction
+  #   # if existing_responses.any?
+  #   #   excluded = existing_responses.join(", ")
+  #   #   prompt += "Do NOT include these words/phrases: #{excluded}.\n"
+  #   # end
 
-    # Guidance to avoid repetition and overly common words
-    # prompt += "Avoid repetitions, and do not use generic words such as 'a', 'of', 'the', etc. "
-
-    # Example of what the response should look like
-
-    # Exclude previously used words, if any, with a clear instruction
-    # if existing_responses.any?
-    #   excluded = existing_responses.join(", ")
-    #   prompt += "Do NOT include these words/phrases: #{excluded}.\n"
-    # end
-
-    # Return the constructed prompt
-    prompt
-  end
+  #   # Return the constructed prompt
+  #   prompt
+  # end
 
   def assistant_prompt
     {
@@ -159,7 +150,7 @@ class Image < ApplicationRecord
   def setup_prompt
     {
       "role": "user",
-      "content": "I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 3-5 options for the next word or phase (limit to 3 words max). 
+      "content": "I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 2-3 options for the next word or phase (limit to 3 words max). 
       Return ONLY an array of strings. 
       Example 1 - Given the word list ['I'], you return ['want', 'need', 'am', 'see', 'hear', 'know']. 
       Example 2 - Given the word list ['I', 'want'], you return ['pizza', 'water', 'milk', 'juice', 'food'].
@@ -171,7 +162,12 @@ class Image < ApplicationRecord
     }
   end
 
+  def response_record_for(user_id)
+    ResponseRecord.find_by(name: label, user_id: user_id)
+  end
+
   def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil, user_id = nil)
+    Rails.logger.debug "\n\nChat with AI for #{self.label}\n\n"
     response_board = ResponseBoard.find_by(name: self.label)
     if response_board && response_board.images.count > 30
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
@@ -210,7 +206,7 @@ class Image < ApplicationRecord
       if response_board
         response_board.create_images(response_content, word_list, user_id)
       else
-        response_board = ResponseBoard.create(name: self.label).create_images(response_content, word_list)
+        response_board = ResponseBoard.create(name: self.label).create_images(response_content, word_list, user_id)
       end
       response_board
     else

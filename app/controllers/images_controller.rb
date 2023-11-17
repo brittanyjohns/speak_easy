@@ -7,12 +7,12 @@ class ImagesController < ApplicationController
     if params[:user_images_only] == "1"
       @images = current_user.images.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).page params[:page]
     else
-      @images = Image.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).searchable_images_for(current_user).order(label: :asc).page params[:page]
+      @images = Image.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).searchable_images_for(current_user).order(created_at: :desc).page params[:page]
     end
     if params[:query].present?
-      @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc)
+      @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(created_at: :desc).page params[:page]
     else
-      @images = @images.searchable_images_for(current_user).order(label: :asc)
+      @images = @images.searchable_images_for(current_user).order(created_at: :desc).page params[:page]
     end
     if turbo_frame_request?
       render partial: "images", locals: { images: @images }
@@ -22,7 +22,9 @@ class ImagesController < ApplicationController
   end
 
   def generate
-    GenerateImageJob.perform_async(@image.id)
+    # GenerateImageJob.perform_async(@image.id)
+    @image.update(send_request_on_save: true)
+    Rails.logger.info "Generate Image: #{@image.label}"
     redirect_to images_url, notice: "Your image is generating."
   end
 
@@ -41,9 +43,6 @@ class ImagesController < ApplicationController
       redirect_to images_url, notice: "You can only edit your own images."
       # elsif @image.saved_image.attached? && !@image.cropped_image.attached?
       #   redirect_to crop_image_url(@image), notice: "You must crop your image before continuing."
-    else
-      # @image.create_image
-      # redirect_to edit_image_url(@image)
     end
   end
 
@@ -54,7 +53,7 @@ class ImagesController < ApplicationController
 
     respond_to do |format|
       if @image.save
-        format.html { redirect_to edit_image_url(@image) }
+        format.html { redirect_to image_url(@image) }
         format.json { render :show, status: :created, location: @image }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -91,20 +90,6 @@ class ImagesController < ApplicationController
       @image.saved_image.purge
     end
     render json: { status: "success", redirect_url: images_url, notice: "Image was successfully cropped & saved." }
-  end
-
-  def create_response_board
-    # @image = Image.find(params[:id])
-    puts "create_response_board Parmas: #{params}"
-    # response_board = ResponseBoard.find_or_create_by(name: @image.label)
-    # AskAiJob.perform_async(@image.id)
-    # redirect_to response_boards_url(response_board)
-    # puts "Label: #{@image.label} Response board: #{response_board.inspect}\n path: #{response_boards_path(response_board)}"
-    redirect_to response_boards_path, notice: "Your image is generating."
-    # respond_to do |format|
-    #   format.html { redirect_to response_boards_url(response_board), notice: "Image was successfully destroyed." }
-    #   format.json { head :no_content }
-    # end
   end
 
   # DELETE /images/1 or /images/1.json

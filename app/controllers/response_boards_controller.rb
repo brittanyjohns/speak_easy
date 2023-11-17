@@ -9,6 +9,7 @@ class ResponseBoardsController < ApplicationController
   def show
     @send_to_ai = "true"
     @response_options = @response_board.response_options.order(click_count: :desc)
+    @response_images = @response_board.response_images.order(click_count: :desc)
   end
 
   def associate_response_image

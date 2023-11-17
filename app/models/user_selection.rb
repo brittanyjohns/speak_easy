@@ -20,7 +20,7 @@
 #
 class UserSelection < ApplicationRecord
   belongs_to :user
-  broadcasts_to ->(user_selection) { :user_selection_list }, inserts_by: :prepend, target: "user_selection_list"
+  # broadcasts_to ->(user_selection) { :user_selection_list }, inserts_by: :prepend, target: "user_selection_list"
 
   scope :current, -> { where(current: true) }
 end

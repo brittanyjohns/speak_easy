@@ -27,7 +27,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  after_initialize :ensure_current_user_selection
+  after_save :ensure_current_user_selection
 
   def ensure_current_user_selection
     self.user_selections.current.first_or_create
@@ -35,6 +35,10 @@ class User < ApplicationRecord
 
   def admin?
     id == 1
+  end
+
+  def self.super_admin
+    User.find(1)
   end
 
   def make_selection(word)

@@ -17,7 +17,7 @@
     <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
     <div class="h-3/4 justify-center p-2 md:p-4">
-      <%= render "layouts/current_selection" %>
+      <%= render "layouts/current_selection" if user_signed_in? %>
        
       <%= yield %>
     </div>

@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   patch "response_images/:id/click", to: "response_images#click", as: "click_response_image"
   resources :images do
     post "generate", on: :member
-    get "create_response_board", on: :member
     get "crop", on: :member
   end
   resources :boards do
@@ -35,4 +34,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/sidekiq"
 end

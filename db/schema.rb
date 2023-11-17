@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_15_200947) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_200947) do
     t.string "category"
     t.boolean "ai_generated", default: false
     t.integer "final_response_count", default: 0
+    t.text "ai_prompt"
   end
 
   create_table "response_boards", force: :cascade do |t|

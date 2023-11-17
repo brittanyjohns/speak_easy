@@ -1,6 +1,6 @@
 class AskAiJob
   include Sidekiq::Job
-  sidekiq_options queue: "default", retry: 2, backtrace: true
+  sidekiq_options queue: "default", retry: 1, backtrace: true
 
   def perform(image_id, response_image_id, word_list = nil, user_id = nil)
     Rails.logger.debug "\n*** Running the Ask AI job!! IMAGE ID: #{image_id}\n WORD LIST: #{word_list}\n"

@@ -17,7 +17,6 @@ class ResponseRecordsController < ApplicationController
     @response_board = @response_record.response_board
     response_image = ResponseImage.find(params[:response_image_id].to_i)
     @response_board.response_images << response_image unless @response_board.response_images.include?(response_image)
-    # redirect_to @response_record
     redirect_to @response_board
   end
 

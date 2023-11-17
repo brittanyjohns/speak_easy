@@ -28,6 +28,10 @@ class Board < ApplicationRecord
     Image.with_attached_cropped_image.includes(cropped_image_attachment: :blob).searchable_images_for(self.user).excluding(images)
   end
 
+  def self.general_board
+    self.find_or_create_by(name: "General", user_id: User.super_admin.id)
+  end
+
   def images
     board_images.includes(:image).map(&:image)
   end

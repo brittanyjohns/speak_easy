@@ -1,6 +1,7 @@
 namespace :images do
   desc "Categorizes images"
   task categorize: [:environment] do
+    CREATE_AI_IMAGES = ENV["CREATE_AI_IMAGES"] || true
     puts "Categorizing images..."
     categorized_word_list = [
       { "category": "Food & Drink", "label": "hamburger" },
@@ -109,16 +110,16 @@ namespace :images do
       label = content[:label] || content["label"]
       category = content[:category] || content["category"]
       puts "Label: #{label} - Category: #{category}"
-      img = Image.find_by(label: label)
-      puts "Image: #{img}"
+      img = Image.find_by(label: label, private: false)
+      puts "Found image #{img.id}: #{img.label} - #{img.category}" if img
       unless img
-        img = Image.create(label: label, send_request_on_save: false, private: false, category: category)
-        puts "Created image: #{img.label}"
+        img = Image.create(label: label, send_request_on_save: CREATE_AI_IMAGES, private: false, category: category, ai_generated: CREATE_AI_IMAGES)
+        puts "#{img.id} Created image: #{img.label}"
       else
         if category && img.category != category
           img.category = category
           if img.save
-            puts "Updated image: #{img.label} - #{img.category}"
+            puts "#{img.id} Updated image: #{img.label} - #{img.category}"
           end
         end
       end

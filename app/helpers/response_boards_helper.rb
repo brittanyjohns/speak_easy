@@ -12,4 +12,36 @@ module ResponseBoardsHelper
       image_tag(image.display_image.representation(resize_to_limit: [100, 100]).processed.url)
     end
   end
+
+  def response_nav_for(current_repoonse_board, word_list)
+    str = "<div class='text-gray-600 text-3xl text-center'> "
+    if word_list
+      if current_repoonse_board.response_images.count > 0
+        current_word = current_repoonse_board.name
+        current_index = word_list.index(current_word)
+        unless current_index
+          str += ""
+        end
+        previous_word = word_list[current_index - 1] if current_index && current_index > 0
+        next_word = word_list[current_index + 1] if current_index && current_index < word_list.count - 1
+        unless previous_word || next_word
+          str += ""
+        end
+        next_board = ResponseBoard.find_by(name: next_word)
+        previous_board = ResponseBoard.find_by(name: previous_word)
+        unless next_board || previous_board
+          str += ""
+        end
+        if next_board && previous_board
+          str += "#{link_to(icon("fa-solid", "arrow-left"), response_board_path(previous_board))} #{link_to(icon("fa-solid", "arrow-right"), response_board_path(next_board))}".html_safe
+        elsif next_board
+          str += "#{link_to(icon("fa-solid", "arrow-right"), response_board_path(next_board))}".html_safe
+        elsif previous_board
+          str += "#{link_to(icon("fa-solid", "arrow-left"), response_board_path(previous_board))}".html_safe
+        end
+      end
+    end
+    str += "</div>"
+    str.html_safe
+  end
 end
