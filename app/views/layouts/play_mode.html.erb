@@ -21,28 +21,30 @@
       </div>
     </div>
     <div class="pt-3">
-       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-    <% @images.each do |image| %>
-      <div id="<%= dom_id image %>" class="w-full" data-controller='speech'>
-        <div class="bg-white rounded-lg shadow overflow-hidden group">
-          <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
-            <input data-speech-target='name' type='text' value='<%= image.label %>' class='invisible p-0 m-0 h-0 w-0'>
-
-            <%= image_tag image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain", data: { action: "click->speech#speak" } %>%
-            <% if image.private %>
-              <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
-            <% end %>
+      <%= render "layouts/current_selection" %>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 m-3">
+        <% @board_images.each do |board_image| %>
+          <div id="<%= dom_id board_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= board_image.response_image.id %>" data-speech-label="<%= board_image.label %>" data-speech-send-to-ai="<%= !board_image.response_image.final_response %>" data-speech-word-list="<%= current_user.current_word_list %>">
+            <div class="bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
+              <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
+              <% if board_image.display_image.attached? %>
+                <%= image_tag board_image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain" %>
+                <% else %>
+                  <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold"><%= board_image.label.upcase %></div>
+                <% end %>
+                <% if board_image.private %>
+                  <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
+                <% end %>
+              </div>
+              <div class="p-1">
+                <p class="truncate text-gray-800 font-small hover:text-blue-600 text-center">
+                  <%= board_image.label %>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="p-4">
-            <p class="truncate text-gray-800 font-medium hover:text-blue-600">
-              <%= link_to image.label, edit_image_path(image), class: "rounded-lg", data: { turbo: false } %>
-            </p>
-          </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
-  </div>
     </div>
-
   </body>
 </html>

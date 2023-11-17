@@ -1,12 +1,16 @@
-<div>
-  <h1 class="font-bold text-4xl">
-    <%= link_to @response_board.source_image.label, create_response_board_image_path(@response_board.source_image), class: "rounded-lg", data: { turbo: false } %>
+<div class="container mx-auto px-4 py-4">
+
+  <h1 class="font-bold text-4xl text-center">
+    <%= @response_board.name %> <span class="text-xs"><%= time_ago_in_words(@response_board.created_at) %> ago</span>
   </h1>
+       <%= response_nav_for(@response_board, current_user.current_user_selection.words) %>
 
-  <%= turbo_stream_from :response_image_list %>
+
+  <%= turbo_stream_from :response_image_list %> 
   <div id='response_image_list' class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      <%= render partial: "response_images/response_image", collection: @response_board.response_images %>
-
+    <% @response_images.each do |response_image| %>
+      <%= render partial: "response_images/response_image", locals: { response_image: response_image, word_list: @current_word_list } %>
+    <% end %>
   </div>
 </div>
 

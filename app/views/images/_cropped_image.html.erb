@@ -5,9 +5,9 @@
                               controller: "images",
                               images_url: image_url,
                               images_id: image.id,
-                            }, class: "container") do %>
-    <div class="image-container">
-      <%= image_tag(image_url, class: "image", id: "source", data: {
+                            }, class: "w-full justify-between items-center") do %>
+    <div class="w-full border">
+      <%= image_tag(image_url, class: "w-full", id: "source", data: {
                                  images_target: "source",
                                }) %>
       <%= button_to "Crop", "#", data: {
@@ -15,8 +15,8 @@
                                    images_target: "cropButton",
                                  }, method: :get %>
     </div>
-    <div class="image-container">
-      <%= image_tag(cropped_image_url, class: "image", id: "output", data: {
+    <div class="w-full">
+      <%= image_tag(cropped_image_url, class: "", id: "output", data: {
                                          images_target: "output",
                                        }) %>
     </div>

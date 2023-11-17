@@ -4,8 +4,10 @@
 #
 #  id                   :bigint           not null, primary key
 #  ai_generated         :boolean          default(FALSE)
+#  ai_prompt            :text
 #  audio_url            :string
 #  category             :string
+#  final_response_count :integer          default(0)
 #  image_prompt         :string
 #  image_url            :string
 #  label                :string

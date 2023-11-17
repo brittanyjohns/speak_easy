@@ -3,7 +3,7 @@
 
 <% cropped_image_url = image.cropped_image.attached? ? rails_storage_proxy_path(image.cropped_image) : "" %>
 
-<%= content_tag(:div, "", class: "container", data: {
+<%= content_tag(:div, "", class: "", data: {
                             controller: "upload",
                           }) do %>
     <div class="my-5">
@@ -11,8 +11,8 @@
         <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
 
     </div>
-    <div class="image-container">
-        <%= image_tag image_url, class: "image", id: "preview", data: {
+    <div class="w-full">
+        <%= image_tag image_url, class: "", id: "preview", data: {
                                    upload_target: "preview",
                                  } %>
     </div>
@@ -22,7 +22,7 @@
                                upload_target: "cropButton",
                              }, method: :get %>
     </div>
-    <div class="image-container">
+    <div class="w-full">
       <%= image_tag(cropped_image_url, class: "image", id: "output", data: {
                                          upload_target: "output",
                                        }) %>

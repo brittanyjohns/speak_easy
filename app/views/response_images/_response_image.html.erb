@@ -1,15 +1,22 @@
-<div id="<%= dom_id response_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= response_image.id %>" data-speech-label="<%= response_image.label %>">
-    <div class="bg-white rounded-lg shadow overflow-hidden group" data-action="click->speech#speak">
+<div id="<%= dom_id response_image %>" class="w-full"  data-controller='speech'  data-speech-id="<%= response_image.id %>" data-speech-label="<%= response_image.label %>" data-speech-send-to-ai="<%= !response_image.final_response %>" data-speech-word-list="<%= @current_word_list %>">
+    <div class="relative bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
         <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
             <%= image_tag response_image.image.display_image.representation(resize_to_limit: [100, 100]).processed.url, class: "absolute top-0 left-0 w-full h-full object-contain" if response_image.image.display_image.attached? %>
-        <% if response_image.image.private %>
-            <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
-        <% end %>
+            <% if response_image.image.private %>
+                <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
+            <% end %>
+
         </div>
         <div class="p-4">
         <p class="truncate text-gray-800 font-medium hover:text-blue-600">
-            <%= link_to response_image.image.label, create_response_board_image_path(response_image.image), class: "rounded-lg", data: { turbo: false } %>
+             <%= response_image.label %>
         </p>
+        <p class="text-gray-600 text-xs"><%= time_ago_in_words(response_image.created_at) %> ago</p>
+        </div>
+        <div class="p-2">
+            <div class="flex items-center justify-between">
+                <%= remove_response_image_button(response_image.response_board, response_image) %>  <span class="text-gray-600 text-xs"><%= response_image.click_count %></span>
+            </div>
         </div>
     </div>
 </div>

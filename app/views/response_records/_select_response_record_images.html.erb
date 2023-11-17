@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "select_response_record_images" do %>
+<div class="grid grid-cols-8 md:grid-cols-8 gap-4">
+
+    <% response_record_images.each do |response_record_image| %>
+      <div id="<%= dom_id response_record_image %>" class="w-full">
+        <div class="bg-white rounded-lg shadow overflow-hidden group">
+          <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
+           <%= select_response_record_image_button(@response_record, response_record_image) %>
+            <% if response_record_image.image.private %>
+              <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
+            <% end %>
+          </div>
+          <div class="p-4">
+            <p class="truncate text-gray-800 font-medium hover:text-blue-600">
+              <%= link_to response_record_image.label, edit_image_path(response_record_image.image), class: "rounded-lg", data: { turbo: false } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
