@@ -69,8 +69,9 @@ class ApplicationController < ActionController::Base
     @image = Image.create(label: label_string, private: false, category: "None", ai_generated: true, send_request_on_save: ResponseBoard::CREATE_AI_IMAGES) unless @image
 
     @response_board = ResponseBoard.find_or_create_by(name: label_string)
-    @response_board.create_response_record(@image.label, @current_user.id)
     @response_image = @response_board.response_images.find_or_create_by(image_id: @image.id, label: label_string)
+    @response_board.create_response_record(@image.label, @current_user.id)
+
     AskAiJob.perform_async(@image.id, @response_image.id, word_list&.flatten, @current_user&.id)
   end
 end

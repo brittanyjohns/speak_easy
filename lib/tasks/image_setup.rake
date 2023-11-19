@@ -2,7 +2,7 @@ namespace :images do
   desc "Categorizes images"
   # CREATE_AI_IMAGES=false rails images:categorize
   task categorize: [:environment] do
-    CREATE_AI_IMAGES = ENV["CREATE_AI_IMAGES"] || true
+    CREATE_AI_IMAGES = ENV.fetch("CREATE_AI_IMAGES", "false") == "true"
     puts "Categorizing images..."
     puts "CREATE_AI_IMAGES: #{CREATE_AI_IMAGES}"
     categorized_word_list = [

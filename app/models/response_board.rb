@@ -13,7 +13,7 @@ class ResponseBoard < ApplicationRecord
   validates :name, presence: true
   normalizes :name, with: ->name { name.downcase }
 
-  CREATE_AI_IMAGES = ENV["CREATE_AI_IMAGES"] || true
+  CREATE_AI_IMAGES = ENV.fetch("CREATE_AI_IMAGES", "false") == "true"
 
   def response_options
     response_images.where.not(label: name)
@@ -46,7 +46,7 @@ class ResponseBoard < ApplicationRecord
 
       unless img
         img = Image.create(label: label, send_request_on_save: CREATE_AI_IMAGES, private: false, category: category, ai_generated: CREATE_AI_IMAGES)
-        puts "Created image: #{img.label}"
+        puts "Created image: #{img.label}\n#{img.inspect}"
       else
         if category && img.category != category
           img.category = category
