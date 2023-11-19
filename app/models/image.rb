@@ -51,13 +51,13 @@ class Image < ApplicationRecord
   def generate_image
     puts "Generate Image: #{label}"
     self.send_request_on_save = false
-    self.create_image
-    puts "Image creating: #{label}"
-    # if self.saved_image.attached? || self.cropped_image.attached?
-    #   puts "Image already has an image attached. Skipping..."
-    # else
-    #   self.create_image
-    # end
+
+    if self.saved_image.attached? || self.cropped_image.attached?
+      puts "Image already has an image attached. Skipping..."
+    else
+      self.create_image
+      self.ai_generated = true
+    end
     self.save
   end
 
@@ -87,7 +87,7 @@ class Image < ApplicationRecord
   end
 
   def prompt_to_send
-    descriptive_prompt || gpt_prompt
+    image_prompt || gpt_prompt
   end
 
   def open_ai_opts
@@ -151,7 +151,7 @@ class Image < ApplicationRecord
     {
       "role": "user",
       "content": "I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 2-3 options for the next word or phase (limit to 3 words max). 
-      Return ONLY an array of strings. 
+      Return ONLY an array of strings. The array should be in order of most likely to least likely & be limited to 3 words max.
       Example 1 - Given the word list ['I'], you return ['want', 'need', 'am', 'see', 'hear', 'know']. 
       Example 2 - Given the word list ['I', 'want'], you return ['pizza', 'water', 'milk', 'juice', 'food'].
       If the word(s) I give you is most likely make a complete sentence, please return the string 'end' only.

@@ -22,8 +22,7 @@ class ImagesController < ApplicationController
   end
 
   def generate
-    # GenerateImageJob.perform_async(@image.id)
-    @image.update(send_request_on_save: true)
+    GenerateImageJob.perform_async(@image.id)
     Rails.logger.info "Generate Image: #{@image.label}"
     redirect_to images_url, notice: "Your image is generating."
   end

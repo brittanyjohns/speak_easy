@@ -1,5 +1,6 @@
 <div>
-  <h1 class="font-bold text-4xl">ResponseRecords#index</h1>
+  <h1 class="font-bold text-4xl">ResponseRecords <span class="text-right"><%= @response_records.count %></span></h1>
+  <%= paginate @response_records %>
   <% @response_records.each do |response_record| %>
   <%= link_to response_record do %>
     <div class="w-3/4 border p-3 mx-auto">

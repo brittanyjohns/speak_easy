@@ -29,7 +29,7 @@ class Board < ApplicationRecord
   end
 
   def self.general_board
-    self.find_or_create_by(name: "General", user_id: User.super_admin.id)
+    self.where(name: "General", user_id: 1).first
   end
 
   def images
@@ -62,5 +62,9 @@ class Board < ApplicationRecord
 
   def full?
     images.count == max_image_count
+  end
+
+  def self.all_boards_for_user(user)
+    self.where(user_id: user.id).or(self.where(user_id: 1, name: "General"))
   end
 end

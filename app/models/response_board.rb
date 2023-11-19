@@ -28,25 +28,20 @@ class ResponseBoard < ApplicationRecord
   end
 
   def create_images(response_content, word_list = nil, user_id = nil)
-    puts "Response content is not an array - #{response_content.class}"
     pp response_content
 
     # response_content.gsub("[", "").gsub("]", "").gsub("'", "").split(", ").each do |content|
     array_of_hashes = eval(response_content)
-    puts "Array of hashes: #{array_of_hashes} - #{array_of_hashes.class}"
     array_of_hashes.each do |content|
-      puts "Content: #{content} - #{content.class}"
       if content.is_a?(String)
-        puts "Content is a string"
         label = content
-        category = "None"
+        category = nil
       elsif content.is_a?(Hash)
-        puts "Content is a hash"
         label = content["label"] || content[:label]
         category = content["category"] || content[:category]
       end
       puts "Label: #{label} - Category: #{category}"
-      img = Image.find_by(label: label)
+      img = Image.find_by(label: label, private: false)
       puts "Found image: #{img.label}" if img
 
       unless img
@@ -55,6 +50,7 @@ class ResponseBoard < ApplicationRecord
       else
         if category && img.category != category
           img.category = category
+          img.send_request_on_save = false
           if img.save
             puts "Updated image category: #{img.label}"
           else
@@ -65,8 +61,10 @@ class ResponseBoard < ApplicationRecord
 
       if img
         # self.images << img unless self.images.include?(img)
-        self.response_images << ResponseImage.find_or_create_by(response_board_id: self.id, image_id: img.id, label: img.label)
-        puts "Added image to response board: #{img.label}"
+        ri = ResponseImage.find_by(response_board_id: self.id, image_id: img.id, label: img.label)
+        ri = ResponseImage.create(response_board_id: self.id, image_id: img.id, label: img.label) unless ri
+        self.response_images << ri unless self.response_images.include?(ri)
+        puts "Added image to response board: #{img.label} - #{ri.label}"
 
         if word_list
           create_response_record(word_list, user_id)
@@ -89,8 +87,6 @@ class ResponseBoard < ApplicationRecord
     throw "Word list is not a string" unless word_string.is_a?(String)
     response_record = ResponseRecord.find_or_create_by(word_list: word_string, user_id: user_id, name: self.name)
     response_record.response_image_ids.concat(self.response_image_ids).uniq!
-    Rails.logger.debug "  self.response_image_ids: #{self.response_image_ids}"
-    Rails.logger.debug "create_response_record Response record: #{response_record.name} - #{response_record.word_list} - #{response_record.response_image_ids}"
     response_record.save
   end
 end

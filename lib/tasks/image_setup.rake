@@ -97,7 +97,7 @@ namespace :images do
       { "category": "Feelings & Actions", "label": "need" },
       { "category": "Feelings & Actions", "label": "feel" },
       { "category": "Feelings & Actions", "label": "think" },
-      { "category": "Feelings & Actions", "label": "know" },
+      { "category": "Feelings & Actions", "label": "hello" },
       { "category": "Food & Drink", "label": "a snack" },
       { "category": "Things & Stuff", "label": "my iPad" },
       { "category": "Places & Nature", "label": "outside" },

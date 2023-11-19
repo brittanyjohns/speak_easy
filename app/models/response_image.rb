@@ -32,6 +32,7 @@ class ResponseImage < ApplicationRecord
   validates :image_id, presence: true
   validates :response_board_id, presence: true
   validates_uniqueness_of :image_id, scope: :response_board_id
+  validates_uniqueness_of :label, scope: :response_board_id
 
   def set_label
     self.label = image.label

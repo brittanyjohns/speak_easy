@@ -1,6 +1,6 @@
 module ResponseBoardsHelper
   def remove_response_image_button(board, image)
-    button_to "#{icon("fa-solid", "trash")}".html_safe, remove_response_image_response_board_path(board, image_id: image), class: "text-red-600 hover:text-red-700 py-1 px-1 rounded-full absolute bottom-0 left-0 text-xs", method: :post
+    button_to "#{icon("fa-solid", "trash")}".html_safe, remove_response_image_response_board_path(board, image_id: image), class: "text-red-600 hover:text-red-700 py-1 px-1 rounded-full absolute bottom-0 left-0 text-xs", data: { turbo: false }, method: :post
   end
 
   def add_response_image_button(board, image, size: "thumnail")

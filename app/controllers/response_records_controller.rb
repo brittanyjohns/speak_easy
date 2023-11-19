@@ -2,7 +2,7 @@ class ResponseRecordsController < ApplicationController
   before_action :set_response_record, except: [:index]
 
   def index
-    @response_records = ResponseRecord.all
+    @response_records = ResponseRecord.all.page params[:page]
   end
 
   def show

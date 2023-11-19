@@ -11,6 +11,9 @@
 #  user_id            :integer
 #
 class ResponseRecord < ApplicationRecord
+  normalizes :name, with: ->name { name.downcase }
+  normalizes :word_list, with: ->word_list { word_list.downcase }
+
   def response_images
     ResponseImage.find(self.response_image_ids)
   end

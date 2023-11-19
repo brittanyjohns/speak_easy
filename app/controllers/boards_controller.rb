@@ -113,7 +113,7 @@ class BoardsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_board
     begin
-      @board = current_user.boards.includes(board_images: [:image]).find(params[:id])
+      @board = Board.all_boards_for_user(current_user).includes(board_images: [:image]).find(params[:id])
     rescue ActiveRecord::RecordNotFound
       redirect_to boards_url, notice: "Board not found"
     end
