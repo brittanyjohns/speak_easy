@@ -91,6 +91,13 @@ class ImagesController < ApplicationController
     render json: { status: "success", redirect_url: images_url, notice: "Image was successfully cropped & saved." }
   end
 
+  def purge_saved_images
+    @image = Image.find(params[:id])
+    @image.saved_image.purge
+    @image.cropped_image.purge
+    redirect_to image_url(@image), notice: "Image was successfully purged."
+  end
+
   # DELETE /images/1 or /images/1.json
   def destroy
     @image.destroy

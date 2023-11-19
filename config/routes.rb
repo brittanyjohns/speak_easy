@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :images do
     post "generate", on: :member
     get "crop", on: :member
+    post "purge_saved_images", on: :member
   end
   resources :boards do
     member do

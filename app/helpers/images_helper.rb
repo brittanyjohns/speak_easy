@@ -7,17 +7,16 @@ module ImagesHelper
     button_to "#{icon("fa-solid", "trash")}".html_safe, remove_image_board_path(board, image_id: image.id), class: "text-red-600 hover:text-red-700 py-1 px-1 rounded-full absolute bottom-0 left-0", method: :post
   end
 
+  def purge_saved_images_button(image)
+    button_to "#{icon("fa-solid", "trash")} Delete Image".html_safe, purge_saved_images_image_path(image.id), class: "text-red-600 hover:text-red-700 py-1 px-1 rounded-full", method: :post
+  end
+
   def speech_button(image)
     button_to icon("fa-regular", "comment-dots"), speak_image_path(image), class: "btn", method: :post
   end
 
-  def saved_image_link(image, *options)
-    size = options[0] || "small"
-    puts "size: #{size}"
+  def saved_image_link(image)
     unless image.cropped_image.attached? || image.saved_image.attached?
-      # puts "no image"
-      # return "<p class='text-red-600'>#{image.label}</p>".html_safe
-      # <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold" data-action="click->speech#speak"><%= image.label.upcase %></div>
       str = "<div class='absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold' data-action='click->speech#speak'>#{image.label.upcase}</div>"
       return str.html_safe
     end

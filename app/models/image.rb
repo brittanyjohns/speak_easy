@@ -61,6 +61,10 @@ class Image < ApplicationRecord
     self.save
   end
 
+  def is_new_image?
+    created_at > 3.minutes.ago
+  end
+
   def self.searchable_images_for(user = nil)
     if user
       Image.where(private: false).or(Image.where(user_id: user.id))
