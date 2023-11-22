@@ -35,8 +35,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    # id == 1
-    false
+    id == 1 || ENV.fetch("ADMIN_EMAILS", "").split(",").include?(email)
   end
 
   def ai_enabled?

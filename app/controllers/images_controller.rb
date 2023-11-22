@@ -21,6 +21,11 @@ class ImagesController < ApplicationController
     end
   end
 
+  def run_image_setup
+    ImageSetupJob.perform_async if current_user.admin?
+    redirect_to images_url, notice: "Image setup is running."
+  end
+
   def generate
     GenerateImageJob.perform_async(@image.id)
     Rails.logger.info "Generate Image: #{@image.label}"

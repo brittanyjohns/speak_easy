@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
 
   resources :images do
+    post "run_image_setup", on: :collection
     post "generate", on: :member
     get "crop", on: :member
     patch "croppable", on: :member
