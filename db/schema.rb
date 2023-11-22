@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_20_211455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,6 +60,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
     t.boolean "show_labels"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "next_board_id"
+    t.integer "previous_board_id"
+    t.integer "parent_id"
+    t.index ["next_board_id"], name: "index_boards_on_next_board_id"
+    t.index ["parent_id"], name: "index_boards_on_parent_id"
+    t.index ["previous_board_id"], name: "index_boards_on_previous_board_id"
     t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
@@ -83,6 +89,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "next_response_board_id"
+    t.integer "previous_response_board_id"
+    t.integer "parent_id"
+    t.index ["next_response_board_id"], name: "index_response_boards_on_next_response_board_id"
+    t.index ["parent_id"], name: "index_response_boards_on_parent_id"
+    t.index ["previous_response_board_id"], name: "index_response_boards_on_previous_response_board_id"
   end
 
   create_table "response_images", force: :cascade do |t|
@@ -104,6 +116,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "situation"
+    t.string "word_array", default: [], array: true
+    t.integer "response_board_id"
+    t.index ["response_board_id"], name: "index_response_records_on_response_board_id"
+    t.index ["word_array"], name: "index_response_records_on_word_array", using: :gin
   end
 
   create_table "user_images", force: :cascade do |t|
@@ -122,6 +139,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
     t.boolean "current", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "situation"
     t.index ["user_id"], name: "index_user_selections_on_user_id"
     t.index ["words"], name: "index_user_selections_on_words", using: :gin
   end
@@ -135,6 +153,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_171030) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ai_enabled", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

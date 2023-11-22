@@ -1,19 +1,12 @@
-<%= form_with(model: board, class: "contents") do |form| %>
+<%= simple_form_for board do |form| %>
+  
   <% if board.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-      <h2><%= pluralize(board.errors.count, "error") %> prohibited this board from being saved:</h2>
-
-      <ul>
-        <% board.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render "layouts/errors", model: board %>
   <% end %>
 
   <div class="my-5">
     <%= form.label :name %>
-    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.input_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
   <div class="mb-4">
@@ -31,11 +24,13 @@
                     {},
                     class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
-    <div class="mb-4">
 
-      <%= form.submit class: "rounded-lg py-2 px-2 outline font-medium cursor-pointer" %>
-        <%= link_to "Cancel", boards_path, class: "ml-2 rounded-lg py-3 px-5 bg-red-400 inline-block font-medium" %>
-
-
-</div>
+  <div class="p-2 bg-blue-50 border justify-between">
+    <%= render "board_fields", form: form %>
+    <%= form.association :next_board %>
+  </div>
+  <div class="mb-4">
+    <%= form.submit class: "rounded-lg py-2 px-2 outline font-medium cursor-pointer" %>
+    <%= link_to "Cancel", boards_path, class: "ml-2 rounded-lg py-3 px-5 bg-red-400 inline-block font-medium" %>
+  </div>
 <% end %>

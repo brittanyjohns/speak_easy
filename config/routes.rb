@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :board_images
+  patch "/ai", to: "application#ai", as: "ai"
+  resources :user_selections
   resources :response_records do
     member do
       post "associate_response_image"
@@ -11,6 +14,7 @@ Rails.application.routes.draw do
   patch "clear_selection", to: "application#clear_selection", as: "clear_selection"
   patch "croppable/:id", to: "images#croppable", as: "croppable"
   patch "response_images/:id/click", to: "response_images#click", as: "click_response_image"
+  patch "response_images/:id/next", to: "response_images#next", as: "next_response_image"
   resources :images do
     post "generate", on: :member
     get "crop", on: :member
@@ -22,6 +26,10 @@ Rails.application.routes.draw do
       post "remove_image"
       get "locked"
     end
+  end
+  resources :board_images do
+    get "next"
+    get "previous"
   end
 
   resources :response_boards, only: [:index, :show] do

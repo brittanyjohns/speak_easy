@@ -2,16 +2,29 @@
 #
 # Table name: response_boards
 #
-#  id         :bigint           not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                         :bigint           not null, primary key
+#  name                       :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  next_response_board_id     :integer
+#  parent_id                  :integer
+#  previous_response_board_id :integer
+#
+# Indexes
+#
+#  index_response_boards_on_next_response_board_id      (next_response_board_id)
+#  index_response_boards_on_parent_id                   (parent_id)
+#  index_response_boards_on_previous_response_board_id  (previous_response_board_id)
 #
 class ResponseBoard < ApplicationRecord
+  has_many :response_records
   has_many :response_images, dependent: :destroy
   has_many :images, through: :response_images
   validates :name, presence: true
   normalizes :name, with: ->name { name.downcase }
+  has_one :next_board, class_name: "ResponseBoard", foreign_key: "next_id"
+  has_one :previous_board, class_name: "ResponseBoard", foreign_key: "previous_id"
+  belongs_to :parent_board, class_name: "ResponseBoard", optional: true, foreign_key: "parent_id"
 
   CREATE_AI_IMAGES = ENV.fetch("CREATE_AI_IMAGES", "false") == "true"
 
@@ -64,7 +77,6 @@ class ResponseBoard < ApplicationRecord
         ri = ResponseImage.find_by(response_board_id: self.id, image_id: img.id, label: img.label)
         ri = ResponseImage.create(response_board_id: self.id, image_id: img.id, label: img.label) unless ri
         self.response_images << ri unless self.response_images.include?(ri)
-        puts "Added image to response board: #{img.label} - #{ri.label}"
 
         if word_list
           create_response_record(word_list, user_id)
@@ -82,10 +94,10 @@ class ResponseBoard < ApplicationRecord
     self
   end
 
-  def create_response_record(word_list, user_id = nil)
+  def create_response_record(word_list, user_id = nil, situation = nil)
     word_string = word_list.is_a?(Array) ? word_list.join(" ") : word_list
     throw "Word list is not a string" unless word_string.is_a?(String)
-    response_record = ResponseRecord.find_or_create_by(word_list: word_string, user_id: user_id, name: self.name)
+    response_record = self.response_records.find_or_create_by(word_list: word_string, user_id: user_id, name: self.name, word_array: [word_list].flatten, situation: situation)
     response_record.response_image_ids.concat(self.response_image_ids).uniq!
     response_record.save
   end

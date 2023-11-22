@@ -282,6 +282,9 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.14.0)
+    simple_form (5.3.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     sortablejs-rails (1.15.0)
       rails (>= 6.0.0, < 8)
     sprockets (4.2.1)
@@ -355,6 +358,7 @@ DEPENDENCIES
   ruby-openai (~> 4.1)
   selenium-webdriver
   sidekiq (~> 7.1)
+  simple_form
   sortablejs-rails
   sprockets-rails
   stimulus-rails

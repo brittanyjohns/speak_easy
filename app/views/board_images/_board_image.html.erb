@@ -1,0 +1,7 @@
+<div id="<%= dom_id board_image %>">
+  <% if action_name != "show" %>
+    <%= link_to "Show this board image", board_image, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this board image", edit_board_image_path(board_image), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

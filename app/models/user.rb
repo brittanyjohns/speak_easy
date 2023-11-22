@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  ai_enabled             :boolean          default(FALSE)
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  name                   :string
@@ -37,12 +38,17 @@ class User < ApplicationRecord
     id == 1
   end
 
+  def ai_enabled?
+    ENV.fetch("AI_ENABLED", false) || ai_enabled
+  end
+
   def self.super_admin
     User.find(1)
   end
 
-  def make_selection(word)
-    selection = self.user_selections.current.first_or_create
+  def make_selection(word, situation = nil)
+    Rails.logger.info "User: #{self.name} - Making selection: #{word} for situation: #{situation}"
+    selection = self.user_selections.current.first_or_create(situation: situation)
     stipped_word = word.strip
     unless stipped_word.blank? || stipped_word == selection.words.last
       selection.words << stipped_word
@@ -71,5 +77,17 @@ class User < ApplicationRecord
     end
     selection.words.flatten!
     selection.save
+  end
+
+  def current_word
+    current_word_list.last
+  end
+
+  def current_response_board
+    ResponseBoard.find_by(name: current_word)
+  end
+
+  def current_situation
+    current_user_selection.situation
   end
 end

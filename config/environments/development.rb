@@ -6,6 +6,7 @@ Rails.application.configure do
   logger.formatter = config.log_formatter
   config.logger = ActiveSupport::TaggedLogging.new(logger)
   config.log_level = :debug
+  # config.log_level = :info
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -74,4 +75,6 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  ActiveStorage::LogSubscriber.detach_from :active_storage
 end

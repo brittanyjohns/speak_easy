@@ -103,3 +103,5 @@ gem "rack-cors"
 
 gem "jsbundling-rails", "~> 1.2"
 gem "kaminari"
+
+gem "simple_form"

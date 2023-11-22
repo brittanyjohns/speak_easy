@@ -4,6 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  current    :boolean          default(TRUE)
+#  situation  :string
 #  words      :string           default([]), is an Array
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

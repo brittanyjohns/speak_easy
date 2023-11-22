@@ -21,7 +21,7 @@ class Image < ApplicationRecord
   belongs_to :user, optional: true
   has_many :board_images, dependent: :destroy
   has_many :response_images, dependent: :destroy
-  attr_accessor :descriptive_prompt
+  attr_accessor :situation
   include ImageHelper
 
   validates :label, presence: true
@@ -144,30 +144,49 @@ class Image < ApplicationRecord
   #   prompt
   # end
 
-  def assistant_prompt
-    {
-      "role": "assistant",
-      "content": "A person with special needs is using an AAC device to communicate. You will predict the next word or phrase to communicate.",
-    }
+  def self.situation_list
+    ["at home", "at school", "at the park", "at the store", "at the doctor's office", "at the dentist's office", "at the hospital", "at the library", "at the beach", "at the pool", "at the gym", "at the zoo", "at the museum", "at the movies", "at the restaurant", "at the mall", "at the airport", "at the train station", "at the bus station", "at the gas station", "at the grocery store", "at the post office", "at the bank", "at the pharmacy", "at the doctor's office", "at the dentist's office", "at the hospital", "at the library", "at the beach", "at the pool", "at the gym", "at the zoo", "at the museum", "at the movies", "at the restaurant", "at the mall", "at the airport", "at the train station", "at the bus station", "at the gas station", "at the grocery store", "at the post office", "at the bank", "at the pharmacy"].sample
+  end
+
+  # def situation_location
+  #   self.situation || Image.situation_list.sample
+  # end
+
+  def situation_prompt(situation_location)
+    "Use the given situation to predict the next word or phrase to communicate. The situation is: #{situation_location}"
   end
 
   def setup_prompt
+    content = "A person with special needs is using an AAC device to communicate. 
+    You will predict the next word or phrase to communicate. I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 2-3 options for the next word or phase (limit to 5 words max). 
+    Return ONLY an array of strings. The array should be in order of most likely to least likely & be limited to 5 words max.
+    # Example 1 - Given the word list ['I'], you return ['want', 'need', 'am', 'see', 'hear', 'know'].
+    # Example 2 - Given the word list ['I', 'want'], you return ['pizza', 'water', 'milk'].
+    If the word(s) I give you is most likely make a complete sentence, please return ['end'] only.
+    Example 1 - Given the word list ['I', 'want', 'pizza', 'please'] you return ['end']."
+    # If the word(s) I give you is most likely make a question or request, please return the string 'question' only.
+    # Example 2 - Given the word list ['Can', 'I', 'have', 'some', 'water'] you return ['please'].",
+
+    if existing_responses.any?
+      excluded = existing_responses.join(", ")
+      content += "Do NOT include these words/phrases: #{excluded}.\n"
+    end
+    content += "If there are no more words to add to the sentence (without repeating), please return the string ['end'] only."
     {
       "role": "user",
-      "content": "I'm going to give you a list of words or short phrases (that represents a sentence being formed) and I want you to return an array of 2-3 options for the next word or phase (limit to 3 words max). 
-      Return ONLY an array of strings. The array should be in order of most likely to least likely & be limited to 3 words max.
-      Example 1 - Given the word list ['I'], you return ['want', 'need', 'am', 'see', 'hear', 'know']. 
-      Example 2 - Given the word list ['I', 'want'], you return ['pizza', 'water', 'milk', 'juice', 'food'].
-      If the word(s) I give you is most likely make a complete sentence, please return the string 'end' only.
-      Example 1 - Given the word list ['I', 'want', 'pizza', 'please'] you return ['end'].
-      If the word(s) I give you is most likely make a question or request, please return the string 'question' only.
-      Example 2 - Given the word list ['Can', 'I', 'have', 'some', 'water'] you return ['please'].",
-
+      "content": content,
     }
   end
 
   def response_record_for(user_id)
     ResponseRecord.find_by(name: label, user_id: user_id)
+  end
+
+  def situation_message(situation)
+    {
+      "role": "user",
+      "content": "Please keep in mind the situation is: #{situation}. Use this to help you predict the next word or phrase to communicate.",
+    }
   end
 
   def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil, user_id = nil)
@@ -180,14 +199,28 @@ class Image < ApplicationRecord
 
     prompt ||= prompt_for_child_conversation
 
-    puts "Prompt: #{prompt}"
-
     message = {
       "role": "user",
       "content": prompt,
     }
+    messages_to_send = [setup_prompt]
+    situation = nil
+    if user_id
+      user = User.find(user_id)
+      if user
+        puts "User: #{user.id} #{user.name}"
+        situation = user.current_situation
+      end
+    end
+    unless situation.blank?
+      puts "Situation: #{situation}"
+      messages_to_send << situation_message(situation)
+    end
+    messages_to_send << message
+    puts "Messages to send: #{messages_to_send.count}"
+    # debugger
     begin
-      ai_client = OpenAiClient.new({ messages: [assistant_prompt, setup_prompt, message] })
+      ai_client = OpenAiClient.new({ messages: messages_to_send })
       response = ai_client.create_chat
       Rails.logger.debug "\n\nResponse: #{response}\n\n"
     rescue => e

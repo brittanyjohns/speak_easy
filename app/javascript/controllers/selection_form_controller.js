@@ -2,14 +2,18 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="selection-form"
 export default class extends Controller {
-  static targets = ["query", "array"];
+  static targets = ["query", "array", "situation"];
 
   connect() {
-    this.query_value = this.data.get("query-value");
+    this.situation = this.situationTarget.value;
 
     console.log(
-      `this.queryTarget.value: ${this.queryTarget.value} - this.query_value: ${this.query_value}`
+      `this.queryTarget.value: ${this.queryTarget.value} - - this.situation: ${this.situation}`
     );
+  }
+
+  test() {
+    console.log("test");
   }
 
   selection = (e) => {

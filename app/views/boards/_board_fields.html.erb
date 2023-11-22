@@ -1,0 +1,6 @@
+<div class="p-5 border">
+  <h2 class="text-2xl font-bold mb-4">Next Board</h2>
+  <%= form.fields_for :next_board do |next_board_form| %>
+      <%= next_board_form.input :name, html: { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+  <% end %>
+</div>
