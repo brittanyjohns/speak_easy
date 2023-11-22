@@ -23,12 +23,12 @@ export default class extends Controller {
     if (this.send_to_ai === "true") {
       this.sendToAI();
     } else {
-      console.log("getting next board");
-      this.getNextBoard();
+      console.log(`Getting next board or image: ${this.nextEndpoint}`); // Look at local_names.default
+      this.getNext();
     }
   }
 
-  getNextBoard() {
+  getNext() {
     fetch(`/${this.nextEndpoint}/${this.image_id}/next`, {
       method: "GET",
       headers: {

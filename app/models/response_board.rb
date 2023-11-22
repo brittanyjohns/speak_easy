@@ -77,18 +77,6 @@ class ResponseBoard < ApplicationRecord
         ri = ResponseImage.find_by(response_board_id: self.id, image_id: img.id, label: img.label)
         ri = ResponseImage.create(response_board_id: self.id, image_id: img.id, label: img.label) unless ri
         self.response_images << ri unless self.response_images.include?(ri)
-
-        if word_list
-          create_response_record(word_list, user_id)
-        end
-        # if content.include?("end")
-        #   puts "Response content includes end"
-        #   source_image.final_response_count += 1
-        #   source_image.save
-        #   response_image = self.response_images.find_by(image_id: img.id)
-        #   response_image.final_response = true
-        #   response_image.save
-        # end
       end
     end
     self

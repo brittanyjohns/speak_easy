@@ -9,9 +9,9 @@
         <div class="hidden md:flex items-center space-x-4 ml-4 md:ml-10">
             <% if user_signed_in? %>
             <%= link_to "My Boards", boards_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
-            <%= link_to "Responds Boards", response_boards_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
-            <%= link_to "Responds Records", response_records_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
-            <%= link_to "User Selections", user_selections_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+            <%= link_to "Responds Boards", response_boards_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
+            <%= link_to "Responds Records", response_records_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
+            <%= link_to "Users", users_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
 
             <%= link_to "Images", images_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
             <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium", form_class: "inline-block" %>

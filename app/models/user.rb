@@ -35,7 +35,8 @@ class User < ApplicationRecord
   end
 
   def admin?
-    id == 1
+    # id == 1
+    false
   end
 
   def ai_enabled?
@@ -47,12 +48,19 @@ class User < ApplicationRecord
   end
 
   def make_selection(word, situation = nil)
+    situation ||= self.current_situation
     Rails.logger.info "User: #{self.name} - Making selection: #{word} for situation: #{situation}"
     selection = self.user_selections.current.first_or_create(situation: situation)
     stipped_word = word.strip
     unless stipped_word.blank? || stipped_word == selection.words.last
       selection.words << stipped_word
     end
+    selection.save
+  end
+
+  def remove_selection(word)
+    selection = self.user_selections.current.first
+    selection.words.delete(word)
     selection.save
   end
 

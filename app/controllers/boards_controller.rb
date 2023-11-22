@@ -47,16 +47,14 @@ class BoardsController < ApplicationController
 
   # POST /boards or /boards.json
   def create
-    @board = current_user.boards.new(board_params)
+    @board = current_user.boards.new(update_board_params)
     if board_params[:next_board_id].present?
-      # @board.next_board_id = board_params[:next_board_id]
-      @board.next_board = Board.find(board_params["next_board_id"])
-    elsif board_params[:next_board_attributes].present? && board_params[:next_board_attributes][:name].present?
+      next_board = Board.find(board_params[:next_board_id])
+      @board.next_board = next_board if next_board
+    elsif board_params[:next_board_attributes].present? && !board_params[:next_board_attributes][:name].blank?
       name = board_params[:next_board_attributes][:name]
       @board.create_next_board(name) if name.present?
-      board_params.delete(:next_board_attributes)
     end
-
     respond_to do |format|
       if @board.save
         format.html { redirect_to board_url(@board), notice: "Board was successfully created." }
@@ -82,7 +80,6 @@ class BoardsController < ApplicationController
     @board.board_images.create(image: image) unless @board.images.include?(image)
     @response_board = @board.response_board
     @response_board.response_images.create(image: image) unless @response_board.images.include?(image)
-    # @board.images << image unless @board.images.include?(image)
 
     redirect_to @board
   end
@@ -99,14 +96,14 @@ class BoardsController < ApplicationController
   # PATCH/PUT /boards/1 or /boards/1.json
   def update
     if board_params[:next_board_id].present?
-      @board.next_board_id = board_params[:next_board_id]
-    elsif board_params[:next_board_attributes].present? && board_params[:next_board_attributes][:name].present?
+      next_board = Board.find(board_params[:next_board_id])
+      @board.next_board = next_board if next_board
+    elsif board_params[:next_board_attributes].present? && !board_params[:next_board_attributes][:name].blank?
       name = board_params[:next_board_attributes][:name]
       @board.create_next_board(name) if name.present?
-      board_params.delete(:next_board_attributes)
     end
     respond_to do |format|
-      if @board.update(board_params)
+      if @board.update(update_board_params)
         format.html { redirect_to board_url(@board), notice: "Board was successfully updated." }
         format.json { render :show, status: :ok, location: @board }
       else
@@ -144,5 +141,9 @@ class BoardsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def board_params
     params.require(:board).permit(:user_id, :name, :theme_color, :grid_size, :next_board_id, next_board_attributes: [:id, :name, :theme_color, :grid_size], previous_board_attributes: [:id, :name, :theme_color, :grid_size])
+  end
+
+  def update_board_params
+    params.require(:board).permit(:user_id, :name, :theme_color, :grid_size, :next_board_id, :previous_board_id)
   end
 end

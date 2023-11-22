@@ -52,6 +52,8 @@ class BoardImagesController < ApplicationController
     @board_image = BoardImage.find(params[:board_image_id])
     @board = @board_image.board
     @next_board = @board.next_board
+    @current_user.make_selection(@board_image.label)
+    word_list = @current_user.current_word_list
     if @next_board
       render json: { status: "success", redirect_url: locked_board_path(@next_board) }
     else
@@ -63,6 +65,7 @@ class BoardImagesController < ApplicationController
     @board_image = BoardImage.find(params[:board_image_id])
     @board = @board_image.board
     @previous_board = @board.previous_board
+    @current_user.remove_selection(@board_image.label)
     if @previous_board
       render json: { status: "success", redirect_url: board_path(@previous_board) }
     else

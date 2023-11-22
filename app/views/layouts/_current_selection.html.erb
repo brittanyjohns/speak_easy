@@ -1,9 +1,9 @@
-<% if current_user.current_user_selection %>
-  <%= form_with(url: clear_selection_path, method: :patch, class: "mr-5 ml-5", data: { controller: "selection-form", turbo_frame: "selection", turbo_action: "advance" }) do |form| %>
+<% if @current_user.current_user_selection %>
+  <%= form_with(url: update_selection_user_path(@current_user), method: :patch, class: "mr-5 ml-5 mb-6", data: { controller: "selection-form", turbo_frame: "selection", turbo_action: "advance" }) do |form| %>
     <div class="flex space-x-3">
-      <%= form.hidden_field :word_array, value: current_user.current_user_selection&.words, data: { selection_form_target: "array" } %>
-      <%= form.text_field :user_input, value: current_user.current_word_list, class: "w-2/3 sm:w-1/2 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { selection_form_target: "query", action: "input->selection-form#selection" } %>
-      <%= form.text_field :situation, value: "#{current_user.current_situation || ""}", id: "situation", class: "situation w-1/4 sm:w-1/4 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { selection_form_target: "situation", action: "input->selection-form#selection" } %>
+      <%= form.hidden_field :word_array, value: @current_user.current_user_selection&.words, data: { selection_form_target: "array" } %>
+      <%= form.text_field :user_input, value: @current_user.current_word_list, placeholder: "Say something...", class: "w-2/3 sm:w-1/2 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { selection_form_target: "query", action: "input->selection-form#selection" } %>
+      <%= form.text_field :situation, value: "#{@current_user.current_situation || ""}", placeholder: "Enter a situation", id: "situation", class: "situation w-1/4 sm:w-1/4 py-2 px-3 rounded border ring-0 focus:ring-4 focus:ring-orange-100 focus:shadow-none focus:border-orange-500 focus:outline-none", data: { selection_form_target: "situation", action: "input->selection-form#selection" } %>
       <%= form.submit "Send", class: "px-3 py-2 font-medium bg-green-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-green-400 focus:ring-4 ring-0 focus:ring-green-100 mr-3", data: { action: "click->selection-form#send" } %>
       <%= form.submit "Clear", class: "px-3 py-2 font-medium bg-orange-300 text-neutal-900 rounded flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100 mr-3" %>
     </div>

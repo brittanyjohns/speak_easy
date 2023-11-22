@@ -1,0 +1,20 @@
+<div>
+  <h1 class="font-bold text-4xl">Users <span class="text-right"><%= @users.count %></span></h1>
+  <%= paginate @users %>
+  <% @users.each do |user| %>
+    <div class="w-3/4 border p-3 mx-auto">
+      <%= link_to user_path(user) do %>
+        <p>user: <%= user.id %> - <%= user.name || user.email %></p>
+      <% end %>
+      <% user.user_selections.current.each do |user_selection| %>
+        <div class="p-1 border">
+          <p>id: <%= user_selection.id %></p>
+          <p>user_id: <%= user_selection.user_id %></p>
+          <p>word_list: <%= user_selection.words %></p>
+          <p>situation: <%= user_selection.situation %></p>
+          <p class="text-xs">Created <%= time_ago_in_words user_selection.created_at %> ago</p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

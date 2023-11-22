@@ -1,7 +1,11 @@
 <div class="mx-auto w-full p-4">
   <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
-  <h3>Next: <%= @board.next_board ? link_to(@board.next_board.name, @board.next_board) : "None" %> </h3>
-  <h3>Previous: <%= @board.previous_board ? link_to(@board.previous_board.name, @board.previous_board) : "None" %> </h3>
+  <div class="p3 border flex justify-between">
+    <h3>Previous: <%= @board.previous_board ? link_to(@board.previous_board.name, @board.previous_board) : "None" %> </h3>
+    <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+    <h3>Next: <%= @board.next_board ? link_to(@board.next_board.name, @board.next_board) : "None" %> </h3>
+  </div>
+    
   <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white inline-block font-medium align-middle" %>
 
   <div class="mt-6 flex justify-around">
@@ -20,7 +24,6 @@
   </div>
 
   <div class="mt-6 flex justify-end space-x-2">
-    <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
     <%= button_to "Destroy", board_path(@board), method: :delete, class: "rounded-lg py-3 px-5 bg-red-600 text-white font-medium", form_class: "" %>
   </div>
 </div>
