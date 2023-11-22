@@ -1,6 +1,7 @@
 <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
   <div class="flex justify-between items-center mb-10">
     <%= button_to "Run Image Setup Job", run_image_setup_images_path, method: :post, class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 border border-blue-600 rounded shadow" %>
+    <p class="text-xs text-gray-400">Generating AI Images: <%= ResponseBoard::CREATE_AI_IMAGES %> </p>
     <h1 class="font-bold text-4xl text-gray-800">Image Library <span class="float-right text-xs"><%= Image.searchable_images_for(current_user).count %></span></h1>
     <%= paginate @images %>
 
