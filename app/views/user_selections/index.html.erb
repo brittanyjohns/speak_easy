@@ -1,0 +1,18 @@
+<div>
+  <h1 class="font-bold text-4xl">ResponseRecords <span class="text-right"><%= @user_selections.count %></span></h1>
+  <%= paginate @user_selections %>
+  <% @user_selections.each do |user_selection| %>
+  <%= link_to user_selection do %>
+    <div class="w-3/4 border p-3 mx-auto">
+      <p>id: <%= user_selection.id %></p>
+       <p>user_id: <%= user_selection.user_id %></p>
+      <p>name: <%= user_selection.name %></p>
+      <p>word_list: <%= user_selection.word_list %></p>
+      <p>response_image_ids: <%= user_selection.response_image_ids %></p>
+      <p>word_array: <%= user_selection.word_array %></p>
+      <p>situation: <%= user_selection.situation %></p>
+      <p><%= time_ago_in_words user_selection.created_at %></p>
+    </div>
+    <% end %>
+  <% end %>
+</div>

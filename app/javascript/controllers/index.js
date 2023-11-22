@@ -17,6 +17,9 @@ application.register("search-form", SearchFormController);
 import SpeechController from "./speech_controller";
 application.register("speech", SpeechController);
 
+import SelectionFormController from "./selection_form_controller";
+application.register("selection-form", SelectionFormController);
+
 // import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading";
 // eagerLoadControllersFrom("controllers", application);
 console.log("index.js loaded");

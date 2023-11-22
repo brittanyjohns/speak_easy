@@ -1,8 +1,9 @@
 <div class="container mx-auto px-4 py-4">
 
-  <h1 class="font-bold text-4xl text-center">
-    <%= @response_board.name %> <span class="text-xs"><%= time_ago_in_words(@response_board.created_at) %> ago</span>
+  <h1 class="font-bold text-4xl">
+    <%= @response_board.name %>
   </h1>
+  <p class="text-xs mb-3 mt-3"><%= time_ago_in_words(@response_board.created_at) %> ago</p>
        <%= response_nav_for(@response_board, current_user.current_user_selection.words) %>
 
 

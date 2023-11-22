@@ -4,7 +4,8 @@ class BoardsController < ApplicationController
 
   # GET /boards or /boards.json
   def index
-    @boards = current_user.boards
+    @boards = Board.all
+    # @boards = current_user.boards
     @general_board = Board.general_board
   end
 
@@ -36,15 +37,25 @@ class BoardsController < ApplicationController
   # GET /boards/new
   def new
     @board = current_user.boards.new
+    @board.next_board ||= @board.build_next_board
   end
 
   # GET /boards/1/edit
   def edit
+    @board.next_board ||= @board.build_next_board
   end
 
   # POST /boards or /boards.json
   def create
     @board = current_user.boards.new(board_params)
+    if board_params[:next_board_id].present?
+      # @board.next_board_id = board_params[:next_board_id]
+      @board.next_board = Board.find(board_params["next_board_id"])
+    elsif board_params[:next_board_attributes].present? && board_params[:next_board_attributes][:name].present?
+      name = board_params[:next_board_attributes][:name]
+      @board.create_next_board(name) if name.present?
+      board_params.delete(:next_board_attributes)
+    end
 
     respond_to do |format|
       if @board.save
@@ -87,6 +98,13 @@ class BoardsController < ApplicationController
 
   # PATCH/PUT /boards/1 or /boards/1.json
   def update
+    if board_params[:next_board_id].present?
+      @board.next_board_id = board_params[:next_board_id]
+    elsif board_params[:next_board_attributes].present? && board_params[:next_board_attributes][:name].present?
+      name = board_params[:next_board_attributes][:name]
+      @board.create_next_board(name) if name.present?
+      board_params.delete(:next_board_attributes)
+    end
     respond_to do |format|
       if @board.update(board_params)
         format.html { redirect_to board_url(@board), notice: "Board was successfully updated." }
@@ -113,7 +131,11 @@ class BoardsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_board
     begin
-      @board = Board.all_boards_for_user(current_user).includes(board_images: [:image]).find(params[:id])
+      if current_user.admin?
+        @board = Board.find(params[:id])
+      else
+        @board = Board.all_boards_for_user(current_user).includes(board_images: [:image]).find(params[:id])
+      end
     rescue ActiveRecord::RecordNotFound
       redirect_to boards_url, notice: "Board not found"
     end
@@ -121,6 +143,6 @@ class BoardsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def board_params
-    params.require(:board).permit(:user_id, :name, :theme_color, :grid_size)
+    params.require(:board).permit(:user_id, :name, :theme_color, :grid_size, :next_board_id, next_board_attributes: [:id, :name, :theme_color, :grid_size], previous_board_attributes: [:id, :name, :theme_color, :grid_size])
   end
 end

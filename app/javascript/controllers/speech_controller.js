@@ -2,19 +2,18 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="speech"
 export default class extends Controller {
-  // static targets = ["name"];
   connect() {
     this.send_to_ai = this.data.get("send-to-ai");
     this.word_list = this.data.get("word-list");
+    this.name = this.data.get("label");
+    this.nextEndpoint = this.data.get("next-endpoint");
   }
 
   speak() {
     this.image_id = this.data.get("id");
-    this.name = this.data.get("label");
-    // this.send_to_ai = this.data.get("send-to-ai");
-    console.log(` ${this.image_id} ${this.name} ${this.send_to_ai}`);
-    // const element = this.nameTarget;
-    // const name = element.value;
+    console.log(
+      ` ${this.image_id} ${this.name} ${this.send_to_ai} - ${this.nextEndpoint}`
+    );
     const utterance = new SpeechSynthesisUtterance(this.name);
     utterance.pitch = 1.5;
     utterance.volume = 0.5;
@@ -23,7 +22,32 @@ export default class extends Controller {
     speechSynthesis.speak(utterance);
     if (this.send_to_ai === "true") {
       this.sendToAI();
+    } else {
+      console.log("getting next board");
+      this.getNextBoard();
     }
+  }
+
+  getNextBoard() {
+    fetch(`/${this.nextEndpoint}/${this.image_id}/next`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')
+          .content,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`data:${data}`); // Look at local_names.default
+        if (data.status === "success") {
+          console.log("Success:", data);
+          window.location.href = data.redirect_url;
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   sendToAI() {
@@ -37,6 +61,7 @@ export default class extends Controller {
       body: JSON.stringify({
         label: this.name,
         word_list: this.word_list,
+        situation: this.situation,
       }),
     })
       .then((response) => response.json())
