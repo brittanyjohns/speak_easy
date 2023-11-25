@@ -1,5 +1,5 @@
-<div>
-  <h1 class="font-bold text-4xl mb-3"><%= @user.id %> - <%= @user.name || @user.email %></h1>
+<div class="">
+  <h1 class="font-bold text-xl mb-3"><%= @user.id %> - <%= @user.name || @user.email %></h1>
   <div class="w-3/4 border p-3 mx-auto">
       <% @user.user_selections.each do |user_selection| %>
         <div class="p-1 border">

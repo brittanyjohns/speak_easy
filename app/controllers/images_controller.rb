@@ -10,9 +10,9 @@ class ImagesController < ApplicationController
       @images = Image.includes(cropped_image_attachment: :blob, saved_image_attachment: :blob).searchable_images_for(current_user).order(created_at: :desc).page params[:page]
     end
     if params[:query].present?
-      @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(created_at: :desc).page params[:page]
+      @images = @images.searchable_images_for(current_user).where("label ILIKE ?", "%#{params[:query]}%").order(updated_at: :desc).page params[:page]
     else
-      @images = @images.searchable_images_for(current_user).order(created_at: :desc).page params[:page]
+      @images = @images.searchable_images_for(current_user).order(updated_at: :desc).page params[:page]
     end
     if turbo_frame_request?
       render partial: "images", locals: { images: @images }
@@ -22,7 +22,7 @@ class ImagesController < ApplicationController
   end
 
   def edit_multiple
-    @images = Image.all.order(created_at: :desc)
+    @images = Image.all.order(label: :asc)
   end
 
   def update_multiple

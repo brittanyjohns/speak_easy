@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
     else
       @ai_enabled = ENV.fetch("AI_ENABLED", false)
     end
+    @ai_global = ENV.fetch("AI_ENABLED", false)
   end
 
   def ai

@@ -19,6 +19,10 @@
       <p class="my-5">
         <%= @image.ai_prompt %>
       </p>
+      <div class="my-5">
+        <p class="text-center"> Created: <%= time_ago_in_words @image.created_at %> ago</p>
+        <p class="text-center"> Updated: <%= time_ago_in_words @image.updated_at %> ago</p>
+      </div>
     </div>
 
     <div class="flex flex-col sm:flex-row sm:space-x-2 my-2">

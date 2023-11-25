@@ -5,8 +5,16 @@ export default class extends Controller {
   static targets = ["enable"];
   connect() {
     this.aiEnabled = this.data.get("mode");
-    if (this.aiEnabled === "true") {
-      this.enableTarget.checked = true;
+    this.enabledGlobal = this.data.get("enabled-global");
+    if (this.enabledGlobal === "true") {
+      if (this.aiEnabled === "true") {
+        this.enableTarget.checked = true;
+      } else {
+        this.enableTarget.checked = false;
+      }
+    } else {
+      this.enableTarget.disabled = true;
+      // this.enableTarget.classList.add("hidden");
     }
   }
 

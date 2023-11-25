@@ -49,7 +49,7 @@ class BoardImagesController < ApplicationController
   end
 
   def next
-    @board_image = BoardImage.find(params[:board_image_id])
+    @board_image = BoardImage.find(params[:id])
     @board = @board_image.board
     @next_board = @board.next_board
     @current_user.make_selection(@board_image.label)
@@ -62,7 +62,7 @@ class BoardImagesController < ApplicationController
   end
 
   def previous
-    @board_image = BoardImage.find(params[:board_image_id])
+    @board_image = BoardImage.find(params[:id])
     @board = @board_image.board
     @previous_board = @board.previous_board
     @current_user.remove_selection(@board_image.label)

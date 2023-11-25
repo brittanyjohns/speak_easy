@@ -38,8 +38,12 @@ class User < ApplicationRecord
     id == 1 || ENV.fetch("ADMIN_EMAILS", "").split(",").include?(email)
   end
 
-  def ai_enabled?
-    ENV.fetch("AI_ENABLED", false) || ai_enabled
+  # def ai_enabled?
+  #   return false unless ai_enabled && ENV.fetch("AI_ENABLED", "false") == "true"
+  # end
+
+  def ai_enabled
+    read_attribute(:ai_enabled) && ENV.fetch("AI_ENABLED", "false") == "true"
   end
 
   def self.super_admin

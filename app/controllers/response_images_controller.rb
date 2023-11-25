@@ -20,4 +20,14 @@ class ResponseImagesController < ApplicationController
     AskAiJob.perform_async(@image.id, @response_image.id, word_list, @current_user.id)
     render json: { status: "success", redirect_url: response_board_path(@response_board) }
   end
+
+  def next
+    puts "NEXT params: #{params}"
+    @response_image = ResponseImage.find(params[:id])
+    @image = @response_image.image if @response_image
+    throw "NO IMAGE FOUND" unless @image
+    @response_image.click_count += 1
+    @response_image.save
+    render json: { status: "success", redirect_url: response_image_path(@response_image) }
+  end
 end

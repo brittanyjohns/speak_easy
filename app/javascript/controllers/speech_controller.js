@@ -51,7 +51,7 @@ export default class extends Controller {
   }
 
   sendToAI() {
-    fetch(`/response_images/${this.image_id}/click`, {
+    fetch(`/${this.nextEndpoint}/${this.image_id}/click`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

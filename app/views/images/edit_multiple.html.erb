@@ -1,21 +1,39 @@
-    <%= button_to "Run Image Setup Job", run_image_setup_images_path, method: :post, data: { turbo_confirm: "Are you sure you want to run this job?" }, class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 border border-blue-600 rounded shadow" %>
 
 <div data-controller="checkbox-select-all">
-  <%= label_tag "select all" %>
-  <%= check_box_tag "select all", nil, nil, { data: { checkbox_select_all_target: "parent", action: "change->checkbox-select-all#toggleChildren" } } %>
-<%= form_with url: update_multiple_images_path, method: :patch, id: :bulk_actions_form do |form| %>
-  <%= form.submit "Delete", data: { turbo_confirm: "Are you sure you want to delete these images?" }, class: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow" %>
-  <%= form.submit "Generate", data: { turbo_confirm: "Are you sure you want to generate these images?" }, class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 border border-green-600 rounded shadow" %> 
+  <div class="p-3 border rounded flex justify-between items-center">
+    <p class="text-xl text-gray-600"> Selected: <span data-checkbox-select-all-target="count">0</span></p>
+    <%= button_to "Run Image Setup Job", run_image_setup_images_path, method: :post, data: { turbo_confirm: "Are you sure you want to run this job?" }, class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 border border-blue-600 rounded shadow" %>
+  </div>
+   <%= form_with url: update_multiple_images_path, method: :patch, id: :bulk_actions_form do |form| %>
+    <%= form.submit "Delete", data: { turbo_confirm: "Are you sure you want to delete these images?" }, class: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 border border-red-600 rounded shadow" %>
+    <%= form.submit "Generate", data: { turbo_confirm: "Are you sure you want to generate these images?" }, class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 border border-green-600 rounded shadow" %> 
+  <% end %>
+  <div class="mx-auto w-1/4 p-3 border rounded flex justify-between items-center m-3">
+    <%= label_tag "select all" %>
+    <%= check_box_tag "select all", nil, nil, { data: { checkbox_select_all_target: "parent", action: "change->checkbox-select-all#toggleChildren" } } %>
+  </div>
+  <div class="flex justify-around">
+    <div class="border p-3 w-1/3">
+      <h3 class="text-xl text-gray-600 text-center m-2">Images without saved attachments</h3>
+      <ul data-checkbox-select-all-target="children">
+        <% @images.without_attached_saved_image.each do |image| %>
+          <li class="flex justify-between border pl-3 pr-3 items-center">
+                        <%= link_to image.label, image_path(image), class: "text-blue-500 hover:text-blue-600" %>
 
-<% end %>
-  <div class="border p-3">
-    <ul data-checkbox-select-all-target="children">
-      <% @images.each do |image| %>
-        <li>
-          <%= label_tag image.label %> <%= image.display_image.present? %>
-          <%= check_box_tag "image_ids[]", image.id, nil, { data: { checkbox_select_all_target: "child", action: "change->checkbox-select-all#toggleParent" }, multiple: true, form: :bulk_actions_form } %>
-        </li>
-      <% end %>
-    </ul>
+            <%= check_box_tag "image_ids[]", image.id, nil, { data: { checkbox_select_all_target: "child", action: "change->checkbox-select-all#toggleParent" }, multiple: true, form: :bulk_actions_form } %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="border p-3 w-1/3">
+      <h3 class="text-xl text-gray-600 text-center m-2">Images with attachments</h3>
+      <ul data-checkbox-select-all-target="children">
+        <% @images.with_attached_saved_image.each do |image| %>
+          <li class="flex justify-between border pl-3 pr-3 items-center">
+            <%= link_to image.label, image_path(image), class: "text-blue-500 hover:text-blue-600" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>

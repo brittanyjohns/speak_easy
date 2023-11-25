@@ -30,6 +30,8 @@ class Image < ApplicationRecord
   has_one_attached :saved_image
   has_one_attached :cropped_image
 
+  scope :without_attached_saved_image, -> { left_joins(:saved_image_attachment).where("active_storage_attachments.id IS NULL") }
+
   after_save :generate_image, if: :send_request_on_save
   after_create_commit :broadcast_upload
 

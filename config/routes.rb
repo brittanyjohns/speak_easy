@@ -32,8 +32,11 @@ Rails.application.routes.draw do
     end
   end
   resources :board_images do
-    get "next"
-    get "previous"
+    member do
+      get "next"
+      get "previous"
+      patch "click"
+    end
   end
 
   resources :response_boards, only: [:index, :show] do
@@ -44,8 +47,11 @@ Rails.application.routes.draw do
   end
 
   resources :response_images do
-    get "next"
-    get "previous"
+    member do
+      get "next"
+      get "previous"
+      patch "click"
+    end
   end
 
   require "sidekiq/web"

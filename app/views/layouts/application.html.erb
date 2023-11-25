@@ -12,12 +12,12 @@
     <script src="https://kit.fontawesome.com/7747fb4a3a.js" crossorigin="anonymous"></script>
   </head>
 
-  <body class="bg-stone-50" data-controller="ai" data-ai-mode="<%= @ai_enabled %>">
+  <body class="bg-stone-50 overflow-hidden" data-controller="ai" data-ai-mode="<%= @ai_enabled %>" data-ai-enabled-global="<%= @ai_global %>">
     <%= render "layouts/navbar" %>
     <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
-    <div class="h-3/4 justify-center p-2 md:p-4">
-                   <%= render "layouts/current_selection" if user_signed_in? %>
+    <div class="justify-center p-2 md:p-4">
+    <%= render "layouts/current_selection" if user_signed_in? %>
 
       <%= yield %>
 
