@@ -91,6 +91,7 @@ class Image < ApplicationRecord
   end
 
   def prompt_to_send
+    return name unless ResponseBoard::CREATE_AI_IMAGES
     image_prompt || gpt_prompt
   end
 
@@ -189,16 +190,13 @@ class Image < ApplicationRecord
     }
   end
 
-  def chat_with_ai(prompt = nil, response_image_id = nil, word_list = nil, user_id = nil)
+  def chat_with_ai(prompt, response_image_id = nil, word_list = nil, user_id = nil)
     Rails.logger.debug "\n\nChat with AI for #{self.label}\n\n"
     response_board = ResponseBoard.find_by(name: self.label)
     if response_board && response_board.images.count > 30
       puts "Found response board for #{self.label} with id #{response_board.id}\n Skipping..."
       return response_board
     end
-
-    prompt ||= prompt_for_child_conversation
-
     message = {
       "role": "user",
       "content": prompt,

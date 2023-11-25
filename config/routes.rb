@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :images do
     post "run_image_setup", on: :collection
+    get "edit_multiple", on: :collection
+    patch "update_multiple", on: :collection
     post "generate", on: :member
     get "crop", on: :member
     patch "croppable", on: :member

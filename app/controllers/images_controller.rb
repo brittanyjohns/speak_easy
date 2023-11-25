@@ -21,6 +21,31 @@ class ImagesController < ApplicationController
     end
   end
 
+  def edit_multiple
+    @images = Image.all.order(created_at: :desc)
+  end
+
+  def update_multiple
+    puts "update_multiple: #{params}"
+    image_ids = params[:image_ids]
+    if params[:commit] == "Delete"
+      Image.destroy(image_ids)
+      redirect_to edit_multiple_images_url, notice: "Images were successfully deleted."
+    elsif params[:commit] == "Generate"
+      image_ids.each do |image_id|
+        GenerateImageJob.perform_async(image_id)
+      end
+      redirect_to edit_multiple_images_url, notice: "Images are generating."
+    elsif params[:commit] == "Add to Board"
+      image_ids.each do |image_id|
+        BoardImage.create(board_id: params[:board_id], image_id: image_id)
+      end
+      redirect_to board_path(params[:board_id]), notice: "Images were successfully added to board."
+    else
+      redirect_to edit_multiple_images_url, notice: "Images were not updated. Unknown action. #{params[:commit]}"
+    end
+  end
+
   def run_image_setup
     ImageSetupJob.perform_async if current_user.admin?
     redirect_to images_url, notice: "Image setup is running."

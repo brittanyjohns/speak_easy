@@ -11,7 +11,7 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
-    @board_images = @board.board_images.includes(image: [cropped_image_attachment: :blob]).order(label: :asc).references(:images)
+    @board_images = @board.board_images.includes(image: [saved_image_attachment: :blob]).order(label: :asc).references(:images)
     if params[:query].present?
       @query = params[:query]
       @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
