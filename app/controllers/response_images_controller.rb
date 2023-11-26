@@ -21,13 +21,28 @@ class ResponseImagesController < ApplicationController
     render json: { status: "success", redirect_url: response_board_path(@response_board) }
   end
 
+  # def next
+  #   puts "NEXT params: #{params}"
+  #   @response_image = ResponseImage.find(params[:id])
+  #   @image = @response_image.image if @response_image
+  #   throw "NO IMAGE FOUND" unless @image
+  #   @response_image.click_count += 1
+  #   @response_image.save
+  #   @response_board = @response_image.response_board
+  #   @next_board = @response_board.next
+  #   render json: { status: "success", redirect_url: response_board_path(@response_board) }
+  # end
+
   def next
-    puts "NEXT params: #{params}"
     @response_image = ResponseImage.find(params[:id])
-    @image = @response_image.image if @response_image
-    throw "NO IMAGE FOUND" unless @image
-    @response_image.click_count += 1
-    @response_image.save
-    render json: { status: "success", redirect_url: response_image_path(@response_image) }
+    @response_board = @response_image.response_board
+    @next_board = @response_board.next_board
+    @current_user.make_selection(@response_image.label)
+    word_list = @current_user.current_word_list
+    if @next_board
+      render json: { status: "success", redirect_url: response_board_path(@next_board) }
+    else
+      render json: { status: "success", redirect_url: response_board_path(@response_board) }
+    end
   end
 end

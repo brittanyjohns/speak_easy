@@ -99,6 +99,6 @@ class Board < ApplicationRecord
   end
 
   def self.all_boards_for_user(user)
-    self.where(user_id: user.id).or(self.where(user_id: 1, name: "General"))
+    self.where(user_id: user.id).or(self.where(user_id: 1))
   end
 end

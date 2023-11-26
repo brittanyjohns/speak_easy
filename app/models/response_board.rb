@@ -22,8 +22,8 @@ class ResponseBoard < ApplicationRecord
   has_many :images, through: :response_images
   validates :name, presence: true
   normalizes :name, with: ->name { name.downcase }
-  has_one :next_board, class_name: "ResponseBoard", foreign_key: "next_id"
-  has_one :previous_board, class_name: "ResponseBoard", foreign_key: "previous_id"
+  has_one :next_board, class_name: "ResponseBoard", foreign_key: "next_response_board_id"
+  has_one :previous_board, class_name: "ResponseBoard", foreign_key: "previous_response_board_id"
   belongs_to :parent_board, class_name: "ResponseBoard", optional: true, foreign_key: "parent_id"
 
   CREATE_AI_IMAGES = ENV.fetch("CREATE_AI_IMAGES", "false") == "true"
@@ -38,6 +38,23 @@ class ResponseBoard < ApplicationRecord
 
   def response_records
     ResponseRecord.where(name: name)
+  end
+
+  def next
+    self.next_board || build_next
+  end
+
+  def matching_response_record
+    ResponseRecord.find_by(name: self.name)
+  end
+
+  def build_next
+    next_board = self.build_next_board
+    if matching_response_record
+      next_board.response_image_ids = matching_response_record.response_image_ids
+      next_board.save
+    end
+    next_board
   end
 
   def create_images(response_content, word_list = nil, user_id = nil)

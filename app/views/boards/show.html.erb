@@ -1,19 +1,21 @@
 <div class="mx-auto w-full p-4">
   <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
   <div class="p3 border flex justify-between">
-    <h3>Previous: <%= @board.previous_board ? link_to(@board.previous_board.name, @board.previous_board) : "None" %> </h3>
+    <p class="text-xs mb-3 mt-3"><%= @board.id %> - User ID: <%= @board.user_id %></p>
     <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-    <h3>Next: <%= @board.next_board ? link_to(@board.next_board.name, @board.next_board) : "None" %> </h3>
+    <h3>Next Board: <%= @board.next_board ? link_to(@board.next_board.name, @board.next_board) : "None" %> </h3>
   </div>
     
   <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white inline-block font-medium align-middle" %>
 
   <div class="mt-6 flex justify-around">
 
-    <div class="border">
+    <div class="border p-2 whitespace-nowrap">
       <%= render "boards/search" %>
-      <div class="mt-4 overflow-x-scroll whitespace-nowrap" id="search_images">
-          <%= paginate @remaining_images %>
+      <div class="mt-4 max-h-screen overflow-x-scroll" id="search_images">
+          <div class="p-4 border text-center">
+            <%= paginate @remaining_images %>
+          </div>
           <%= render "select_images", images: @remaining_images %>
       </div>
     </div>

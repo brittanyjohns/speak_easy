@@ -3,6 +3,12 @@
   <h1 class="font-bold text-4xl">
     <%= @response_board.name %>
   </h1>
+  <div class="w-3/4 border p-3 mx-auto">
+    <p class="text-xs mb-3 mt-3"><%= @response_board.id %></p>
+    <p class="text-xs mb-3 mt-3"><%= @response_board.matching_response_record&.inspect %></p>
+    <p class="text-xs mb-3 mt-3"><%= @response_board.matching_response_record&.response_labels %></p>
+    <p class="text-xs mb-3 mt-3"><%= @response_board.created_at %></p>
+    <p class="text-xs mb-3 mt-3"><%= @response_board.updated_at %></p>
   <p class="text-xs mb-3 mt-3"><%= time_ago_in_words(@response_board.created_at) %> ago</p>
        <%= response_nav_for(@response_board, current_user.current_user_selection.words) %>
 

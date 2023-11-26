@@ -4,8 +4,7 @@ class BoardsController < ApplicationController
 
   # GET /boards or /boards.json
   def index
-    @boards = Board.all
-    # @boards = current_user.boards
+    set_boards
     @general_board = Board.general_board
   end
 
@@ -125,13 +124,24 @@ class BoardsController < ApplicationController
 
   private
 
+  def set_boards
+    if current_user.admin?
+      @boards = Board.all.includes(board_images: [:image])
+    else
+      @boards = Board.all_boards_for_user(current_user).includes(board_images: [:image])
+    end
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_board
+    set_boards
     begin
       if current_user.admin?
-        @board = Board.find(params[:id])
+        @boards = Board.all.includes(board_images: [:image])
+        @board = @boards.find(params[:id])
       else
-        @board = Board.all_boards_for_user(current_user).includes(board_images: [:image]).find(params[:id])
+        @boards = Board.all_boards_for_user(current_user).includes(board_images: [:image])
+        @board = @boards.find(params[:id])
       end
     rescue ActiveRecord::RecordNotFound
       redirect_to boards_url, notice: "Board not found"

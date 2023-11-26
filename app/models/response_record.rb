@@ -23,11 +23,15 @@ class ResponseRecord < ApplicationRecord
   normalizes :word_list, with: ->word_list { word_list.downcase }
 
   def response_images
-    ResponseImage.find(self.response_image_ids)
+    ResponseImage.where(id: self.response_image_ids)
   end
 
   def remaining_images
     ResponseImage.where.not(id: self.response_image_ids)
+  end
+
+  def response_labels
+    response_images.map(&:label)
   end
 
   # def response_board
