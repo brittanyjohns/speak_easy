@@ -4,7 +4,11 @@
       <div id="<%= dom_id image %>" class="w-full">
         <div class="bg-white rounded-lg shadow overflow-hidden group">
           <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
-                <%= image_tag image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain" if image.display_image.attached? %>
+            <% if image.display_image.attached? %>
+              <%= image_tag image.display_image, class: "absolute top-0 left-0 w-full h-full object-contain", data: { action: "click->speech#speak" } %>
+            <% else %>
+              <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold" data-action="click->speech#speak"><%= image.label.upcase %></div>
+            <% end %>
             <% if image.private %>
               <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
             <% end %>
