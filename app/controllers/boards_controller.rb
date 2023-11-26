@@ -5,6 +5,7 @@ class BoardsController < ApplicationController
   # GET /boards or /boards.json
   def index
     set_boards
+    @default_boards = Board.default_boards
     @general_board = Board.general_board
   end
 
@@ -128,7 +129,7 @@ class BoardsController < ApplicationController
     if current_user.admin?
       @boards = Board.all.includes(board_images: [:image])
     else
-      @boards = Board.all_boards_for_user(current_user).includes(board_images: [:image])
+      @boards = current_user.boards.includes(board_images: [:image])
     end
   end
 
@@ -140,7 +141,7 @@ class BoardsController < ApplicationController
         @boards = Board.all.includes(board_images: [:image])
         @board = @boards.find(params[:id])
       else
-        @boards = Board.all_boards_for_user(current_user).includes(board_images: [:image])
+        @boards = current_user.boards.includes(board_images: [:image])
         @board = @boards.find(params[:id])
       end
     rescue ActiveRecord::RecordNotFound

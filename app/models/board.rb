@@ -98,7 +98,7 @@ class Board < ApplicationRecord
     images.count == max_image_count
   end
 
-  def self.all_boards_for_user(user)
-    self.where(user_id: user.id).or(self.where(user_id: 1))
+  def self.default_boards
+    self.where(user_id: 1)
   end
 end

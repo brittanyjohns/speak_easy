@@ -4,16 +4,32 @@
     <%= link_to "New board", new_board_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 border border-blue-700 rounded shadow" %>
   </div>
 
-  <div id="boards" class="w-full">
-    <ul class="list-none p-0">
-    <% @boards.each do |board| %>
-      <li class="p-4 md:p-6 mb-4 flex justify-between items-center bg-white rounded-lg shadow border border-gray-200 transform hover:scale-105 transition duration-150 ease-in-out">
-        <%= link_to "#{board.name.blank? ? "no name" : board.name}", board, class: "text-lg md:text-xl font-medium text-gray-700 hover:text-blue-600 transition duration-150 ease-in-out" %>
-        <span class="inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white">
-          <%= board.id %>
-        </span>
-      </li>
-    <% end %>
-    </ul>
+  <div class="flex justify-between">
+    <div id="default_boards" class="border p-1 w-full">
+      <h3 class="text-xl font-bold text-gray-800">Default Boards</h3>
+      <ul class="list-none p-0">
+      <% @default_boards.each do |board| %>
+        <li class="p-4 md:p-6 mb-4 flex justify-between items-center bg-white rounded-lg shadow border border-gray-200 transform hover:scale-105 transition duration-150 ease-in-out">
+          <%= link_to "#{board.name.blank? ? "no name" : board.name}", board, class: "text-lg md:text-xl font-medium text-gray-700 hover:text-blue-600 transition duration-150 ease-in-out" %>
+          <span class="inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white">
+            <%= board.board_images.count %> images
+          </span>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+    <div id="boards" class="border p-1  w-full">
+      <h3 class="text-xl font-bold text-gray-800">My Boards</h3>
+      <ul class="list-none p-0">
+      <% @boards.each do |board| %>
+        <li class="p-4 md:p-6 mb-4 flex justify-between items-center bg-white rounded-lg shadow border border-gray-200 transform hover:scale-105 transition duration-150 ease-in-out">
+          <%= link_to "#{board.name.blank? ? "no name" : board.name}", board, class: "text-lg md:text-xl font-medium text-gray-700 hover:text-blue-600 transition duration-150 ease-in-out" %>
+          <span class="inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white">
+            <%= board.board_images.count %> images
+          </span>
+        </li>
+      <% end %>
+      </ul>
+    </div>
   </div>
 </div>
