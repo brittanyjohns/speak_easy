@@ -135,13 +135,13 @@ class BoardsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_board
-    set_boards
+    @boards = Board.all.includes(board_images: [:image])
     begin
       if current_user.admin?
-        @boards = Board.all.includes(board_images: [:image])
+        # @boards = Board.all.includes(board_images: [:image])
         @board = @boards.find(params[:id])
       else
-        @boards = current_user.boards.includes(board_images: [:image])
+        # @boards = current_user.boards.includes(board_images: [:image])
         @board = @boards.find(params[:id])
       end
     rescue ActiveRecord::RecordNotFound
