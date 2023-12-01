@@ -57,8 +57,6 @@ export default class extends Controller {
     const totalList = this.initialIdList.concat(idList);
     this.uniqueArr = [...new Set(totalList)];
     this.imageIdsToAddTarget.value = this.uniqueArr;
-    console.log(`unqiueArr is a ${typeof this.uniqueArr}`);
-    console.log(`unqiueArr is a ${this.uniqueArr}`);
     this.imageIdsTarget.value = this.uniqueArr.join(",");
     this.imageIdsTarget.innerHTML = this.uniqueArr.join(", ");
     this.searchOutlet.value = this.uniqueArr.join(",");
