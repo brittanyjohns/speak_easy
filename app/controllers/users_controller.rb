@@ -41,17 +41,18 @@ class UsersController < ApplicationController
 
     if remaining.blank?
       if matching_words.blank? && user_input.blank?
-        redirect_to response_boards_path, notice: "Nothing to create"
+        redirect_back_or_to response_boards_path, notice: "Nothing to create"
         return
       elsif matching_words.blank? && user_input.present?
         create_image_and_ask_ai(user_input, nil)
         @user.make_selection(user_input, situation)
-        redirect_to response_board_path(@response_board), notice: "Your images are generating. user_input #{user_input}"
+        redirect_back_or_to image_path(@image), notice: "Your images are generating. user_input #{user_input}"
+        # redirect_to response_board_path(@response_board), notice: "Your images are generating. user_input #{user_input}"
         return
       end
       word_list = matching_words[0..-1]
       create_image_and_ask_ai(matching_words.last, word_list)
-      redirect_to response_board_path(@response_board), notice: "Your images are generating. #{word_list}"
+      redirect_back_or_to image_path(@image), notice: "Your images are generating. #{word_list}"
     else
       stripped_remaining = remaining.strip
       word_list = matching_words << stripped_remaining
@@ -61,7 +62,7 @@ class UsersController < ApplicationController
       last_response_board.images << @image unless last_response_board.images.include?(@image)
       last_response_board.save
 
-      redirect_to response_board_path(@response_board), notice: "Your images are generating."
+      redirect_back_or_to image_path(@image), notice: "Your images are generating."
     end
   end
 

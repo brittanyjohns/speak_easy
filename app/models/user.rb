@@ -30,12 +30,14 @@ class User < ApplicationRecord
 
   after_save :ensure_current_user_selection
 
+  SUPER_ADMIN_ID = ENV.fetch("SUPER_ADMIN_ID", 1)
+
   def ensure_current_user_selection
     self.user_selections.current.first_or_create
   end
 
   def admin?
-    id == 1 || ENV.fetch("ADMIN_EMAILS", "").split(",").include?(email)
+    id == SUPER_ADMIN_ID || ENV.fetch("ADMIN_EMAILS", "").split(",").include?(email)
   end
 
   # def ai_enabled?
@@ -47,7 +49,7 @@ class User < ApplicationRecord
   end
 
   def self.super_admin
-    User.find(1)
+    User.find(SUPER_ADMIN_ID)
   end
 
   def make_selection(word, situation = nil)

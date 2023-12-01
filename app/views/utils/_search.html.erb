@@ -1,0 +1,13 @@
+<%= form_with(url: search_path, method: :get, class: "image-ids-to-add", data: { controller: "search-form", turbo_frame: "images", turbo_action: "advance", search_form_useronly_value: params["user_images_only"], search_form_query_value: params["query"] }) do |form| %>
+  <div class="flex flex-wrap items-center justify-between gap-4 w-full md:w-3/4 xl:w-1/2 mb-4">
+    <%= form.hidden_field :image_ids, value: @image_ids_to_add, data: { search_form_target: "imageIdsToAdd" } %>
+    <%= form.text_field :query, placeholder: "Search images...", class: "flex-grow py-2 px-4 rounded border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ease-in-out w-full md:w-auto", data: { search_form_target: "query", action: "input->search-form#search" } %>
+    <%= form.submit "Search", class: "shrink-0 px-4 py-2 font-medium bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300" %>
+    <%= link_to "Clear", search_path, class: "shrink-0 px-4 py-2 font-medium bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300" %>
+    
+    <div class="flex items-center space-x-2 justify-end <%= show_user_images_only ? "" : "hidden" %>">
+      <%= form.check_box :user_images_only, class: "form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500", data: { search_form_target: "userImagesOnly", action: "input->search-form#search" } %>
+      <%= form.label :user_images_only, "Only my images", class: "text-sm font-medium text-gray-700" %>
+    </div>
+  </div>
+<% end %>

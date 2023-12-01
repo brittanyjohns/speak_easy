@@ -27,6 +27,10 @@ class BoardImage < ApplicationRecord
   #   board.response_board.response_images.find_by(image_id: image.id)
   # end
 
+  def id_and_label
+    "#{id} - #{image.label} - #{image.id}"
+  end
+
   def response_image
     board.response_board.response_images.includes(:image).where(image: { label: image.label }).find_or_create_by(image: image)
   end

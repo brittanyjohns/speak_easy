@@ -1,5 +1,6 @@
 <div class="mx-auto w-full p-4">
   <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
+  <%= link_to "Build", build_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
   <div class="p3 border flex justify-between">
     <p class="text-xs mb-3 mt-3"><%= @board.id %> - User ID: <%= @board.user_id %></p>
     <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
@@ -11,7 +12,7 @@
   <div class="mt-6 flex justify-around">
 
     <div class="border p-2 whitespace-nowrap">
-      <%= render "boards/search" %>
+      <%= render "utils/search", search_path: board_path(@board), show_user_images_only: true %>
       <div class="mt-4 max-h-screen overflow-x-scroll" id="search_images">
           <div class="p-4 border text-center">
             <%= paginate @remaining_images %>

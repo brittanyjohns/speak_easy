@@ -7,7 +7,7 @@
 
     <%= link_to "New image", new_image_path, class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 border border-green-600 rounded shadow" %>
   </div>
-  <%= render "search" %>
+  <%= render "utils/search", search_path: images_path, show_user_images_only: true %>
 
   <div class="mt-4 overflow-hidden">
     <%= render "images", images: @images %>

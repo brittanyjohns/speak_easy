@@ -98,7 +98,33 @@ class Board < ApplicationRecord
     images.count == max_image_count
   end
 
+  def image_ids
+    board_images.map(&:image_id)
+  end
+
+  def words
+    board_images.map(&:id_and_label).join("<br/>").html_safe
+  end
+
+  def self.searchable_boards_for(user)
+    if user.admin?
+      Board.all
+    elsif user
+      Board.where(user: user).or(Board.where(user_id: User::SUPER_ADMIN_ID))
+    else
+      Board.where(user_id: User::SUPER_ADMIN_ID)
+    end
+  end
+
+  def self.searchable_boards_for_select(user)
+    searchable_boards_for(user).order(name: :asc).map { |b| [b.name, b.id] }
+  end
+
+  def self.searchable_boards_for_select_with_general(user)
+    searchable_boards_for_select(user).unshift(["General", 0])
+  end
+
   def self.default_boards
-    self.where(user_id: 1)
+    self.where(user_id: User::SUPER_ADMIN_ID).order(name: :asc)
   end
 end

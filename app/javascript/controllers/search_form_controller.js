@@ -6,16 +6,14 @@ function removeParamFromURL(url, param) {
 }
 // Connects to data-controller="search-form"
 export default class extends Controller {
-  static targets = ["query", "userImagesOnly"];
+  static targets = ["query", "userImagesOnly", "imageIdsToAdd"];
   static values = { useronly: String };
   connect() {
-    this.query_value = this.data.get("query-value");
-    this.queryTarget.value = this.query_value;
-    console.log(`queryValue: ${this.query_value}`);
+    this.queryTarget.value = this.data.get("query-value");
+
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
     const params = new URLSearchParams(url.search);
-    console.log(`params: ${params}`);
     this.userImagesOnlyTarget.checked = params.has("user_images_only", "1");
     this.queryTarget.focus();
   }

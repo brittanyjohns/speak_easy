@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
 
   resources :images do
+    post "find_or_create", on: :collection
     post "run_image_setup", on: :collection
     get "edit_multiple", on: :collection
     patch "update_multiple", on: :collection
@@ -26,6 +27,8 @@ Rails.application.routes.draw do
   end
   resources :boards do
     member do
+      get "build"
+      post "add_multiple_images"
       post "associate_image"
       post "remove_image"
       get "locked"

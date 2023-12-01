@@ -1,0 +1,18 @@
+<%= form_with(url: add_multiple_images_board_path(@board), method: :post, id: :add_multiple_form, class: "images-to-add", data: { controller: "add-images", id_value: @board.id, turbo_frame: "add_images", turbo_action: "advance", search_form_search_form_outlet: ".image-ids-to-add" }) do |f| %>
+    <p class="text-xl text-gray-600"> Selected: <span data-add-images-target="count">0</span></p>
+        <p class="text-xl text-gray-600"> Image Ids to Add: <span data-add-images-target="imageIds"><%= @image_ids_to_add %></span></p>
+        <%= f.text_field :image_ids_to_add, class: "image-ids-to-add", data: { add_images_target: "imageIdsToAdd" } %>
+
+    <%= f.submit "Add", class: "p-3 bg-blue-500 hover:bg-blue-600 text-white rounded mb-4", data: { action: "click->add-images#send" } %>
+    <div class="mx-auto w-1/4 p-3 border rounded flex justify-between items-center m-3" data-add-images-board-id="<%= @board.id %>">
+        <%= label_tag "select all" %>
+        <%= check_box_tag "select all", nil, nil, { data: { add_images_target: "parent", action: "change->add-images#toggleChildren" } } %>
+      </div>
+    <% @remaining_images.each do |image| %>
+        <div class="flex justify-between border pl-3 pr-3 items-center">
+        <%= label_tag "ID: #{image.id}" %>
+        <%= link_to image.label, image_path(image), class: "text-blue-500 hover:text-blue-600" %>
+        <%= check_box_tag "image_ids[]", image.id, nil, { data: { add_images_target: "image", action: "change->add-images#toggleParent" }, multiple: true, form: :add_multiple_form } %>
+        </div>
+    <% end %>
+<% end %>
