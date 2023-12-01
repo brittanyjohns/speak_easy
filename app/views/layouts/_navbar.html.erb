@@ -3,9 +3,7 @@
         <a href="/" class="text-white font-semibold text-lg">
             SpeakEZ
         </a>
-        <div class="border border-white px-3 py-2 rounded">
-            <%= render "layouts/enable_ai_button" %>
-        </div>
+        <%= render "layouts/enable_ai_button" if user_signed_in? %>
         <div class="hidden md:flex items-center space-x-4 ml-4 md:ml-10">
             <% if user_signed_in? %>
             <%= link_to "My Boards", boards_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>

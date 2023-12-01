@@ -6,11 +6,12 @@ function removeParamFromURL(url, param) {
 }
 // Connects to data-controller="search-form"
 export default class extends Controller {
-  static targets = ["query", "userImagesOnly"];
+  static targets = ["query", "userImagesOnly", "imageIdsToAdd"];
   static values = { useronly: String };
   connect() {
     this.query_value = this.data.get("query-value");
     this.queryTarget.value = this.query_value;
+    console.log(`imageIdsToAdd: ${this.imageIdsToAddTarget.value}`);
     console.log(`queryValue: ${this.query_value}`);
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);

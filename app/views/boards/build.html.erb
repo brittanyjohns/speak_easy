@@ -1,0 +1,12 @@
+<h1><%= link_to @board.name, @board %></h1>
+
+<%= paginate @remaining_images %>
+<%= render "utils/search", search_path: build_board_path(@board), show_user_images_only: true %>
+<div class="flex justify-center">
+  <div class="p-3 m-2 border w-1/4">
+    <h4><%= @board.words %></h4>
+    </div>
+    <div class="p-3 m-2 border w-1/2">
+        <%= render "boards/checkboxes", images: @remaining_images %>
+    </div>
+</div>

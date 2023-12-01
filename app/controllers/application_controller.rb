@@ -15,7 +15,9 @@ class ApplicationController < ActionController::Base
   def ai
     if user_signed_in?
       current_user.update(ai_enabled: !current_user.ai_enabled)
-      render json: { status: "success", ai_enabled: current_user.ai_enabled, redirect_to: boards_path }
+      referer = request.headers["Referer"]
+      puts "referer: #{referer}"
+      render json: { status: "success", ai_enabled: current_user.ai_enabled, redirect_to: referer }
     else
       redirect_to root_url, notice: "You must be signed in to change AI mode"
     end

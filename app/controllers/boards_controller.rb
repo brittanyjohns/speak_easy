@@ -66,20 +66,25 @@ class BoardsController < ApplicationController
     end
   end
 
-  def find_or_create_image
-    @board = current_user.boards.find(params[:id])
-    @image = Image.find_or_create_by(label: params[:label])
-    @board.images << @image unless @board.images.include?(@image)
-  end
-
   def associate_image
-    @board = current_user.boards.find(params[:id])
+    set_boards
+    @board = @boards.find(params[:id])
     image = Image.find(params[:image_id])
 
-    before = @board.images.include?(image)
-    @board.board_images.create(image: image) unless @board.images.include?(image)
+    unless @board.images.include?(image)
+      new_board_image = @board.board_images.new(image: image)
+      unless new_board_image.save
+        Rails.logger.debug "new_board_image.errors: #{new_board_image.errors.full_messages}"
+      end
+    end
+
     @response_board = @board.response_board
-    @response_board.response_images.create(image: image) unless @response_board.images.include?(image)
+    unless @response_board.images.include?(image)
+      new_response_image = @response_board.response_images.new(image: image)
+      unless new_response_image.save
+        Rails.logger.debug "new_response_image.errors: #{new_response_image.errors.full_messages}"
+      end
+    end
 
     redirect_to @board
   end
@@ -90,7 +95,59 @@ class BoardsController < ApplicationController
     board_image.destroy
     @response_board = @board.response_board
     response_image = @response_board.response_images.find_by(image_id: params[:image_id])
-    render partial: "board_images", locals: { images: @board.images }
+    response_image.destroy if response_image
+    # redirect_to @board
+    render partial: "board_images/board_images", locals: { images: @board.images }
+  end
+
+  def build
+    @board = Board.searchable_boards_for(current_user).find(params[:id])
+    if params[:image_ids].present?
+      image_ids = params[:image_ids].split(",").map(&:to_i)
+      @image_ids_to_add = image_ids - @board.image_ids
+    end
+    if params[:query].present?
+      @query = params[:query]
+      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
+    else
+      @remaining_images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+    end
+
+    if turbo_frame_request?
+      render partial: "select_images", locals: { images: @remaining_images }
+    else
+      render :build
+    end
+  end
+
+  def add_multiple_images
+    @board = Board.searchable_boards_for(current_user).find(params[:id])
+
+    if params[:image_ids_to_add].present?
+      @image_ids_to_add = params[:image_ids_to_add].split(",")
+      puts "\n\n****image_ids: #{@image_ids_to_add}\n\n"
+      @image_ids_to_add.each do |image_id|
+        image = Image.find(image_id)
+
+        unless @board.images.include?(image)
+          new_board_image = @board.board_images.new(image: image)
+          unless new_board_image.save
+            Rails.logger.debug "new_board_image.errors: #{new_board_image.errors.full_messages}"
+          end
+        end
+
+        @response_board = @board.response_board
+        unless @response_board.images.include?(image)
+          new_response_image = @response_board.response_images.new(image: image)
+          unless new_response_image.save
+            Rails.logger.debug "new_response_image.errors: #{new_response_image.errors.full_messages}"
+          end
+        end
+      end
+    else
+      puts "no image_ids"
+    end
+    redirect_to build_board_path(@board)
   end
 
   # PATCH/PUT /boards/1 or /boards/1.json
@@ -135,7 +192,7 @@ class BoardsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_board
-    @boards = Board.all.includes(board_images: [:image])
+    @boards = Board.searchable_boards_for(current_user).includes(board_images: [:image])
     begin
       if current_user.admin?
         # @boards = Board.all.includes(board_images: [:image])

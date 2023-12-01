@@ -32,6 +32,10 @@ class ImagesController < ApplicationController
       Image.destroy(image_ids)
       redirect_to edit_multiple_images_url, notice: "Images were successfully deleted."
     elsif params[:commit] == "Generate"
+      if image_ids.count > 5
+        redirect_to edit_multiple_images_url, notice: "You can only generate 5 images at a time."
+        return
+      end
       image_ids.each do |image_id|
         GenerateImageJob.perform_async(image_id)
       end
@@ -49,6 +53,24 @@ class ImagesController < ApplicationController
   def run_image_setup
     ImageSetupJob.perform_async if current_user.admin?
     redirect_to images_url, notice: "Image setup is running."
+  end
+
+  def find_or_create
+    @image = Image.searchable_images_for(current_user).find_by(label: params[:label], private: false)
+    @found_image = @image
+    @image = Image.create(label: params[:label], private: false) unless @image
+    if @found_image
+      notice = "Image found!"
+    else
+      notice = "New image created!"
+    end
+    if @ai_enabled
+      @image.generate_image
+      notice += " Image is generating."
+      redirect_to image_url(@image), notice: notice
+    else
+      redirect_back_or_to image_url(@image), notice: notice
+    end
   end
 
   def generate
