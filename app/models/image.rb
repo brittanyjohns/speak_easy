@@ -73,9 +73,9 @@ class Image < ApplicationRecord
 
   def self.searchable_images_for(user = nil)
     if user
-      Image.where(private: false).or(Image.where(user_id: user.id))
+      Image.where(private: false).or(Image.where(user_id: user.id)).or(Image.where(user_id: nil))
     else
-      Image.where(private: false)
+      Image.where(private: false).or(Image.where(user_id: nil))
     end
   end
 

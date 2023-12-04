@@ -2,7 +2,14 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="add-images"
 export default class extends Controller {
-  static targets = ["image", "parent", "count", "imageIds", "imageIdsToAdd"];
+  static targets = [
+    "image",
+    "parent",
+    "count",
+    "imageIds",
+    "imageIdsToAdd",
+    "image1",
+  ];
   connect() {
     this.searchOutlet = document.querySelector("#image_ids");
 
@@ -40,6 +47,13 @@ export default class extends Controller {
     }
     this.updateImageIds();
   }
+
+  toggleParent1 = (e) => {
+    this.eventCheckbox = e.target.children[2] ? e.target.children[2] : e.target;
+    this.eventCheckbox.checked = !this.eventCheckbox.checked;
+    e.target.classList.toggle("bg-green-200");
+    this.toggleParent();
+  };
 
   toggleChildren() {
     if (this.parentTarget.checked) {

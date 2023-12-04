@@ -150,6 +150,20 @@ class BoardsController < ApplicationController
     redirect_to build_board_path(@board)
   end
 
+  def mark_as_favorite
+    @board = Board.searchable_boards_for(current_user).find(params[:id])
+    @board.favorite = true
+    @board.save!
+    redirect_back_or_to @board
+  end
+
+  def unfavorite
+    @board = Board.searchable_boards_for(current_user).find(params[:id])
+    @board.favorite = false
+    @board.save!
+    redirect_back_or_to @board
+  end
+
   # PATCH/PUT /boards/1 or /boards/1.json
   def update
     if board_params[:next_board_id].present?
@@ -208,10 +222,10 @@ class BoardsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def board_params
-    params.require(:board).permit(:user_id, :name, :theme_color, :grid_size, :next_board_id, next_board_attributes: [:id, :name, :theme_color, :grid_size], previous_board_attributes: [:id, :name, :theme_color, :grid_size])
+    params.require(:board).permit(:static, :user_id, :name, :theme_color, :grid_size, :next_board_id, next_board_attributes: [:id, :name, :theme_color, :grid_size], previous_board_attributes: [:id, :name, :theme_color, :grid_size])
   end
 
   def update_board_params
-    params.require(:board).permit(:user_id, :name, :theme_color, :grid_size, :next_board_id, :previous_board_id)
+    params.require(:board).permit(:static, :user_id, :name, :theme_color, :grid_size, :next_board_id, :previous_board_id)
   end
 end

@@ -42,7 +42,11 @@ export default class extends Controller {
         console.log(`data:${data}`); // Look at local_names.default
         if (data.status === "success") {
           console.log("Success:", data);
-          window.location.href = data.redirect_url;
+          if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+          } else {
+            window.location.reload();
+          }
         }
       })
       .catch((error) => {

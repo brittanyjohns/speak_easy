@@ -54,10 +54,11 @@ class BoardImagesController < ApplicationController
     @next_board = @board.next_board
     @current_user.make_selection(@board_image.label)
     word_list = @current_user.current_word_list
-    if @next_board
+    if @next_board && !@board.static
+      puts "next_board: #{@next_board}"
       render json: { status: "success", redirect_url: locked_board_path(@next_board) }
     else
-      render json: { status: "success", redirect_url: edit_board_path(@board) }
+      render json: { status: "success", redirect_url: nil }
     end
   end
 

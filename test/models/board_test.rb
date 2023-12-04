@@ -3,9 +3,11 @@
 # Table name: boards
 #
 #  id                :bigint           not null, primary key
+#  favorite          :boolean          default(FALSE)
 #  grid_size         :string
 #  name              :string
 #  show_labels       :boolean
+#  static            :boolean          default(FALSE)
 #  theme_color       :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

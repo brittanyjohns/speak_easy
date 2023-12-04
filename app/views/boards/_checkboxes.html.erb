@@ -9,10 +9,10 @@
         <%= check_box_tag "select all", nil, nil, { data: { add_images_target: "parent", action: "change->add-images#toggleChildren" } } %>
       </div>
     <% @remaining_images.each do |image| %>
-        <div class="flex justify-between border pl-3 pr-3 items-center">
+        <div class="flex justify-between border pl-3 pr-3 items-center hover:bg-blue-400" data-imageid="<%= image.id %>" data-action="click->add-images#toggleParent1" data-add-images-target="image1" id="<%= image.id %>">
         <%= label_tag "ID: #{image.id}" %>
         <%= link_to image.label, image_path(image), class: "text-blue-500 hover:text-blue-600" %>
-        <%= check_box_tag "image_ids[]", image.id, nil, { data: { add_images_target: "image", action: "change->add-images#toggleParent" }, multiple: true, form: :add_multiple_form } %>
+        <%= check_box_tag "image_ids[]", image.id, nil, { class: "hidden", data: { add_images_target: "image", action: "change->add-images#toggleParent" }, multiple: true, form: :add_multiple_form } %>
         </div>
     <% end %>
 <% end %>

@@ -19,7 +19,7 @@
             <%= icon("fa-solid", "arrow-left") %> <%= @board.name %>
           </h1>
         <% end %>
-        <div class="text-xl text-white">  <%= current_user.current_word_list %></div>
+        <div class="text-xs text-white">  <%= @board.static? ? "STATIC MODE" : "BETA MODE" %></div>
       </div>
     </div>
     <div class="pt-3">

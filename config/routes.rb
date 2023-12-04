@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   end
   resources :boards do
     member do
+      patch "mark_as_favorite"
+      patch "unfavorite"
       get "build"
       post "add_multiple_images"
       post "associate_image"

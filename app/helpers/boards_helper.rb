@@ -1,4 +1,19 @@
 module BoardsHelper
+  def mark_as_favorite_button(board)
+    if board.favorite
+      button_to "#{icon("fa-solid", "star")}".html_safe, unfavorite_board_path(board), method: :patch, class: "btn btn-sm btn-outline-secondary"
+    else
+      button_to "#{icon("fa-regular", "star")}".html_safe, mark_as_favorite_board_path(board), method: :patch, class: "btn btn-sm btn-outline-secondary"
+    end
+  end
+
+  def current_user_first_favorite_board_button(user)
+    return unless user && user.favorite_boards.any?
+    board = user.favorite_boards.first
+    return unless board
+    button_to "#{icon("fa-regular", "star")} #{board.name}".html_safe, locked_board_path(board), method: :get, class: "text-xs text-white bg-blue-500 hover:bg-blue-700 rounded-full px-2 py-1"
+  end
+
   def print_grid(images, columns = 3)
     str = ""
     images.each_slice(columns) do |batch|

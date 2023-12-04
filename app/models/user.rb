@@ -36,6 +36,10 @@ class User < ApplicationRecord
     self.user_selections.current.first_or_create
   end
 
+  def favorite_boards
+    boards.where(favorite: true)
+  end
+
   def admin?
     id == SUPER_ADMIN_ID || ENV.fetch("ADMIN_EMAILS", "").split(",").include?(email)
   end
