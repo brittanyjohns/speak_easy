@@ -1,4 +1,12 @@
 module BoardsHelper
+  def user_board_info(board)
+    txt = "<span class='text-xs text-gray-500 float-right'>"
+    txt += board.user == current_user ? "PRIVATE" : ""
+    txt += "<br> #{board.static ? "STATIC" : ""}"
+    txt += "</span>"
+    txt.html_safe
+  end
+
   def mark_as_favorite_button(board)
     if board.favorite
       button_to "#{icon("fa-solid", "star")}".html_safe, unfavorite_board_path(board), method: :patch, class: "btn btn-sm btn-outline-secondary"

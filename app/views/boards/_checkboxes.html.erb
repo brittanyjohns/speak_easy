@@ -9,8 +9,8 @@
         <%= check_box_tag "select all", nil, nil, { data: { add_images_target: "parent", action: "change->add-images#toggleChildren" } } %>
     </div>
     <% @remaining_images.each do |image| %>
-    <div class="flex justify-around border pl-3 pr-3 items-center hover:bg-blue-400" data-imageid="<%= image.id %>" data-action="click->add-images#toggleParent1" data-add-images-target="image1" id="<%= image.id %>">
-        <span class="text-4xl text-gray-600"><%= image.label.upcase %></span>
+    <div class="flex justify-between border pl-3 pr-3 items-center hover:bg-blue-400" data-imageid="<%= image.id %>" data-action="click->add-images#toggleParent1" data-add-images-target="image1" id="<%= image.id %>">
+        <span class="text-xl text-gray-600 ml-10"><%= image.label.upcase %></span>
         <%= display_image_for(image) %>
         <%= check_box_tag "image_ids[]", image.id, nil, { class: "hidden", data: { add_images_target: "image", action: "change->add-images#toggleParent" }, multiple: true, form: :add_multiple_form } %>
     </div>

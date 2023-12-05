@@ -69,7 +69,7 @@ class ImagesController < ApplicationController
       notice += " Image is generating."
       redirect_to image_url(@image), notice: notice
     else
-      redirect_back_or_to image_url(@image), notice: notice
+      redirect_to image_url(@image), notice: notice
     end
   end
 

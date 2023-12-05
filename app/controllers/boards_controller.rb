@@ -11,7 +11,7 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
-    @board_images = @board.images.with_attached_saved_image.order(label: :asc).references(:images)
+    @board_images = @board.images.with_attached_saved_image.order(created_at: :desc)
     if params[:query].present?
       @query = params[:query]
       @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").with_attached_saved_image.order(label: :asc).page(params[:page]).per(20)
@@ -78,7 +78,7 @@ class BoardsController < ApplicationController
       end
     end
 
-    redirect_to @board
+    redirect_back_or_to @board
   end
 
   def remove_image
@@ -127,7 +127,7 @@ class BoardsController < ApplicationController
     else
       puts "no image_ids"
     end
-    redirect_to build_board_path(@board)
+    redirect_back_or_to build_board_path(@board)
   end
 
   def mark_as_favorite

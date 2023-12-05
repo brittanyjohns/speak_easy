@@ -1,30 +1,25 @@
 <div class="mx-auto w-full p-4">
-  <h2 class="text-2xl font-bold mb-4"><%= @board.name %></h2>
-  <%= link_to "Build", build_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-  <div class="p3 border flex justify-between">
-    <p class="text-xs mb-3 mt-3"><%= @board.id %> - User ID: <%= @board.user_id %></p>
-    <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+  <h2 class="text-2xl font-bold mb-4"><%= @board.name %> <%= user_board_info(@board) %></h2>
+  <h3 class="text-xl font-medium mb-4"><%= @board.board_images.count %> total images</h3>
+  <div class="p3 flex justify-evenly mb-5">
+    <%= link_to "Edit", edit_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-bold" %>
+        <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white font-medium hover:bg-orange-700" %>
+
+      <%= link_to "Add more images", build_board_path(@board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+
+    <% unless @board.static %>
     <h3>Next Board: <%= @board.next_board ? link_to(@board.next_board.name, @board.next_board) : "None" %> </h3>
+    <% end %>
   </div>
     
-  <%= link_to "PLAY MODE", locked_board_path(@board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white inline-block font-medium align-middle" %>
 
-  <div class="mt-6 flex justify-around">
-
-    <div class="border p-2 whitespace-nowrap">
-      <%= render "utils/search", search_path: board_path(@board), show_user_images_only: true %>
-      <div class="mt-4 max-h-screen overflow-x-scroll" id="search_images">
-          <div class="p-4 border text-center">
-            <%= paginate @remaining_images %>
-          </div>
-          <%= render "select_images", images: @remaining_images %>
+    <div class="flex justify-center">
+      <div class="p-3 m-2 border w-3/4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <%= render @board.board_images %>
+        </div>
       </div>
     </div>
-    <div class="mt-4 overflow-x-scroll whitespace-nowrap border">
-          <%= render "select_images", images: @board_images %>
-    </div>
-    
-  </div>
 
   <div class="mt-6 flex justify-end space-x-2">
     <%= button_to "Destroy", board_path(@board), method: :delete, class: "rounded-lg py-3 px-5 bg-red-600 text-white font-medium", form_class: "" %>

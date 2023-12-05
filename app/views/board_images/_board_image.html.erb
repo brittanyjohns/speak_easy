@@ -1,15 +1,6 @@
-<div id="<%= dom_id board_image %>" class="w-full">
-  <div class="bg-white rounded-lg shadow overflow-hidden group">
-    <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
-      <%= remove_board_image_button(@board, board_image.image) %>
-      <% if board_image.private %>
-        <span class="absolute top-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs px-1.5 py-0.5 rounded-full">Private</span>
-      <% end %>
-    </div>
-    <div class="p-4">
-      <p class="truncate text-gray-800 font-medium">
-        <%= board_image.label %>
-      </p>
-    </div>
+<div id="<%= dom_id board_image %>" class="w-full border pt-2">
+  <div class="pl-3 pr-3 items-center hover:bg-blue-400 text-center">
+      <%= display_image_for(board_image.image) %>
+      <span class="text-xl text-gray-600 ml-10"><%= board_image.label.upcase %></span>
   </div>
-</div>
+</div>  
