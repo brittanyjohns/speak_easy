@@ -16,7 +16,7 @@ export default class extends Controller {
     );
     const utterance = new SpeechSynthesisUtterance(this.name);
     utterance.pitch = 1.5;
-    utterance.volume = 0.5;
+    utterance.volume = 0.7;
     utterance.rate = 1;
 
     speechSynthesis.speak(utterance);
@@ -41,11 +41,10 @@ export default class extends Controller {
       .then((data) => {
         console.log(`data:${data}`); // Look at local_names.default
         if (data.status === "success") {
-          console.log("Success:", data);
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
           } else {
-            window.location.reload();
+            console.log("No redirect url");
           }
         }
       })
