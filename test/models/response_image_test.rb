@@ -13,8 +13,9 @@
 #
 # Indexes
 #
-#  index_response_images_on_image_id           (image_id)
-#  index_response_images_on_response_board_id  (response_board_id)
+#  index_response_images_on_image_id                        (image_id)
+#  index_response_images_on_response_board_id               (response_board_id)
+#  index_response_images_on_response_board_id_and_image_id  (response_board_id,image_id) UNIQUE
 #
 # Foreign Keys
 #

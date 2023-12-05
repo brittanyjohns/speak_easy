@@ -11,8 +11,9 @@
 #
 # Indexes
 #
-#  index_board_images_on_board_id  (board_id)
-#  index_board_images_on_image_id  (image_id)
+#  index_board_images_on_board_id               (board_id)
+#  index_board_images_on_board_id_and_image_id  (board_id,image_id) UNIQUE
+#  index_board_images_on_image_id               (image_id)
 #
 # Foreign Keys
 #

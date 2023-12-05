@@ -11,12 +11,12 @@ class BoardsController < ApplicationController
 
   # GET /boards/1 or /boards/1.json
   def show
-    @board_images = @board.board_images.includes(image: [saved_image_attachment: :blob]).order(label: :asc).references(:images)
+    @board_images = @board.images.with_attached_saved_image.order(label: :asc).references(:images)
     if params[:query].present?
       @query = params[:query]
-      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
+      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").with_attached_saved_image.order(label: :asc).page(params[:page]).per(20)
     else
-      @remaining_images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+      @remaining_images = @board.remaining_images.with_attached_saved_image.order(label: :asc).page(params[:page]).per(20)
     end
 
     if turbo_frame_request?
@@ -78,39 +78,33 @@ class BoardsController < ApplicationController
       end
     end
 
-    @response_board = @board.response_board
-    unless @response_board.images.include?(image)
-      new_response_image = @response_board.response_images.new(image: image)
-      unless new_response_image.save
-        Rails.logger.debug "new_response_image.errors: #{new_response_image.errors.full_messages}"
-      end
-    end
-
     redirect_to @board
   end
 
   def remove_image
-    @board = current_user.boards.find(params[:id])
-    board_image = @board.board_images.find(params[:image_id])
-    board_image.destroy
-    @response_board = @board.response_board
-    response_image = @response_board.response_images.find_by(image_id: params[:image_id])
-    response_image.destroy if response_image
-    # redirect_to @board
-    render partial: "board_images/board_images", locals: { images: @board.images }
+    set_boards
+    @board = @boards.find(params[:id])
+    image = Image.find(params[:image_id])
+    @board.images.delete(image)
+    # @response_board = @board.response_board
+    # response_image = @response_board.response_images.find_by(image_id: params[:image_id])
+    # response_image.destroy if response_image
+    redirect_back_or_to @board
+    # render partial: "board_images/board_image", collection: @board.board_images.includes(image: [saved_image_attachment: :blob]).order(label: :asc).references(:images), as: :board_image
   end
 
   def build
-    @board = Board.searchable_boards_for(current_user).find(params[:id])
+    set_boards
+    @board = @boards.find(params[:id])
     if params[:image_ids].present?
       image_ids = params[:image_ids].split(",").map(&:to_i)
       @image_ids_to_add = image_ids - @board.image_ids
     end
     if params[:query].present?
       @query = params[:query]
-      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).page(params[:page]).per(20)
+      @remaining_images = @board.remaining_images.where("label ILIKE ?", "%#{params[:query]}%").order(label: :asc).with_attached_saved_image.page(params[:page]).per(20)
     else
-      @remaining_images = @board.remaining_images.order(label: :asc).page(params[:page]).per(20)
+      @remaining_images = @board.remaining_images.with_attached_saved_image.order(label: :asc).page(params[:page]).per(20)
     end
 
     if turbo_frame_request?
@@ -121,28 +115,14 @@ class BoardsController < ApplicationController
   end
 
   def add_multiple_images
-    @board = Board.searchable_boards_for(current_user).find(params[:id])
+    set_boards
+    @board = @boards.find(params[:id])
 
-    if params[:image_ids_to_add].present?
-      @image_ids_to_add = params[:image_ids_to_add].split(",")
-      puts "\n\n****image_ids: #{@image_ids_to_add}\n\n"
-      @image_ids_to_add.each do |image_id|
-        image = Image.find(image_id)
-
-        unless @board.images.include?(image)
-          new_board_image = @board.board_images.new(image: image)
-          unless new_board_image.save
-            Rails.logger.debug "new_board_image.errors: #{new_board_image.errors.full_messages}"
-          end
-        end
-
-        @response_board = @board.response_board
-        unless @response_board.images.include?(image)
-          new_response_image = @response_board.response_images.new(image: image)
-          unless new_response_image.save
-            Rails.logger.debug "new_response_image.errors: #{new_response_image.errors.full_messages}"
-          end
-        end
+    if params[:image_ids].present?
+      @image_ids = params[:image_ids]
+      puts "\n\n****image_ids: #{@image_ids}\n\n"
+      @image_ids.each do |image_id|
+        @board.add_image(image_id)
       end
     else
       puts "no image_ids"
@@ -200,7 +180,7 @@ class BoardsController < ApplicationController
     if current_user.admin?
       @boards = Board.all.includes(board_images: [:image])
     else
-      @boards = current_user.boards.includes(board_images: [:image])
+      @boards = Board.searchable_boards_for(current_user).includes(board_images: [:image])
     end
   end
 

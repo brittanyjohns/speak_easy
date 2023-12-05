@@ -4,9 +4,12 @@
 <%= render "utils/search", search_path: build_board_path(@board), show_user_images_only: true %>
 <div class="flex justify-center">
   <div class="p-3 m-2 border w-1/4">
-    <h4><%= @board.words %></h4>
+    <h4>Board Images</h4>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <%= render @board.board_images %>
     </div>
-    <div class="p-3 m-2 border w-1/2">
-        <%= render "boards/checkboxes", images: @remaining_images %>
-    </div>
+  </div>
+  <div class="p-3 m-2 border w-1/2">
+      <%= render "boards/checkboxes", images: @remaining_images %>
+  </div>
 </div>

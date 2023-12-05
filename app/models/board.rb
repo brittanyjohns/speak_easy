@@ -30,6 +30,7 @@
 class Board < ApplicationRecord
   belongs_to :user, optional: true
   has_many :board_images, dependent: :destroy
+  has_many :images, -> { distinct }, through: :board_images
   belongs_to :parent_board, class_name: "Board", optional: true, foreign_key: "parent_id"
   belongs_to :next_board, class_name: "Board", foreign_key: "next_board_id", optional: true
   belongs_to :previous_board, class_name: "Board", foreign_key: "previous_board_id", optional: true
@@ -55,6 +56,17 @@ class Board < ApplicationRecord
     self.where(name: "General", user_id: 1).first
   end
 
+  def add_image(image_id)
+    if image_ids.include?(image_id.to_i)
+      puts "image already added"
+    else
+      new_board_image = board_images.new(image_id: image_id.to_i)
+      unless new_board_image.save
+        Rails.logger.debug "new_board_image.errors: #{new_board_image.errors.full_messages}"
+      end
+    end
+  end
+
   def create_next_board(name)
     next_board = self.next_board || self.build_next_board
     next_board.name = name
@@ -68,9 +80,9 @@ class Board < ApplicationRecord
     next_board
   end
 
-  def images
-    board_images.includes(:image).map(&:image)
-  end
+  # def images
+  #   board_images.includes(:image).map(&:image)
+  # end
 
   def response_board
     ResponseBoard.find_or_create_by(name: name)

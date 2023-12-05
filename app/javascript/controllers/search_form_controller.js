@@ -15,7 +15,6 @@ export default class extends Controller {
     const url = new URL(currentUrl);
     const params = new URLSearchParams(url.search);
     this.userImagesOnlyTarget.checked = params.has("user_images_only", "1");
-    this.queryTarget.focus();
   }
 
   search = (e) => {

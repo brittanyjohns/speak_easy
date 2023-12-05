@@ -11,8 +11,9 @@
 #
 # Indexes
 #
-#  index_board_images_on_board_id  (board_id)
-#  index_board_images_on_image_id  (image_id)
+#  index_board_images_on_board_id               (board_id)
+#  index_board_images_on_board_id_and_image_id  (board_id,image_id) UNIQUE
+#  index_board_images_on_image_id               (image_id)
 #
 # Foreign Keys
 #
@@ -31,9 +32,10 @@ class BoardImage < ApplicationRecord
     "#{id} - #{image.label} - #{image.id}"
   end
 
-  def response_image
-    board.response_board.response_images.includes(:image).where(image: { label: image.label }).find_or_create_by(image: image)
-  end
+  # def response_image
+  # board.response_board.response_images.find_by(image_id: image.id)
+  # board.response_board.response_images.includes(:image).where(image: { label: image.label }).find_or_create_by(image: image)
+  # end
 
   def display_image
     image.display_image

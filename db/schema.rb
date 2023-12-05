@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_04_200803) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_05_145459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_200803) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["board_id", "image_id"], name: "index_board_images_on_board_id_and_image_id", unique: true
     t.index ["board_id"], name: "index_board_images_on_board_id"
     t.index ["image_id"], name: "index_board_images_on_image_id"
   end
@@ -108,6 +109,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_200803) do
     t.integer "click_count", default: 0
     t.boolean "final_response", default: false
     t.index ["image_id"], name: "index_response_images_on_image_id"
+    t.index ["response_board_id", "image_id"], name: "index_response_images_on_response_board_id_and_image_id", unique: true
     t.index ["response_board_id"], name: "index_response_images_on_response_board_id"
   end
 
