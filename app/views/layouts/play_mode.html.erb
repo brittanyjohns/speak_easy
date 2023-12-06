@@ -35,7 +35,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 m-3">
 
         <% @board_images.each do |board_image| %>
-          <div id="<%= dom_id board_image %>" class="w-full" data-controller='speech static-image' data-speech-id="<%= board_image.id %>" data-speech-label="<%= board_image.label %>" data-speech-send-to-ai="<%= @ai_enabled %>" data-speech-next-endpoint="board_images" data-controller='static-image' data-static-image-label="<%= board_image.label.upcase %>" data-static-image-target="wrapper" data-action="click->static-image#click">
+          <div id="<%= dom_id board_image %>" class="w-full" data-controller='static-image' data-static-image-label="<%= board_image.label.upcase %>" data-static-image-target="wrapper" data-action="click->static-image#speak">
             <div class="bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
               <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
               <% if board_image.display_image.attached? %>
