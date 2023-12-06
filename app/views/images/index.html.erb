@@ -1,15 +1,19 @@
 <div class="mx-auto w-full px-4 sm:px-6 lg:px-8">
+  <% if current_user.admin? %>
   <%= link_to "Edit Multiple", edit_multiple_images_path, class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 border border-blue-600 rounded shadow" %>
-  <div class="flex justify-between items-center mb-10">
     <p class="text-xs text-gray-400">Generating AI Images: <%= ResponseBoard::CREATE_AI_IMAGES %> </p>
-    <h1 class="font-bold text-4xl text-gray-800">Image Library <span class="float-right text-xs"><%= Image.searchable_images_for(current_user).count %></span></h1>
-    <%= paginate @images %>
+    <% end %>
+      <div class="flex justify-between items-center mb-10">
+
+    <h1 class="font-bold text-4xl text-gray-800">Image Library </h1>
 
     <%= link_to "New image", new_image_path, class: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 border border-green-600 rounded shadow" %>
   </div>
   <%= render "utils/search", search_path: images_path, show_user_images_only: true %>
 
   <div class="mt-4 overflow-hidden">
+        <%= paginate @images %>
+
     <%= render "images", images: @images %>
   </div>
 

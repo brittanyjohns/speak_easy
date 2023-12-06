@@ -22,22 +22,12 @@
   </div>
 
   <div class="my-5">
-    <%= form.label :image_prompt %>
-    <%= form.text_field :image_prompt, placeholder: "No image? Use ChatGPT to generate one. Enter your prompt here.", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
     <%= form.label :private %>
     <%= form.check_box :private, class: "shadow rounded-md border border-gray-200 outline-none px-4 py-2 mt-2 ml-3 inline" %>
   </div>
-  <div class="my-5">
-    <%= form.label :send_request_on_save %>
-    <%= form.check_box :send_request_on_save, class: "shadow rounded-md border border-gray-200 outline-none px-4 py-2 mt-2 ml-3 inline" %>
-  </div>
 
   <div class="my-5">
-      <%= form.label :upload %>
-      <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "block rounded-md outline-none px-3 py-2 mt-2 w-1/2" %>
+      <%= form.file_field :saved_image, data: { upload_target: "input" }, class: "rounded-md outline-none px-3 py-2 mt-2 w-1/2" %>
   </div>
 
   <div class="inline">

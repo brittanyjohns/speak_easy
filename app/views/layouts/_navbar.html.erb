@@ -11,8 +11,10 @@
             <%= link_to "Responds Boards", response_boards_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
             <%= link_to "Responds Records", response_records_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
             <%= link_to "Users", users_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" if current_user.admin? %>
+            <%= link_to "New Image", new_image_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
 
-            <%= link_to "Images", images_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+            <%= link_to "Image Library", images_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+
             <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium", form_class: "inline-block" %>
             <% else %>
             <%= link_to "Sign up", new_user_registration_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
