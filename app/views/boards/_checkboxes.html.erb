@@ -1,7 +1,7 @@
 <%= form_with(url: add_multiple_images_board_path(@board), method: :post, id: :add_multiple_form, class: "images-to-add", data: { controller: "add-images", id_value: @board.id, turbo_frame: "add_images", turbo_action: "advance", search_form_search_form_outlet: ".image-ids-to-add" }) do |f| %>
     <p class="text-xl text-gray-600"> Selected: <span data-add-images-target="count">0</span></p>
         <p class="text-xl text-gray-600"> Image Ids to Add: <span data-add-images-target="imageIds"><%= @image_ids_to_add %></span></p>
-        <%= f.text_field :image_ids_to_add, class: "image-ids-to-add", data: { add_images_target: "imageIdsToAdd" } %>
+        <%= f.text_field :image_ids_to_add, class: "image-ids-to-add cursor-not-allowed", disabled: true, data: { add_images_target: "imageIdsToAdd" } %>
 
     <%= f.submit "Add", class: "p-3 bg-blue-500 hover:bg-blue-600 text-white rounded mb-4", data: { action: "click->add-images#send" } %>
     <div class="mx-auto w-1/4 p-3 border rounded flex justify-between items-center m-3" data-add-images-board-id="<%= @board.id %>">
@@ -12,7 +12,7 @@
     <div class="flex justify-between border pl-3 pr-3 items-center hover:bg-blue-400" data-imageid="<%= image.id %>" data-action="click->add-images#toggleParent1" data-add-images-target="image1" id="<%= image.id %>">
         <span class="text-xl text-gray-600 ml-10"><%= image.label.upcase %></span>
         <%= display_image_for(image) %>
-        <%= check_box_tag "image_ids[]", image.id, nil, { class: "hidden", data: { add_images_target: "image", action: "change->add-images#toggleParent" }, multiple: true, form: :add_multiple_form } %>
+        <%= check_box_tag "image_ids[]", image.id, nil, { class: "hidden", data: { add_images_target: "image", action: "change->add-images#toggleParent", label: image.label }, multiple: true, form: :add_multiple_form } %>
     </div>
     <% end %>
 <% end %>

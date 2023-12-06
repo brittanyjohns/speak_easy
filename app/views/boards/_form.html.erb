@@ -17,24 +17,17 @@
                     class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :grid_size, "Grid Size", class: "block text-sm font-medium text-gray-700" %>
-    <%= form.select :grid_size,
-                    options_for_select(["2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "8x8"]),
-                    {},
-                    class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-  </div>
-
-
   <div class="my-5">
     <%= form.label :static %>
-    <%= form.check_box :static, class: "shadow rounded-md border border-gray-200 outline-none px-4 py-2 mt-2 ml-3 inline" %>
+    <%= form.check_box :static, class: "shadow rounded-md border border-gray-200 outline-none px-4 py-2 mt-2 ml-3 inline hidden" %>
   </div>
 
-  <div class="p-2 bg-blue-50 border justify-between">
+ <% if current_user.admin? %>
+  <div class="my-5">
     <%= render "board_fields", form: form %>
     <%= form.association :next_board %>
   </div>
+  <% end %>
   <div class="mb-4">
     <%= form.submit class: "rounded-lg py-2 px-2 outline font-medium cursor-pointer" %>
     <%= link_to "Cancel", boards_path, class: "ml-2 rounded-lg py-3 px-5 bg-red-400 inline-block font-medium" %>

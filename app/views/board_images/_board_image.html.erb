@@ -1,6 +1,6 @@
-<div id="<%= dom_id board_image %>" class="w-full border pt-2">
-  <div class="pl-3 pr-3 items-center hover:bg-blue-400 text-center">
-      <%= display_image_for(board_image.image) %>
-      <span class="text-xl text-gray-600 ml-10"><%= board_image.label.upcase %></span>
+<div id="<%= dom_id board_image %>" class="w-full border pt-2 cursor-pointer" data-controller='static-image' data-static-image-label="<%= board_image.label.upcase %>" data-static-image-target="wrapper" data-action="click->static-image#speak">
+  <div class="pl-3 pr-3 items-center text-center" id="<%= board_image.label %>">
+    <%= display_image_for(board_image.image) %>
+    <span class="text-xl text-gray-600 ml-10"><%= board_image.label.upcase %></span>
   </div>
 </div>  

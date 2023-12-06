@@ -22,11 +22,20 @@
         <div class="text-xs text-white">  <%= @board.static? ? "STATIC MODE" : "BETA MODE" %></div>
       </div>
     </div>
-    <div class="pt-3">
+    <div class="pt-3" data-controller="static-board">
+      <div class="text-center">
+        <ul class="flex justify-center text-4xl font-bold" id="the-list" data-static-board-target="list"></ul>
+
+        <div class="mx-auto w-1/2 p-4 flex justify-around">
+          <button class="bg-gray-100 rounded-lg py-3 px-5 font-medium" data-action="click->static-board#clearList">Clear</button>
+          <button class="bg-green-100 rounded-lg py-3 px-5 font-medium" data-action="click->static-board#speakList">Speak</button>
+        </div>
+
+      </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 m-3">
 
         <% @board_images.each do |board_image| %>
-          <div id="<%= dom_id board_image %>" class="w-full" data-controller='speech' data-speech-id="<%= board_image.id %>" data-speech-label="<%= board_image.label %>" data-speech-send-to-ai="<%= @ai_enabled %>" data-speech-next-endpoint="board_images">
+          <div id="<%= dom_id board_image %>" class="w-full" data-controller='speech static-image' data-speech-id="<%= board_image.id %>" data-speech-label="<%= board_image.label %>" data-speech-send-to-ai="<%= @ai_enabled %>" data-speech-next-endpoint="board_images" data-controller='static-image' data-static-image-label="<%= board_image.label.upcase %>" data-static-image-target="wrapper" data-action="click->static-image#click">
             <div class="bg-white rounded-lg shadow overflow-hidden group cursor-pointer" data-action="click->speech#speak">
               <div class="relative w-full h-0 pb-[100%]"> <!-- Aspect Ratio Box -->
               <% if board_image.display_image.attached? %>

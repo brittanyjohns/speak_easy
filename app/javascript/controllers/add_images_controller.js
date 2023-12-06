@@ -64,19 +64,27 @@ export default class extends Controller {
     this.updateImageIds();
   }
 
+  updateImageLabelList() {
+    const imageLabels = this.imageTargets
+      .filter((x) => x.checked)
+      .map((x) => x.dataset.label);
+    this.imageIdsToAddTarget.value = imageLabels.join(", ");
+  }
+
   updateImageIds() {
     const idList = this.imageTargets
       .filter((x) => x.checked)
       .map((x) => x.value);
     const totalList = this.initialIdList.concat(idList);
     this.uniqueArr = [...new Set(totalList)];
-    this.imageIdsToAddTarget.value = this.uniqueArr;
+    // this.imageIdsToAddTarget.value = this.uniqueArr;
     this.imageIdsTarget.value = this.uniqueArr.join(",");
     this.imageIdsTarget.innerHTML = this.uniqueArr.join(", ");
     this.searchOutlet.value = this.uniqueArr.join(",");
 
     this.updateCount();
     this.updateCheckboxesWithImageIds();
+    this.updateImageLabelList();
   }
 
   updateCheckboxesWithImageIds() {

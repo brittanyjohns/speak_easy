@@ -4,7 +4,7 @@ class BoardsController < ApplicationController
 
   # GET /boards or /boards.json
   def index
-    set_boards
+    @boards = current_user.boards.includes(board_images: [:image])
     @default_boards = Board.default_boards
     @general_board = Board.general_board
   end
@@ -36,7 +36,7 @@ class BoardsController < ApplicationController
 
   # GET /boards/new
   def new
-    @board = current_user.boards.new
+    @board = current_user.boards.new(static: true)
     @board.next_board ||= @board.build_next_board
   end
 

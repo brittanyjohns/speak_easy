@@ -3,7 +3,7 @@
         <a href="/" class="text-white font-semibold text-lg">
             SpeakEZ
         </a>
-        <%= render "layouts/enable_ai_button" if user_signed_in? %>
+        <%= render "layouts/enable_ai_button" if user_signed_in? && current_user.admin? %>
         <div class="hidden md:flex items-center space-x-4 ml-4 md:ml-10">
             <% if user_signed_in? %>
             <%= current_user_first_favorite_board_button(current_user) %>
