@@ -79,6 +79,19 @@ class Image < ApplicationRecord
     end
   end
 
+  def generate_description(img_url)
+    if self.saved_image.attached?
+      response = OpenAiClient.describe_image(img_url)
+      if response
+        puts "Response: #{response}"
+      else
+        puts "**** ERROR **** \nDid not receive valid response. Response: #{response}\n"
+      end
+    else
+      puts "Image does not have an image attached. Skipping..."
+    end
+  end
+
   def name
     image_prompt || label
   end

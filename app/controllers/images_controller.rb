@@ -81,6 +81,15 @@ class ImagesController < ApplicationController
 
   # GET /images/1 or /images/1.json
   def show
+    puts "SHOW\n\nr@image.display_image: #{image_url(@image.display_image)}"
+  end
+
+  def describe
+    @image = Image.find(params[:id])
+    image_url = @image.display_image.attached? ? image_url(@image.display_image) : @image.image_url
+    puts "describe: #{image_url}"
+    @image.generate_description(image_url)
+    redirect_to image_url(@image), notice: "Image description is generating."
   end
 
   # GET /images/new

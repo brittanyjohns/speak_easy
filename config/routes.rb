@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get "crop", on: :member
     patch "croppable", on: :member
     post "purge_saved_images", on: :member
+    post "describe", on: :member
   end
   resources :boards do
     member do

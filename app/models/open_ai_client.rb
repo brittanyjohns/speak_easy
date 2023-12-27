@@ -28,6 +28,34 @@ class OpenAiClient
     img_url
   end
 
+  def self.describe_image(img_url)
+    # model: "gpt-4-vision-preview",
+    # messages: [
+    #   {
+    #     role: "user",
+    #     content: [
+    #       { type: "text", text: "What’s in this image?" },
+    #       {
+    #         type: "image_url",
+    #         image_url: {
+    #           "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+    #         },
+    #       },
+    #     ],
+    #   },
+    # ],
+    puts "describe: #{img_url} \n openai_client: #{openai_client}"
+    response = openai_client.chat(parameters: { model: "gpt-4-vision-preview", messages: [{ role: "user", content: [{ type: "text", text: "What’s in this image?" }, { type: "image_url", image_url: { url: img_url } }] }] })
+    puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
+    save_response_locally(response)
+    response
+  end
+
+  def self.save_response_locally(response)
+    puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
+    File.open("response.json", "w") { |f| f.write(response) }
+  end
+
   def create_image_variation(img_url, num_of_images = 1)
     response = openai_client.images.variations(parameters: { image: img_url, n: num_of_images })
     img_variation_url = response.dig("data", 0, "url")

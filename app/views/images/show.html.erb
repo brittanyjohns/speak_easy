@@ -27,6 +27,8 @@
 
     <div class="flex flex-col sm:flex-row sm:space-x-2 my-2">
       <%= purge_saved_images_button(@image) %>
+            <%= describe_image_button(@image) %>
+
       <%= link_to "Edit", edit_image_path(@image), class: "text-white shadow rounded-lg py-2 px-4 bg-cyan-700 mb-2 sm:mb-0 font-medium text-center" %>
       <%= link_to "Crop", crop_image_path(@image), class: "text-white shadow rounded-lg py-2 px-4 bg-cyan-700 font-medium text-center" %>
     </div>

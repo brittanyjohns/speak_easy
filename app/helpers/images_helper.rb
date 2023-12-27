@@ -11,6 +11,10 @@ module ImagesHelper
     button_to "#{icon("fa-solid", "trash")} Delete Image".html_safe, purge_saved_images_image_path(image.id), class: "text-red-600 hover:text-red-700 py-1 px-1 rounded-full", method: :post
   end
 
+  def describe_image_button(image)
+    button_to "#{icon("fa-regular", "comment-dots")} Describe Image".html_safe, describe_image_path(image), class: "rounded-full", method: :post
+  end
+
   def speech_button(image)
     button_to icon("fa-regular", "comment-dots"), speak_image_path(image), class: "btn", method: :post
   end
