@@ -17,7 +17,7 @@
       </p>
 
       <p class="my-5">
-        <%= @image.ai_prompt %>
+        <%= @image.ai_prompt ? @image.ai_prompt : "No AI prompt available." %>
       </p>
       <div class="my-5">
         <p class="text-center"> Created: <%= time_ago_in_words @image.created_at %> ago</p>

@@ -40,6 +40,11 @@ class Image < ApplicationRecord
     self.response_images.find_or_create_by(response_board_id: response_board.id, label: self.label)
   end
 
+  def external_image_url
+    # Rails.application.routes.url_helpers.rails_blob_path(self.display_image)
+    Rails.application.routes.url_helpers.url_for(self.display_image)
+  end
+
   scope :public_images, -> { where(private: false) }
 
   def display_image
@@ -79,11 +84,15 @@ class Image < ApplicationRecord
     end
   end
 
-  def generate_description(img_url)
+  def generate_description
+    img_url = external_image_url
+    puts "describe: #{img_url}"
     if self.saved_image.attached?
       response = OpenAiClient.describe_image(img_url)
       if response
         puts "Response: #{response}"
+        self.ai_prompt = response
+        self.save if self.ai_prompt
       else
         puts "**** ERROR **** \nDid not receive valid response. Response: #{response}\n"
       end

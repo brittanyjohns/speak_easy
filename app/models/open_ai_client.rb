@@ -47,7 +47,7 @@ class OpenAiClient
     puts "describe: #{img_url} \n openai_client: #{openai_client}"
     response = openai_client.chat(parameters: { model: "gpt-4-vision-preview", messages: [{ role: "user", content: [{ type: "text", text: "What’s in this image?" }, { type: "image_url", image_url: { url: img_url } }] }] })
     puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
-    save_response_locally(response)
+    # save_response_locally(response)
     response
   end
 

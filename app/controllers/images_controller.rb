@@ -86,9 +86,10 @@ class ImagesController < ApplicationController
 
   def describe
     @image = Image.find(params[:id])
-    image_url = @image.display_image.attached? ? image_url(@image.display_image) : @image.image_url
-    puts "describe: #{image_url}"
-    @image.generate_description(image_url)
+    image_url = @image.saved_image.attached? ? rails_storage_proxy_path(@image.saved_image) : ""
+    puts "describe from controller - not used: #{image_url}"
+    puts "image_url(@image): #{image_url(@image)}"
+    @image.generate_description
     redirect_to image_url(@image), notice: "Image description is generating."
   end
 
