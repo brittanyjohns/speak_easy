@@ -42,7 +42,8 @@ class Image < ApplicationRecord
 
   def external_image_url
     # Rails.application.routes.url_helpers.rails_blob_path(self.display_image)
-    Rails.application.routes.url_helpers.url_for(self.display_image)
+    # Rails.application.routes.url_helpers.url_for(self.display_image)
+    self.display_image.representation(resize_to_limit: [100, 100]).processed.url
   end
 
   scope :public_images, -> { where(private: false) }
