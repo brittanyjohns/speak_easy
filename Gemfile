@@ -89,8 +89,6 @@ gem "figaro"
 # Open AI
 gem "ruby-openai", "~> 4.1"
 
-gem "espeak-ruby", require: "espeak"
-
 gem "view_component"
 
 gem "cssbundling-rails", "~> 1.3"

@@ -131,7 +131,6 @@ GEM
       ruby2_keywords
     dry-initializer (3.1.1)
     erubi (1.12.0)
-    espeak-ruby (1.1.0)
     faraday (2.7.11)
       base64
       faraday-net_http (>= 2.0, < 3.1)
@@ -342,7 +341,6 @@ DEPENDENCIES
   debug
   devise
   dry-initializer
-  espeak-ruby
   faraday
   figaro
   font-awesome-sass (~> 6.4.0)
