@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :menus do
+    resources :docs do
+      member do
+        get :enhance_image_description
+      end
+    end
+  end
   patch "/ai", to: "application#ai", as: "ai"
   root to: "home#index"
   get "home/index"

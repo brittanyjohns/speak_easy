@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Docs</h1>
+
+<div id="docs">
+  <% @docs.each do |doc| %>
+    <%= render doc %>
+    <p>
+      <%= link_to "Show this doc", menu_doc_path(@menu, doc) %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New doc", new_menu_doc_path %>

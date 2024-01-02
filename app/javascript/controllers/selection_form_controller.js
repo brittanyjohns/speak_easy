@@ -6,10 +6,6 @@ export default class extends Controller {
 
   connect() {
     this.situation = this.situationTarget.value;
-
-    console.log(
-      `this.queryTarget.value: ${this.queryTarget.value} - - this.situation: ${this.situation}`
-    );
   }
 
   test() {

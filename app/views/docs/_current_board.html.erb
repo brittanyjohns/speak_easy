@@ -1,0 +1,36 @@
+<div class="mx-auto w-full p-4" data-controller="static-board">
+  <div class="text-center">
+    <ul class="flex justify-center text-4xl font-bold" id="the-list" data-static-board-target="list"></ul>
+
+    <div class="mx-auto w-1/2 p-4 flex justify-around">
+      <button class="bg-gray-100 rounded-lg py-3 px-5 font-medium" data-action="click->static-board#clearList">Clear</button>
+      <button class="bg-green-100 rounded-lg py-3 px-5 font-medium" data-action="click->static-board#speakList">Speak</button>
+    </div>
+
+  </div>
+  <h2 class="text-2xl font-bold mb-4"><%= board.name %> <%= user_board_info(board) %></h2>
+  <h3 class="text-xl font-medium mb-4"><%= board.board_images.count %> total images</h3>
+  <div class="p3 flex justify-evenly mb-5">
+    <%= link_to "Edit", edit_board_path(board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+        <%= link_to "PLAY MODE", locked_board_path(board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white text-3xl font-medium hover:bg-orange-700" %>
+
+      <%= link_to "Add more images", build_board_path(board), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+
+    <% unless board.static %>
+    <h3>Next Board: <%= board.next_board ? link_to(board.next_board.name, board.next_board) : "None" %> </h3>
+    <% end %>
+  </div>
+    
+
+    <div class="flex justify-center">
+      <div class="p-3 m-2 border w-3/4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <%= render board.board_images %>
+        </div>
+      </div>
+    </div>
+
+  <div class="mt-6 flex justify-end space-x-2">
+    <%= button_to "Destroy", board_path(board), method: :delete, class: "rounded-lg py-3 px-5 bg-red-600 text-white font-medium", form_class: "" %>
+  </div>
+</div>

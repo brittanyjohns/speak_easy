@@ -1,0 +1,31 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="my-5">
+  <p>
+    <strong>Name:</strong>
+    <%= @doc.name %>
+  </p>
+</div>
+
+<%= link_to "Current Board", board_path(@doc.current_board) %>
+
+<div class="flex justify-around">
+  <%= image_tag @doc.image, class: "w-1/4" if @doc.image.attached? %>
+  <div class="flex flex-wrap">
+    <%= render "current_board", board: @doc.current_board %>
+  </div>
+</div>
+<div class="my-5">
+  <p class="text-2xl">image_description: <%= @doc.image_description %></p>
+  <p class="text-xs">raw_text: <%= @doc.raw_text %></p> 
+</div>
+
+<div>
+  <%= link_to "Edit this doc", edit_menu_doc_path(@menu, @doc) %> |
+  <%= link_to "Back to docs", menu_docs_path(@menu) %>
+
+  <%= link_to "Get Image Description", enhance_image_description_menu_doc_path(@menu, @doc), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+
+  <%= button_to "Destroy this doc", menu_doc_path(@menu, @doc), method: :delete %>
+</div>
+

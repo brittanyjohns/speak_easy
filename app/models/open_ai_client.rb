@@ -3,6 +3,7 @@ require "openai"
 class OpenAiClient
   DEFAULT_MODEL = "text-davinci-001"
   TURBO_MODEL = "gpt-3.5-turbo"
+  GPT_4_MODEL = "gpt-4-1106-preview"
 
   def initialize(opts)
     @messages = opts["messages"] || opts[:messages] || []
@@ -19,6 +20,7 @@ class OpenAiClient
 
   def create_image
     response = openai_client.images.generate(parameters: { prompt: @prompt, size: "512x512" })
+    puts "\n\nRESPONSE: #{response}\n\n"
     if response
       img_url = response.dig("data", 0, "url")
       puts "*** ERROR *** Invaild Image Response: #{response}" unless img_url
@@ -29,29 +31,53 @@ class OpenAiClient
   end
 
   def self.describe_image(img_url)
-    # model: "gpt-4-vision-preview",
-    # messages: [
-    #   {
-    #     role: "user",
-    #     content: [
-    #       { type: "text", text: "What’s in this image?" },
-    #       {
-    #         type: "image_url",
-    #         image_url: {
-    #           "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
-    #         },
-    #       },
-    #     ],
-    #   },
-    # ],
-    puts "describe: #{img_url} \n openai_client: #{openai_client}"
     response = openai_client.chat(parameters: { model: "gpt-4-vision-preview", messages: [{ role: "user", content: [{ type: "text", text: "What’s in this image?" }, { type: "image_url", image_url: { url: img_url } }] }] })
     puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
     # save_response_locally(response)
     response
   end
 
-  def self.save_response_locally(response)
+  def clarify_image_description(image_description)
+    puts "Missing image description.\n" && return unless image_description
+    @model = GPT_4_MODEL
+    @messages = [{ role: "user", content: [{ type: "text", text: "Please parse the following text from a kid's menu and form a clear list of the food and beverage options ONLY.
+    Create a short image description for each item based on the name and description.
+    The NAME of the food or beverage is the most important part. Ensure that the name is accurate.
+    The description is optional.
+    Respond as json formatted as: #{expected_json_schema}\n
+     #{image_description}" }] }]
+    puts "Sending to model: #{@model}\n"
+    response = create_chat
+    puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
+    response
+  end
+
+  def expected_json_schema
+    {
+      "food": [
+        {
+          "name": "Chicken Tenders",
+          "description": "Served with french fries and honey mustard sauce.",
+          "image_description": "Chicken tenders with french fries and honey mustard sauce.",
+        },
+        {
+          "name": "Cheeseburger",
+          "description": "Served with french fries.",
+          "image_description": "Cheeseburger with french fries.",
+        },
+      ],
+      "drinks": [
+        {
+          "name": "Milk",
+        },
+        {
+          "name": "Apple Juice",
+        },
+      ],
+    }
+  end
+
+  def save_response_locally(response)
     puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
     File.open("response.json", "w") { |f| f.write(response) }
   end

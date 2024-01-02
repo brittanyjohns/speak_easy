@@ -9,6 +9,7 @@
     "esbuild": "^0.19.5",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
+    "tesseract.js": "^5.0.4",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },

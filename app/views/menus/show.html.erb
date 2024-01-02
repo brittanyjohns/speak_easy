@@ -1,0 +1,26 @@
+<div class="mx-auto md:w-2/3 w-full flex">
+  <div class="mx-auto">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <%= render @menu %>
+    <% if @current_doc && @current_doc.current_board %>
+    <div class="flex justify-around">
+      <div class="w-1/3">
+      <%= image_for_doc(@current_doc) %>
+      </div>
+      <div class="flex flex-wrap">
+        <%= render "current_board", board: @current_doc.current_board if @current_doc.current_board %>
+      </div>
+    </div>
+    <% else %>
+        <%= link_to "Add a document to this menu", new_menu_doc_path(@menu), class: "mt-2 rounded-lg py-3 px-5 bg-green-100 block font-medium text-center mb-4" %>
+    <% end %>
+    <%= link_to "Edit this menu", edit_menu_path(@menu), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <div class="inline-block ml-2">
+      <%= button_to "Destroy this menu", menu_path(@menu), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+    </div>
+    <%= link_to "Back to menus", menus_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  </div>
+</div>

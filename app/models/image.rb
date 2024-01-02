@@ -31,7 +31,7 @@ class Image < ApplicationRecord
   has_one_attached :cropped_image
 
   scope :without_attached_saved_image, -> { left_joins(:saved_image_attachment).where("active_storage_attachments.id IS NULL") }
-
+  scope :created_yesterday, -> { where("created_at >= ?", 1.day.ago) }
   after_save :generate_image, if: :send_request_on_save
   after_create_commit :broadcast_upload
 
@@ -67,6 +67,10 @@ class Image < ApplicationRecord
       self.ai_generated = true
     end
     self.save
+  end
+
+  def start_generate_image_job
+    GenerateImageJob.perform_async(self.id)
   end
 
   def is_new_image?

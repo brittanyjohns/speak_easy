@@ -15,6 +15,7 @@ export default class extends Controller {
       ` ${this.image_id} ${this.name} ${this.send_to_ai} - ${this.nextEndpoint}`
     );
     const utterance = new SpeechSynthesisUtterance(this.name);
+    console.log(`utterance: ${utterance}`);
     utterance.pitch = 1.5;
     utterance.volume = 0.7;
     utterance.rate = 1;

@@ -34,6 +34,7 @@ class Board < ApplicationRecord
   belongs_to :parent_board, class_name: "Board", optional: true, foreign_key: "parent_id"
   belongs_to :next_board, class_name: "Board", foreign_key: "next_board_id", optional: true
   belongs_to :previous_board, class_name: "Board", foreign_key: "previous_board_id", optional: true
+  belongs_to :doc, optional: true
 
   accepts_nested_attributes_for :next_board, :previous_board
 

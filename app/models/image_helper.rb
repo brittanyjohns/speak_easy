@@ -28,6 +28,19 @@ module ImageHelper
     end
   end
 
+  def clarify_image_description
+    response = OpenAiClient.new(open_ai_opts).clarify_image_description(raw_text)
+    if response
+      puts "response: #{response}"
+      response_text = response[:content]
+      puts "response_text: #{response_text}"
+      self.image_description = response_text
+    else
+      Rails.logger.debug "*** ERROR - clarify_image_description *** \nDid not receive valid response. Response: #{response}\n"
+    end
+    response_text
+  end
+
   def create_image_variation(img_url = nil, user = nil)
     success = false
     img_url ||= main_doc.main_image_on_disk

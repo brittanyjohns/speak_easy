@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_05_145459) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_02_030324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,10 +66,22 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_05_145459) do
     t.integer "parent_id"
     t.boolean "static", default: false
     t.boolean "favorite", default: false
+    t.integer "doc_id"
     t.index ["next_board_id"], name: "index_boards_on_next_board_id"
     t.index ["parent_id"], name: "index_boards_on_parent_id"
     t.index ["previous_board_id"], name: "index_boards_on_previous_board_id"
     t.index ["user_id"], name: "index_boards_on_user_id"
+  end
+
+  create_table "docs", force: :cascade do |t|
+    t.string "name"
+    t.string "documentable_type", null: false
+    t.bigint "documentable_id", null: false
+    t.text "image_description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "raw_text"
+    t.index ["documentable_type", "documentable_id"], name: "index_docs_on_documentable"
   end
 
   create_table "images", force: :cascade do |t|
@@ -86,6 +98,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_05_145459) do
     t.boolean "ai_generated", default: false
     t.integer "final_response_count", default: 0
     t.text "ai_prompt"
+  end
+
+  create_table "menus", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "response_boards", force: :cascade do |t|

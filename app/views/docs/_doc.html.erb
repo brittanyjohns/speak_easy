@@ -1,0 +1,17 @@
+<div id="<%= dom_id doc %>">
+  <p>
+    <strong>Name:</strong>
+    <%= doc.name %>
+  </p>
+
+  <p>
+    <strong>Documentable:</strong>
+    <%= doc.documentable_id %>
+  </p>
+
+  <p>
+    <strong>Image:</strong>
+    <%= link_to doc.image.filename, doc.image if doc.image.attached? %>
+  </p>
+
+</div>

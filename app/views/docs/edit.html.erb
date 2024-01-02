@@ -1,0 +1,10 @@
+<h1>Editing doc</h1>
+
+<%= render "form", doc: @doc %>
+
+<br>
+
+<div>
+  <%= link_to "Show this doc", menu_doc_path(@menu, @doc) %> |
+  <%= link_to "Back to docs", menu_docs_path %>
+</div>

@@ -1,0 +1,32 @@
+<%= form_with(model: [@menu, doc], local: true, data: { controller: "ocr disable" }) do |form| %>
+  <% if doc.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(doc.errors.count, "error") %> prohibited this doc from being saved:</h2>
+
+      <ul>
+        <% doc.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.text_field :raw_text, data: { ocr_target: "image_description" }, class: "h-32 w-3/4 border-2" %>
+  </div>
+
+  <div>
+    <%= form.label :image, style: "display: block" %>
+    <%= form.file_field :image, data: { ocr_target: "file", action: "change->ocr#upload" } %>
+  </div>
+
+  <div>
+        <%= form.submit "Save", class: "text-white shadow rounded-lg py-2 px-4 bg-green-700 font-medium text-center", data: { disable_target: "button", action: "click->disable#disableForm" } %>
+
+  </div>
+<% end %>

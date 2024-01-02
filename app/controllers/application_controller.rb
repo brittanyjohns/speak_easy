@@ -12,6 +12,11 @@ class ApplicationController < ActionController::Base
     @ai_global = ENV.fetch("AI_ENABLED", false)
   end
 
+  def show_toolbars
+    @show_toolbars = params["controller"] != 'menus' && params["controller"] != 'docs'
+  end
+
+
   def ai
     if user_signed_in?
       current_user.update(ai_enabled: !current_user.ai_enabled)

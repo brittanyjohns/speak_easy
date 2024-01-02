@@ -17,8 +17,8 @@
     <%= render "layouts/notice" %>
        <%= render "layouts/alert" %>
     <div class="justify-center p-2 md:p-4">
-    <%= render "layouts/current_selection" if user_signed_in? && @ai_enabled && current_user.admin? %>
-    <%= render "images/find_or_create" if user_signed_in? %>
+    <%= render "layouts/current_selection" if user_signed_in? && @ai_enabled && current_user.admin? && @show_toolbars %>
+    <%= render "images/find_or_create" if user_signed_in? && @show_toolbars %>
 
       <%= yield %>
 

@@ -1,0 +1,22 @@
+<div class="mx-auto w-full p-4 border">
+  <h2 class="text-2xl font-bold mb-4"><%= board.name %> <%= user_board_info(board) %></h2>
+  <div class="flex justify-between">
+    <%= link_to "View Current Board", locked_board_path(board), class: "mt-2 px-4 py-2 rounded-lg bg-orange-600 text-white text-3xl font-medium hover:bg-orange-700" %>
+  </div>    
+
+    <div class="flex justify-center">
+      <div class="p-1 m-2 border w-full">
+          <% board.board_images.each do |board_image| %>
+            <div class="flex flex-col justify-center items-center">
+              <p class="text-center"><%= board_image.label %></p>
+            </div>
+          <% end %>
+      </div>
+    </div>
+
+  <div class="mt-6 flex justify-end space-x-2">
+    <%= button_to "View", board_path(board), method: :get, class: "rounded-lg py-1 px-3 bg-blue-600 text-white font-medium", form_class: "" %>
+        <%= button_to "Destroy", board_path(board), method: :delete, class: "rounded-lg py-1 px-3 bg-red-600 text-white font-medium", form_class: "" %>
+
+  </div>
+</div>
