@@ -49,6 +49,7 @@ class User < ApplicationRecord
   # end
 
   def ai_enabled
+    return true if admin?
     read_attribute(:ai_enabled) && ENV.fetch("AI_ENABLED", "false") == "true"
   end
 
