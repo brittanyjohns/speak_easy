@@ -26,6 +26,7 @@ class DocsController < ApplicationController
   def create
     @doc = Doc.new(doc_params)
     @menu = Menu.find(params[:menu_id]) if params[:menu_id]
+    @doc.name = @menu.name + " - " + @doc.id.to_s
     @doc.documentable = @menu
 
     respond_to do |format|

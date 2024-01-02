@@ -44,12 +44,20 @@ class OpenAiClient
     Create a short image description for each item based on the name and description.
     The NAME of the food or beverage is the most important part. Ensure that the name is accurate.
     The description is optional.
-    Respond as json formatted as: #{expected_json_schema}\n
-     #{image_description}" }] }]
+    Respond as json. 
+    Here is an EXAMPLE RESPONSE: #{expected_json_schema}\n
+    This is the text to parse: #{strip_image_description(image_description)}\n\n" }] }]
     puts "Sending to model: #{@model}\n"
     response = create_chat
     puts "*** ERROR *** Invaild Image Description Response: #{response}" unless response
     response
+  end
+
+  def strip_image_description(image_description)
+    puts "Missing image description.\n" && return unless image_description
+    stripped_description = image_description.gsub(/[^a-z ]/i, '')
+    puts "Stripped image description: #{stripped_description}\n"
+    stripped_description
   end
 
   def expected_json_schema
